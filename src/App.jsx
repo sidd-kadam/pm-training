@@ -250,7 +250,7 @@ export default function PMApp() {
 
   // ── PASSWORD GATE ─────────────────────────────────────────────────────
   function checkPassword() {
-    if (pwInput.trim().toLowerCase() === "pmtraining2026") {
+    if (pwInput.trim().toLowerCase() === "Siddhant@0812") {
       storageSet("pm_auth", "true");
       setUnlocked(true);
     } else {
