@@ -204,7 +204,7 @@ function GuestSurvey({ guestProfile, lastScore, onDone }) {
             <span style={{ fontSize: 26 }}>👋</span>
             <div>
               <p style={{ fontSize: 14, fontWeight: 600, color: "#E6E6E6", marginBottom: 2 }}>Try it free</p>
-              <p style={{ fontSize: 12, color: "rgba(127,108,240,0.8)" }}>2 free challenges · No account needed</p>
+              <p style={{ fontSize: 12, color: "rgba(127,108,240,0.8)" }}>1 free challenge · No account needed</p>
             </div>
           </div>
           <button onClick={() => setScreen("guestForm")} style={{ ...btn("#7F6CF0", "#fff"), width: "100%", boxShadow: "0 4px 16px rgba(127,108,240,0.3)" }}>
@@ -274,14 +274,14 @@ function GuestSurvey({ guestProfile, lastScore, onDone }) {
 
         {/* NEW: Guest challenge counter */}
         {isGuest && (
-          <div style={{ ...card({ background: guestChallengeCount >= 2 ? "rgba(255,159,10,0.08)" : "rgba(127,108,240,0.06)", borderColor: guestChallengeCount >= 2 ? "#FF9F0A44" : "#7F6CF044" }), display: "flex", alignItems: "center", gap: 12 }} className="au1">
+          <div style={{ ...card({ background: guestChallengeCount >= 1 ? "rgba(255,159,10,0.08)" : "rgba(127,108,240,0.06)", borderColor: guestChallengeCount >= 1 ? "#FF9F0A44" : "#7F6CF044" }), display: "flex", alignItems: "center", gap: 12 }} className="au1">
             <div style={{ display: "flex", gap: 5 }}>
-              {[1,2].map(n => <div key={n} style={{ width: 32, height: 6, borderRadius: 99, background: n <= guestChallengeCount ? (guestChallengeCount >= 2 ? "#C4B5FD" : "#7F6CF0") : "rgba(255,255,255,0.1)", transition: "background .3s" }}/>)}
+              {[1].map(n => <div key={n} style={{ width: 32, height: 6, borderRadius: 99, background: n <= guestChallengeCount ? "#C4B5FD" : "rgba(255,255,255,0.1)", transition: "background .3s" }}/>)}
             </div>
-            <span style={{ fontSize: 12, color: guestChallengeCount >= 2 ? "#C4B5FD" : "rgba(255,255,255,0.45)", fontWeight: guestChallengeCount >= 2 ? 700 : 400 }}>
-              {guestChallengeCount >= 2 ? "2/2 challenges used — please give us your feedback" : `${guestChallengeCount}/2 free challenges used`}
+            <span style={{ fontSize: 12, color: guestChallengeCount >= 1 ? "#C4B5FD" : "rgba(255,255,255,0.45)", fontWeight: guestChallengeCount >= 1 ? 700 : 400 }}>
+              {guestChallengeCount >= 1 ? "1/1 challenge used — please give us your feedback" : "1 free challenge available"}
             </span>
-            {guestChallengeCount >= 2 && (
+            {guestChallengeCount >= 1 && (
               <button onClick={() => setScreen("survey")} style={{ ...btn("#C4B5FD", "#191919"), fontSize: 11, padding: "6px 14px", marginLeft: "auto" }}>Give Feedback →</button>
             )}
           </div>
@@ -303,15 +303,15 @@ function GuestSurvey({ guestProfile, lastScore, onDone }) {
 
         {/* Track selection (unchanged, but disabled if guest hit limit) */}
         <div style={card()} className="au2">
-          {isGuest && guestChallengeCount >= 2 ? (
+          {isGuest && guestChallengeCount >= 1 ? (
             <div style={{ textAlign: "center", padding: "8px 0" }}>
-              <p style={{ fontSize: 14, color: "rgba(255,255,255,0.5)", marginBottom: 14 }}>You've used your 2 free challenges.</p>
+              <p style={{ fontSize: 14, color: "rgba(255,255,255,0.5)", marginBottom: 14 }}>You've used your free challenge.</p>
               <button onClick={() => setScreen("survey")} style={{ ...btn("#7F6CF0", "#fff"), boxShadow: "0 4px 16px rgba(127,108,240,0.3)" }}>Give Feedback & See Results →</button>
             </div>
           ) : (
             <>
               <div style={{ fontSize: 13, color: "rgba(255,255,255,0.5)", lineHeight: 1.7, marginBottom: 18 }}>
-                {isGuest ? `${2 - guestChallengeCount} free challenge${2 - guestChallengeCount === 1 ? "" : "s"} remaining. Choose your track below.` : "Choose your track. Get a real PM scenario. Write a serious answer. Your coach scores you."}
+                {isGuest ? `1 free challenge available. Choose your track below.` : "Choose your track. Get a real PM scenario. Write a serious answer. Your coach scores you."}
               </div>
               <div style={{ display: "flex", gap: 10 }}>
                 {[["B2B", "🏢", "#7F6CF0", "#1D1B2E", "Enterprise & platform"], ["B2C", "📱", "#7F6CF0", "#0F2018", "Consumer & growth"]].map(([t, icon, accent, bg, desc]) => (
@@ -463,26 +463,26 @@ function GuestSurvey({ guestProfile, lastScore, onDone }) {
           </div>
         )}
 
-        {/* NEW: Guest counter + action buttons on result screen */}
+        {/* Guest counter on result screen — 1 challenge limit */}
         {isGuest && (
-          <div style={{ ...card({ background: guestChallengeCount >= 2 ? "rgba(255,159,10,0.08)" : "rgba(127,108,240,0.06)", borderColor: guestChallengeCount >= 2 ? "#FF9F0A44" : "#7F6CF044" }), display: "flex", alignItems: "center", gap: 12 }}>
+          <div style={{ ...card({ background: "rgba(255,159,10,0.08)", borderColor: "#FF9F0A44" }), display: "flex", alignItems: "center", gap: 12 }}>
             <div style={{ display: "flex", gap: 5 }}>
-              {[1,2].map(n => <div key={n} style={{ width: 32, height: 6, borderRadius: 99, background: n <= guestChallengeCount ? (guestChallengeCount >= 2 ? "#C4B5FD" : "#7F6CF0") : "rgba(255,255,255,0.1)" }}/>)}
+              <div style={{ width: 32, height: 6, borderRadius: 99, background: "#C4B5FD" }}/>
             </div>
-            <span style={{ fontSize: 12, color: guestChallengeCount >= 2 ? "#C4B5FD" : "rgba(255,255,255,0.45)", fontWeight: 600, flex: 1 }}>
-              {guestChallengeCount >= 2 ? "2/2 challenges used" : `${guestChallengeCount}/2 challenges used`}
+            <span style={{ fontSize: 12, color: "#C4B5FD", fontWeight: 600, flex: 1 }}>
+              1/1 challenge used · Your feedback helps us improve ✨
             </span>
           </div>
         )}
 
         <div style={{ display: "flex", gap: 10 }} className="au4">
-          <button style={btn("rgba(255,255,255,0.08)", "rgba(255,255,255,0.6)")} onClick={() => setPhase("home")}>← Home</button>
-          {isGuest && guestChallengeCount >= 2 ? (
-            <button style={{ ...btn("#C4B5FD", "#191919"), flex: 1 }} onClick={() => setScreen("survey")}>Give Feedback →</button>
+          {isGuest ? (
+            <button style={{ ...btn("#7F6CF0", "#fff"), flex: 1, boxShadow: "0 4px 16px rgba(127,108,240,0.3)" }} onClick={() => setScreen("survey")}>Share Your Feedback →</button>
           ) : (
-            <button style={{ ...btn("#7F6CF0", "#fff"), flex: 1 }} onClick={() => { setPhase("home"); setTimeout(() => startChallenge(trackType), 50); }}>
-              {isGuest ? `Try Challenge ${guestChallengeCount + 1} of 2 →` : "Another Challenge →"}
-            </button>
+            <>
+              <button style={btn("rgba(255,255,255,0.08)", "rgba(255,255,255,0.6)")} onClick={() => setPhase("home")}>← Home</button>
+              <button style={{ ...btn("#7F6CF0", "#fff"), flex: 1 }} onClick={() => { setPhase("home"); setTimeout(() => startChallenge(trackType), 50); }}>Another Challenge →</button>
+            </>
           )}
         </div>
       </div>
