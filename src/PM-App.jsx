@@ -244,7 +244,7 @@ export default function PMApp() {
         <div style={{marginBottom:24}}>
           <div style={{fontSize:10, color:"#f59e0b", letterSpacing:"0.18em", marginBottom:6}}>PM DAILY TRAINING</div>
           <div style={{fontSize:22, fontWeight:700, color:"#f1f5f9"}}>Hey Siddhant 👋</div>
-          <div style={{fontSize:12, color:"#3d5070", marginTop:4}}>One challenge. One assessment. Every day.</div>
+          <div style={{fontSize:12, color:"#3d5070", marginTop:4}}>One challenge. One assessment. Every day. v2</div>
         </div>
 
         {error && <div style={{...card({borderColor:"#ef444433", background:"#1a0808"}), fontSize:13, color:"#f87171", marginBottom:12}}>{error}</div>}
