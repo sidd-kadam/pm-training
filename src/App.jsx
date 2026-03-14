@@ -141,6 +141,52 @@ function Pills({opts,val,onChange,color="#7C3AED"}) {
   );
 }
 
+
+// ── Shared UI components (defined outside to avoid re-creation on render) ──
+function PCard({children,pastel="#EDE9FE",style={},cls="card"}){
+  return(
+    <div className={cls} style={{background:pastel,borderRadius:24,overflow:"hidden",boxShadow:"0 4px 20px rgba(0,0,0,0.06)",...style}}>
+      {children}
+    </div>
+  );
+}
+
+function WCard({children,style={},cls="card"}){
+  return(
+    <div className={cls} style={{background:"#fff",borderRadius:24,overflow:"hidden",boxShadow:"0 2px 12px rgba(0,0,0,0.06)",...style}}>
+      {children}
+    </div>
+  );
+}
+
+function BtnPrimary({children,onClick,disabled,color="#7C3AED",style={}}){
+  return(
+    <button className="btn-primary" onClick={onClick} disabled={disabled} style={{background:disabled?"#E5E7EB":`linear-gradient(135deg,${color},${color}cc)`,color:disabled?"#9CA3AF":"#fff",borderRadius:16,padding:"16px 24px",fontSize:16,fontWeight:700,width:"100%",boxShadow:disabled?"none":`0 6px 20px ${color}40`,transition:"all .2s",...style}}>
+      {children}
+    </button>
+  );
+}
+
+function BtnSec({children,onClick,style={}}){
+  return(
+    <button onClick={onClick} style={{background:"#fff",borderRadius:16,padding:"15px 20px",fontSize:15,fontWeight:600,color:"#374151",boxShadow:"0 2px 8px rgba(0,0,0,0.08)",transition:"all .2s",...style}}>
+      {children}
+    </button>
+  );
+}
+
+function BackNav({onClick,extras}){
+  return(
+    <div style={{display:"flex",alignItems:"center",gap:8,paddingBottom:20}}>
+      <button onClick={onClick} style={{background:"#fff",borderRadius:12,padding:"8px 14px",fontSize:14,fontWeight:600,color:"#7C3AED",display:"flex",alignItems:"center",gap:6,boxShadow:"0 2px 8px rgba(0,0,0,0.08)"}}>
+        <svg width="8" height="14" viewBox="0 0 8 14" fill="none"><path d="M7 1L1 7L7 13" stroke="#7C3AED" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        Back
+      </button>
+      {extras}
+    </div>
+  );
+}
+
 export default function PMApp() {
   const [phase,setPhase]=useState("home");
   const [trackType,setTrackType]=useState(null);
@@ -252,60 +298,6 @@ export default function PMApp() {
   // ── shared ────────────────────────────────────────────────────────────
   const PAGE={fontFamily:"Inter,-apple-system,BlinkMacSystemFont,sans-serif",background:"#f0f4f8",minHeight:"100vh",WebkitFontSmoothing:"antialiased"};
   const WRAP={maxWidth:640,margin:"0 auto",padding:"0 16px 80px"};
-
-  // Pastel card component
-  function PCard({children,pastel="#EDE9FE",style={},cls="card"}){
-    return(
-      <div className={cls} style={{background:pastel,borderRadius:24,overflow:"hidden",boxShadow:"0 4px 20px rgba(0,0,0,0.06)",...style}}>
-        {children}
-      </div>
-    );
-  }
-
-  // White card
-  function WCard({children,style={},cls="card"}){
-    return(
-      <div className={cls} style={{background:"#fff",borderRadius:24,overflow:"hidden",boxShadow:"0 2px 12px rgba(0,0,0,0.06)",...style}}>
-        {children}
-      </div>
-    );
-  }
-
-  // Section heading
-  function SecHead({children}){
-    return <p style={{fontSize:12,fontWeight:700,color:"#9CA3AF",letterSpacing:"0.08em",textTransform:"uppercase",padding:"0 0 10px"}}>{children}</p>;
-  }
-
-  // Primary button
-  function BtnPrimary({children,onClick,disabled,color="#7C3AED",style={}}){
-    return(
-      <button className="btn-primary" onClick={onClick} disabled={disabled} style={{background:disabled?"#E5E7EB":`linear-gradient(135deg,${color},${color}cc)`,color:disabled?"#9CA3AF":"#fff",borderRadius:16,padding:"16px 24px",fontSize:16,fontWeight:700,width:"100%",boxShadow:disabled?"none":`0 6px 20px ${color}40`,transition:"all .2s",...style}}>
-        {children}
-      </button>
-    );
-  }
-
-  // Secondary button
-  function BtnSec({children,onClick,style={}}){
-    return(
-      <button onClick={onClick} style={{background:"#fff",borderRadius:16,padding:"15px 20px",fontSize:15,fontWeight:600,color:"#374151",boxShadow:"0 2px 8px rgba(0,0,0,0.08)",transition:"all .2s",...style}}>
-        {children}
-      </button>
-    );
-  }
-
-  // Back nav
-  function BackNav({onClick,extras}){
-    return(
-      <div style={{display:"flex",alignItems:"center",gap:8,paddingBottom:20}}>
-        <button onClick={onClick} style={{background:"#fff",borderRadius:12,padding:"8px 14px",fontSize:14,fontWeight:600,color:"#7C3AED",display:"flex",alignItems:"center",gap:6,boxShadow:"0 2px 8px rgba(0,0,0,0.08)"}}>
-          <svg width="8" height="14" viewBox="0 0 8 14" fill="none"><path d="M7 1L1 7L7 13" stroke="#7C3AED" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-          Back
-        </button>
-        {extras}
-      </div>
-    );
-  }
 
   // ── LOADING ───────────────────────────────────────────────────────────
   if(phase==="loading") return(
