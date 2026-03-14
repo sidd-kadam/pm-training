@@ -153,7 +153,7 @@ async function sendFeedback(payload) {
 }
 
 // ── NEW: Guest Survey component (standalone, no shared state with main app) ─
-export default function GuestSurvey({ guestProfile, lastScore, onDone }) {
+export default function App() {
   const [rating, setRating] = useState(0);
   const [freq, setFreq] = useState("");
   const [missing, setMissing] = useState("");
@@ -276,7 +276,7 @@ export default function GuestSurvey({ guestProfile, lastScore, onDone }) {
         {isGuest && (
           <div style={{ ...card({ background: guestChallengeCount >= 1 ? "rgba(255,159,10,0.08)" : "rgba(127,108,240,0.06)", borderColor: guestChallengeCount >= 1 ? "#FF9F0A44" : "#7F6CF044" }), display: "flex", alignItems: "center", gap: 12 }} className="au1">
             <div style={{ display: "flex", gap: 5 }}>
-              {[1].map(n => <div key={n} style={{ width: 32, height: 6, borderRadius: 99, background: n <= guestChallengeCount ? "#C4B5FD" : "rgba(255,255,255,0.1)", transition: "background .3s" }}/>)}
+              <div style={{ width: 32, height: 6, borderRadius: 99, background: guestChallengeCount >= 1 ? "#C4B5FD" : "rgba(255,255,255,0.1)", transition: "background .3s" }}/>
             </div>
             <span style={{ fontSize: 12, color: guestChallengeCount >= 1 ? "#C4B5FD" : "rgba(255,255,255,0.45)", fontWeight: guestChallengeCount >= 1 ? 700 : 400 }}>
               {guestChallengeCount >= 1 ? "1/1 challenge used — please give us your feedback" : "1 free challenge available"}
@@ -311,7 +311,7 @@ export default function GuestSurvey({ guestProfile, lastScore, onDone }) {
           ) : (
             <>
               <div style={{ fontSize: 13, color: "rgba(255,255,255,0.5)", lineHeight: 1.7, marginBottom: 18 }}>
-                {isGuest ? `1 free challenge available. Choose your track below.` : "Choose your track. Get a real PM scenario. Write a serious answer. Your coach scores you."}
+                {isGuest ? "1 free challenge available. Choose your track below." : "Choose your track. Get a real PM scenario. Write a serious answer. Your coach scores you."}
               </div>
               <div style={{ display: "flex", gap: 10 }}>
                 {[["B2B", "🏢", "#7F6CF0", "#1D1B2E", "Enterprise & platform"], ["B2C", "📱", "#7F6CF0", "#0F2018", "Consumer & growth"]].map(([t, icon, accent, bg, desc]) => (
