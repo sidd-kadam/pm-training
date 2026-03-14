@@ -236,7 +236,7 @@ export default function PMApp() {
     const chosen=p2[Math.floor(Math.random()*p2.length)];
     setPick(chosen);setHintOpen(false);
     try{const text=await callClaude(`You are a ${track} PM coach. Generate a concise, realistic, specific challenge.`,chosen.prompt);setChallenge(text);setAnswer("");setPhase("answering");}
-    catch(e){setError(e.message);setPhase("home");}
+    catch(e){setError("Challenge failed: " + e.message);setPhase("home");}
   }
 
   async function submitAnswer(){
