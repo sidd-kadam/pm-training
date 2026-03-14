@@ -181,6 +181,9 @@ export default function PMApp() {
   const [history, setHistory] = useState([]);
   const [error, setError] = useState("");
   const [sessionCount, setSessionCount] = useState(0);
+  const [unlocked, setUnlocked] = useState(() => storageGet("pm_auth")?.value === "true");
+  const [pwInput, setPwInput] = useState("");
+  const [pwError, setPwError] = useState(false);
 
   const today = new Date().toLocaleDateString("en-US", { weekday:"long", month:"long", day:"numeric" });
 
@@ -244,6 +247,53 @@ export default function PMApp() {
   const CONTAINER = { maxWidth:660, margin:"0 auto", padding:"0 24px 80px" };
   const CARD = { background:"#FFFFFF", border:"1px solid #E8E3DE", borderRadius:16, overflow:"hidden" };
   const DIVIDER = { height:1, background:"#F5F1EE", margin:"0" };
+
+  // ── PASSWORD GATE ─────────────────────────────────────────────────────
+  function checkPassword() {
+    if (pwInput.trim().toLowerCase() === "pmtraining2026") {
+      storageSet("pm_auth", "true");
+      setUnlocked(true);
+    } else {
+      setPwError(true);
+      setPwInput("");
+    }
+  }
+
+  if (!unlocked) return (
+    <div style={{ ...PAGE, display:"flex", alignItems:"center", justifyContent:"center", minHeight:"100vh" }}>
+      <style>{G}</style>
+      <div style={{ width:"100%", maxWidth:400, padding:"0 24px" }}>
+        <div style={{ textAlign:"center", marginBottom:40 }} className="au">
+          <div style={{ width:56, height:56, borderRadius:16, background:"linear-gradient(135deg,#7C3AED,#4F46E5)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 20px", boxShadow:"0 4px 20px rgba(124,58,237,0.3)" }}>
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+              <path d="M4 19L9 10L13 14L17 7L21 12" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <circle cx="21" cy="6" r="2" fill="white"/>
+            </svg>
+          </div>
+          <h1 style={{ fontFamily:"Inter,sans-serif", fontWeight:700, fontSize:26, color:"#1C1917", letterSpacing:"-0.03em", marginBottom:8 }}>PM Training</h1>
+          <p style={{ fontFamily:"Inter,sans-serif", fontSize:15, color:"#78716C", lineHeight:1.6 }}>Enter the access code to continue.</p>
+        </div>
+        <div className="au1">
+          <div style={{ background:"#fff", border: pwError ? "1.5px solid #FCA5A5" : "1.5px solid #E8E3DE", borderRadius:14, overflow:"hidden", transition:"border 0.2s", boxShadow:"0 1px 4px rgba(0,0,0,0.04)" }}>
+            <input
+              type="password"
+              value={pwInput}
+              onChange={e => { setPwInput(e.target.value); setPwError(false); }}
+              onKeyDown={e => { if (e.key === "Enter") checkPassword(); }}
+              placeholder="Access code"
+              autoFocus
+              style={{ width:"100%", border:"none", padding:"16px 20px", fontFamily:"Inter,sans-serif", fontSize:16, color:"#1C1917", background:"transparent", outline:"none", letterSpacing:"0.08em" }}
+            />
+          </div>
+          {pwError && <p style={{ fontFamily:"Inter,sans-serif", fontSize:13, color:"#DC2626", marginTop:8, textAlign:"center" }}>Incorrect access code. Try again.</p>}
+          <button className="action-btn" onClick={checkPassword} style={{ width:"100%", background:"#7C3AED", border:"none", borderRadius:12, padding:"14px", color:"#fff", fontFamily:"Inter,sans-serif", fontSize:15, fontWeight:600, marginTop:12, transition:"all 0.2s" }}>
+            Continue
+          </button>
+          <p style={{ fontFamily:"Inter,sans-serif", fontSize:13, color:"#C4B5A8", textAlign:"center", marginTop:16, lineHeight:1.6 }}>This app is private. Contact Siddhant for access.</p>
+        </div>
+      </div>
+    </div>
+  );
 
   // ── LOADING ───────────────────────────────────────────────────────────
   if (phase === "loading") return (
