@@ -77,24 +77,14 @@ Single most impactful improvement. Make it concrete.
 Write a 120-word model answer for this exact challenge. Show structure, framework, business reasoning. Educational and specific.`;
 
 async function callClaude(system, userMsg) {
-  const res = await fetch("https://api.anthropic.com/v1/messages", {
+  const res = await fetch("/api/chat", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": import.meta.env.VITE_ANTHROPIC_API_KEY,
-      "anthropic-version": "2023-06-01",
-      "anthropic-dangerous-direct-browser-access": "true"
-    },
-    body: JSON.stringify({
-      model: "claude-haiku-4-5-20251001",
-      max_tokens: 700,
-      system,
-      messages: [{ role: "user", content: userMsg }],
-    }),
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ system, userMsg }),
   });
   const d = await res.json();
-  if (d.error) throw new Error(d.error.message);
-  return d.content?.map(b => b.text || "").join("") || "";
+  if (d.error) throw new Error(d.error);
+  return d.text || "";
 }
 
 function renderLines(text, baseColor = "#94a3b8") {
