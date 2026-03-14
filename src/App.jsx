@@ -505,7 +505,7 @@ export default function PMApp() {
             <div style={{ fontFamily:"Inter,sans-serif", fontSize:13, color:"rgba(255,255,255,0.3)", marginTop:4 }}>out of 10</div>
             <div style={{ marginTop:14, padding:"8px 18px", background: scores.overall>=7?"rgba(48,209,88,0.08)":scores.overall>=5?"rgba(255,159,10,0.08)":"rgba(255,69,58,0.08)", borderRadius:20, display:"inline-block" }}>
               <span style={{ fontFamily:"Inter,sans-serif", fontSize:14, fontWeight:500, color: scores.overall>=7?"#30D158":scores.overall>=5?"#FF9F0A":"#FF453A" }}>
-                {scores.overall>=7?"Solid junior PM thinking":"scores.overall>=5?Good foundation, keep building":"Real gaps to close — let's fix them"}
+                {scores.overall>=7?"Solid junior PM thinking":scores.overall>=5?"Good foundation, keep building":"Real gaps to close — let's fix them"}
               </span>
             </div>
           </div>
