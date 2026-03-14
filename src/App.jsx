@@ -153,7 +153,7 @@ async function sendFeedback(payload) {
 }
 
 // ── NEW: Guest Survey component (standalone, no shared state with main app) ─
-function GuestSurvey({ guestProfile, lastScore, onDone }) {
+export default function GuestSurvey({ guestProfile, lastScore, onDone }) {
   const [rating, setRating] = useState(0);
   const [freq, setFreq] = useState("");
   const [missing, setMissing] = useState("");
