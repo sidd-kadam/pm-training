@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
 
-// ── Storage helpers (unchanged) ───────────────────────────────────────────
 function storageGet(key) { try { const v = localStorage.getItem(key); return v ? { value: v } : null; } catch { return null; } }
 function storageSet(key, value) { try { localStorage.setItem(key, value); } catch {} }
 function storageList(prefix) { try { return { keys: Object.keys(localStorage).filter(k => k.startsWith(prefix)) }; } catch { return { keys: [] }; } }
 
-// ── Challenge data (unchanged) ────────────────────────────────────────────
 const CHALLENGES = {
   B2B: [
     { tag: "PRIORITIZATION", color: "#7F6CF0",
@@ -43,7 +41,6 @@ const CHALLENGES = {
   ]
 };
 
-// ── Assessment prompt (unchanged) ─────────────────────────────────────────
 const ASSESS_SYSTEM = `You are a direct PM coach for a junior PM (0-2 years). Be honest, specific, encouraging.
 
 Reply in this EXACT format:
@@ -73,7 +70,6 @@ Single most impactful improvement. Concrete and learnable.
 **STRONG ANSWER EXAMPLE**
 120-word model answer. Show framework applied, structure, specific business reasoning.`;
 
-// ── API call (unchanged) ──────────────────────────────────────────────────
 async function callClaude(system, userMsg) {
   const res = await fetch("/api/chat", {
     method: "POST",
@@ -85,7 +81,6 @@ async function callClaude(system, userMsg) {
   return d.text || "";
 }
 
-// ── Global styles (unchanged) ─────────────────────────────────────────────
 const G = `
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -100,17 +95,15 @@ const G = `
   .au2 { animation: fadeUp .4s .12s cubic-bezier(.22,1,.36,1) both; }
   .au3 { animation: fadeUp .4s .18s cubic-bezier(.22,1,.36,1) both; }
   .au4 { animation: fadeUp .4s .24s cubic-bezier(.22,1,.36,1) both; }
-  .hovcard:hover { background: #252525 !important; }
   .trk { transition: background .15s; }
   .trk:hover { background: #252525 !important; }
   input:focus, textarea:focus { border-color: #7F6CF0 !important; box-shadow: 0 0 0 2px rgba(127,108,240,0.15) !important; }
 `;
 
-// ── Shared render helpers (unchanged) ─────────────────────────────────────
 function renderMD(text, isKey = false) {
-  const headColor = isKey ? "#7F6CF0" : "#E6E6E6";
-  const bodyColor = isKey ? "rgba(0,200,150,0.85)" : "rgba(255,255,255,0.7)";
-  const labelColor = isKey ? "#7F6CF0" : "rgba(255,255,255,0.35)";
+  const headColor = isKey ? "#A78BFA" : "#E6E6E6";
+  const bodyColor = isKey ? "rgba(167,139,250,0.85)" : "rgba(255,255,255,0.7)";
+  const labelColor = isKey ? "#7F6CF0" : "rgba(255,255,255,0.3)";
   return text.trim().split("\n").map((line, i) => {
     if (line.startsWith("**") && line.endsWith("**"))
       return <p key={i} style={{ fontSize:10, fontWeight:600, letterSpacing:"0.1em", textTransform:"uppercase", color:labelColor, marginTop:20, marginBottom:8, fontFamily:"Inter,sans-serif" }}>{line.replace(/\*\*/g,"")}</p>;
@@ -127,218 +120,205 @@ function ScoreBar({ label, score, delay = 0 }) {
   const [w, setW] = useState(0);
   useEffect(() => { const t = setTimeout(() => setW(score * 10), 300 + delay); return () => clearTimeout(t); }, [score]);
   const color = score >= 7 ? "#7F6CF0" : score >= 5 ? "#C4B5FD" : "#FF6B6B";
-  const bg = score >= 7 ? "rgba(127,108,240,0.15)" : score >= 5 ? "rgba(196,181,253,0.15)" : "rgba(255,107,107,0.15)";
+  const bg    = score >= 7 ? "rgba(127,108,240,0.15)" : score >= 5 ? "rgba(196,181,253,0.15)" : "rgba(255,107,107,0.15)";
   return (
     <div style={{ padding:"12px 0", borderBottom:"1px solid rgba(255,255,255,0.05)" }}>
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:10 }}>
-        <span style={{ fontFamily:"Inter,sans-serif", fontSize:14, color:"rgba(255,255,255,0.55)", fontWeight:400 }}>{label}</span>
+        <span style={{ fontFamily:"Inter,sans-serif", fontSize:14, color:"rgba(255,255,255,0.5)", fontWeight:400 }}>{label}</span>
         <span style={{ fontFamily:"Inter,sans-serif", fontSize:13, fontWeight:600, color, background:bg, padding:"3px 10px", borderRadius:99 }}>{score}/10</span>
       </div>
-      <div style={{ height:6, background:"rgba(255,255,255,0.07)", borderRadius:99, overflow:"hidden" }}>
-        <div style={{ width:`${w}%`, height:"100%", background:`linear-gradient(90deg,${color}cc,${color})`, borderRadius:99, transition:"width 1s cubic-bezier(.4,0,.2,1)" }}/>
+      <div style={{ height:5, background:"rgba(255,255,255,0.07)", borderRadius:99, overflow:"hidden" }}>
+        <div style={{ width:`${w}%`, height:"100%", background:`linear-gradient(90deg,${color}99,${color})`, borderRadius:99, transition:"width 1s cubic-bezier(.4,0,.2,1)" }}/>
       </div>
     </div>
   );
 }
 
-// ── NEW: Guest feedback API call ──────────────────────────────────────────
-async function sendFeedback(payload) {
-  const res = await fetch("/api/feedback", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
-  const d = await res.json();
-  if (!d.ok) throw new Error(d.error || "Failed to send");
-}
+export default function PMApp() {
+  const [phase, setPhase] = useState("home");
+  const [trackType, setTrackType] = useState(null);
+  const [challenge, setChallenge] = useState("");
+  const [pick, setPick] = useState(null);
+  const [hintOpen, setHintOpen] = useState(false);
+  const [answer, setAnswer] = useState("");
+  const [assessment, setAssessment] = useState("");
+  const [answerKey, setAnswerKey] = useState("");
+  const [showKey, setShowKey] = useState(false);
+  const [scores, setScores] = useState(null);
+  const [total, setTotal] = useState(0);
+  const [highScores, setHighScores] = useState(0);
+  const [history, setHistory] = useState([]);
+  const [error, setError] = useState("");
+  const [unlocked, setUnlocked] = useState(() => storageGet("pm_auth")?.value === "true");
+  const [pwInput, setPwInput] = useState("");
+  const [pwError, setPwError] = useState(false);
 
-// ── NEW: Guest Survey component (standalone, no shared state with main app) ─
-export default function App() {
-  const [rating, setRating] = useState(0);
-  const [freq, setFreq] = useState("");
-  const [missing, setMissing] = useState("");
-  const [wouldPay, setWouldPay] = useState("");
-  const [priceRange, setPriceRange] = useState("");
-  const [recommend, setRecommend] = useState(null);
-  const [extra, setExtra] = useState("");
-  const [sending, setSending] = useState(false);
-  const [sent, setSent] = useState(false);
-  const [err, setErr] = useState("");
+  const today = new Date().toISOString().slice(0, 10);
+  const font  = "'Inter', sans-serif";
+  const base  = { fontFamily: font, background: "#191919", minHeight: "100vh", color: "#E6E6E6", padding: "24px 20px" };
+  const card  = (x = {}) => ({ background: "#202020", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 10, padding: 20, marginBottom: 10, ...x });
+  const pill  = c => ({ fontSize: 11, padding: "3px 10px", borderRadius: 4, background: c + "18", color: c, letterSpacing: "0.02em", fontWeight: 500 });
+  const btn   = (bg, fg = "#191919", off = false) => ({ background: bg, color: fg, border: "none", borderRadius: 8, padding: "10px 20px", fontFamily: font, fontWeight: 500, fontSize: 14, cursor: off ? "default" : "pointer", opacity: off ? 0.4 : 1, transition: "all 0.12s" });
 
-  const font = "'Inter', sans-serif";
-  const base = { fontFamily: font, background: "#191919", minHeight: "100vh", color: "#E6E6E6", padding: "24px 20px" };
-  const card = (x = {}) => ({ background: "#202020", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 8, padding: 20, marginBottom: 10, ...x });
-  const pill = c => ({ fontSize: 11, padding: "3px 10px", borderRadius: 4, background: c + "18", color: c, letterSpacing: "0.02em", fontWeight: 500 });
-  const btn = (bg, fg = "#191919", off = false) => ({ background: bg, color: fg, border: "none", borderRadius: 8, padding: "10px 20px", fontFamily: font, fontWeight: 500, fontSize: 14, cursor: off ? "default" : "pointer", opacity: off ? 0.4 : 1, transition: "all 0.12s" });
+  useEffect(() => {
+    const hR = storageList("pm_session:");
+    if (hR?.keys?.length) {
+      const s = hR.keys.map(k => { const r = storageGet(k); return r ? JSON.parse(r.value) : null; }).filter(Boolean).reverse();
+      setHistory(s.slice(0, 30));
+      setTotal(s.length);
+      setHighScores(s.filter(x => x.scores?.overall >= 7).length);
+    }
+  }, []);
 
-  // ── NEW: Render guest form ──
-  if (screen === "guestForm") return (
-    <GuestForm onSubmit={startGuestSession} onBack={() => setScreen("entry")} />
-  );
+  function checkPassword() {
+    if (pwInput.trim() === "Siddhant@0812") {
+      storageSet("pm_auth", "true");
+      setUnlocked(true);
+    } else {
+      setPwError(true);
+      setPwInput("");
+    }
+  }
 
-  // ── NEW: Render survey ──
-  if (screen === "survey") return (
-    <GuestSurvey guestProfile={guestProfile} lastScore={guestLastScore} onDone={endGuestSession} />
-  );
+  async function startChallenge(track) {
+    setTrackType(track); setPhase("loading"); setError("");
+    const pool = CHALLENGES[track];
+    const lastR = storageGet("pm_last_tag");
+    let p2 = pool.filter(c => c.tag !== lastR?.value);
+    if (!p2.length) p2 = pool;
+    const chosen = p2[Math.floor(Math.random() * p2.length)];
+    setPick(chosen); setHintOpen(false);
+    try {
+      const text = await callClaude(`You are a ${track} PM coach. Generate a concise, realistic, specific challenge.`, chosen.prompt);
+      setChallenge(text); setAnswer(""); setPhase("answering");
+    } catch (e) { setError(e.message); setPhase("home"); }
+  }
 
-  // ── NEW: Entry screen (replaces old password-only screen) ──
-  if (screen === "entry" && !unlocked) return (
+  async function submitAnswer() {
+    if (answer.trim().length < 60) return;
+    setPhase("loading");
+    try {
+      const result = await callClaude(ASSESS_SYSTEM, `TRACK: ${trackType}\nTYPE: ${pick?.tag}\n\nCHALLENGE:\n${challenge}\n\nANSWER:\n${answer}`);
+      const idx = result.indexOf("---KEY---");
+      setAssessment(idx > -1 ? result.slice(0, idx) : result);
+      setAnswerKey(idx > -1 ? result.slice(idx + 9) : "");
+      setShowKey(false);
+      const m = l => { const r = new RegExp(l + "[:\\s]+(\\d+)/10", "i"); const x = result.match(r); return x ? parseInt(x[1]) : 5; };
+      const s = { structured: m("Structured Thinking"), business: m("Business Acumen"), depth: m("Specificity"), maturity: m("PM Maturity"), overall: m("Overall") };
+      setScores(s); saveSession(s); setPhase("result");
+    } catch (e) { setError(e.message); setPhase("answering"); }
+  }
+
+  function saveSession(s) {
+    storageSet("pm_last_tag", pick?.tag);
+    storageSet(`pm_session:${Date.now()}`, JSON.stringify({ date: today, tag: pick?.tag, track: trackType, scores: s }));
+    const ns = { date: today, tag: pick?.tag, track: trackType, scores: s };
+    setHistory(prev => [ns, ...prev].slice(0, 30));
+    setTotal(p => p + 1);
+    if (s.overall >= 7) setHighScores(p => p + 1);
+  }
+
+  // ── PASSWORD ──────────────────────────────────────────────────────────
+  if (!unlocked) return (
     <div style={{ ...base, display: "flex", alignItems: "center", justifyContent: "center" }}>
       <style>{G}</style>
-      <div style={{ width: "100%", maxWidth: 420 }} className="au">
-        {/* Logo */}
+      <div style={{ width: "100%", maxWidth: 360 }} className="au">
         <div style={{ textAlign: "center", marginBottom: 36 }}>
-          <div style={{ width: 60, height: 60, borderRadius: 10, background: "linear-gradient(145deg,#C4B5FD,#5B7FFF)" , display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 18px", boxShadow: "0 4px 20px rgba(127,108,240,0.4)" }}>
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-              <path d="M4 20L9 11L14 15L18 7L23 12" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-              <circle cx="23" cy="6" r="2.5" fill="white"/>
+          <div style={{ width: 56, height: 56, borderRadius: 14, background: "linear-gradient(145deg,#7F6CF0,#6356C7)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px", boxShadow: "0 8px 24px rgba(127,108,240,0.35)" }}>
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+              <path d="M4 19L9 10L13 14L17 7L21 12" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <circle cx="21" cy="6" r="2.5" fill="white"/>
             </svg>
           </div>
-          <h1 style={{ fontSize: 26, fontWeight: 600, color: "#E6E6E6", marginBottom: 8, letterSpacing: "-0.02em" }}>PM Training</h1>
-          <p style={{ fontSize: 14, color: "rgba(255,255,255,0.45)", lineHeight: 1.6 }}>Real challenges. Honest scores.<br/>Build your PM skills daily.</p>
+          <h1 style={{ fontSize: 24, fontWeight: 700, color: "#E6E6E6", marginBottom: 6, letterSpacing: "-0.02em" }}>PM Training</h1>
+          <p style={{ fontSize: 14, color: "rgba(255,255,255,0.35)", lineHeight: 1.5 }}>Personal dashboard. Enter your code.</p>
         </div>
-
-        {/* Guest option */}
-        <div style={{ ...card({ borderColor: "#7F6CF044", background: "rgba(127,108,240,0.06)" }), marginBottom: 10 }} className="au1">
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 14 }}>
-            <span style={{ fontSize: 26 }}>👋</span>
-            <div>
-              <p style={{ fontSize: 14, fontWeight: 600, color: "#E6E6E6", marginBottom: 2 }}>Try it free</p>
-              <p style={{ fontSize: 12, color: "rgba(127,108,240,0.8)" }}>1 free challenge · No account needed</p>
-            </div>
-          </div>
-          <button onClick={() => setScreen("guestForm")} style={{ ...btn("#7F6CF0", "#fff"), width: "100%", boxShadow: "0 4px 16px rgba(127,108,240,0.3)" }}>
-            Continue as Guest →
-          </button>
-        </div>
-
-        {/* Divider */}
-        <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "18px 0" }} className="au2">
-          <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.08)" }}/>
-          <span style={{ fontSize: 11, color: "rgba(255,255,255,0.25)" }}>or sign in with access code</span>
-          <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.08)" }}/>
-        </div>
-
-        {/* Password */}
-        <div style={card()} className="au2">
+        <div style={card()}>
           <input type="password" value={pwInput}
             onChange={e => { setPwInput(e.target.value); setPwError(false); }}
             onKeyDown={e => e.key === "Enter" && checkPassword()}
-            placeholder="Enter access code"
-            autoComplete="off"
-            style={{ width: "100%", border: `1px solid ${pwError ? "#FF6B6B" : "rgba(255,255,255,0.08)"}`, borderRadius: 8, padding: "13px 16px", fontFamily: font, fontSize: 14, color: "#E6E6E6", background: "#191919", marginBottom: 10 }}
+            placeholder="Access code"
+            autoFocus
+            style={{ width: "100%", background: "#191919", border: `1px solid ${pwError ? "#FF6B6B" : "rgba(255,255,255,0.08)"}`, borderRadius: 8, padding: "12px 14px", fontFamily: font, fontSize: 15, color: "#E6E6E6", marginBottom: 10 }}
           />
           {pwError && <p style={{ fontSize: 13, color: "#FF6B6B", textAlign: "center", marginBottom: 10 }}>Incorrect code. Try again.</p>}
-          <button onClick={checkPassword} style={{ ...btn("rgba(255,255,255,0.08)", "rgba(255,255,255,0.7)"), width: "100%", border: "1px solid rgba(255,255,255,0.08)" }}>Sign in</button>
+          <button onClick={checkPassword} style={{ ...btn("#7F6CF0", "#fff"), width: "100%", boxShadow: "0 4px 16px rgba(127,108,240,0.3)" }}>Continue →</button>
         </div>
       </div>
     </div>
   );
 
-  // ── LOADING (unchanged) ───────────────────────────────────────────────
+  // ── LOADING ───────────────────────────────────────────────────────────
   if (phase === "loading") return (
-    <div style={{ ...base, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 16 }}>
+    <div style={{ ...base, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14 }}>
       <style>{G}</style>
-      <div style={{ width: 32, height: 32, border: "3px solid rgba(255,255,255,0.08)", borderTopColor: "#7F6CF0" , borderRadius: "50%", animation: "spin 0.75s linear infinite" }}/>
-      <p style={{ fontSize: 13, color: "rgba(255,255,255,0.45)" }}>Loading your challenge…</p>
+      <div style={{ width: 30, height: 30, border: "2px solid rgba(255,255,255,0.08)", borderTopColor: "#7F6CF0", borderRadius: "50%", animation: "spin 0.7s linear infinite" }}/>
+      <p style={{ fontSize: 13, color: "rgba(255,255,255,0.3)", fontFamily: font }}>Loading…</p>
     </div>
   );
 
-  // ── HOME (existing + guest additions) ────────────────────────────────
+  // ── HOME ──────────────────────────────────────────────────────────────
   if (phase === "home") return (
     <div style={base}>
       <style>{G}</style>
-      <div style={{ maxWidth: 600, margin: "0 auto" }}>
+      <div style={{ maxWidth: 580, margin: "0 auto" }}>
 
-        {/* Header — NEW: shows guest name + End Session btn; else unchanged */}
-        <div style={{ marginBottom: 28, display: "flex", justifyContent: "space-between", alignItems: "flex-start" }} className="au">
-          <div>
-            <div style={{ fontSize: 11, color: "#7F6CF0", letterSpacing: "0.12em", marginBottom: 8, fontWeight: 600 }}>PM DAILY TRAINING</div>
-            <div style={{ fontSize: 26, fontWeight: 800, color: "#E8E8E8", letterSpacing: "-0.02em", lineHeight: 1.2 }}>
-              {isGuest ? `Hi, ${guestProfile.firstName}! 👋` : "Hi, Siddhant! 👋"}
-            </div>
-            {isGuest ? (
-              <div style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", marginTop: 4 }}>
-                "{["Clarity beats cleverness. Strategy beats effort.", "Every PM started where you are now.", "Questions sharpen thinking. Thinking sharpens products.", "The best PMs say no more than yes."][Math.floor(Date.now() / 86400000) % 4]}"
-              </div>
-            ) : (
-              <div style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", marginTop: 4 }}>One challenge. One assessment. Every day.</div>
-            )}
-          </div>
-          {isGuest && (
-            <button onClick={endGuestSession} style={{ ...btn("#FF453A22", "#FF6B6B"), fontSize: 11, padding: "7px 14px", border: "1px solid #FF453A33" }}>
-              End Session
-            </button>
-          )}
+        {/* Header */}
+        <div style={{ marginBottom: 28 }} className="au">
+          <p style={{ fontSize: 11, color: "#7F6CF0", letterSpacing: "0.12em", fontWeight: 600, marginBottom: 8 }}>PM DAILY TRAINING</p>
+          <h1 style={{ fontSize: 26, fontWeight: 700, color: "#E6E6E6", letterSpacing: "-0.02em", lineHeight: 1.2, marginBottom: 6 }}>Hi, Siddhant 👋</h1>
+          <p style={{ fontSize: 14, color: "rgba(255,255,255,0.35)" }}>One challenge. One assessment. Every day.</p>
         </div>
 
-        {/* NEW: Guest challenge counter */}
-        {isGuest && (
-          <div style={{ ...card({ background: guestChallengeCount >= 1 ? "rgba(255,159,10,0.08)" : "rgba(127,108,240,0.06)", borderColor: guestChallengeCount >= 1 ? "#FF9F0A44" : "#7F6CF044" }), display: "flex", alignItems: "center", gap: 12 }} className="au1">
-            <div style={{ display: "flex", gap: 5 }}>
-              <div style={{ width: 32, height: 6, borderRadius: 99, background: guestChallengeCount >= 1 ? "#C4B5FD" : "rgba(255,255,255,0.1)", transition: "background .3s" }}/>
+        {error && <div style={{ ...card({ background: "rgba(255,107,107,0.08)", borderColor: "rgba(255,107,107,0.2)" }), fontSize: 13, color: "#FF6B6B", marginBottom: 10 }}>⚠ {error}</div>}
+
+        {/* Stats */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }} className="au1">
+          {[
+            { label: "Total sessions", value: total, color: "#7F6CF0", bg: "#1D1B2E" },
+            { label: "Scored 7 or above", value: highScores, color: "#C4B5FD", bg: "#1A1826" },
+          ].map((s, i) => (
+            <div key={i} style={{ background: s.bg, border: `1px solid ${s.color}22`, borderRadius: 10, padding: "18px 16px" }}>
+              <div style={{ fontSize: 30, fontWeight: 700, color: s.color, letterSpacing: "-0.03em", lineHeight: 1, marginBottom: 6 }}>{s.value}</div>
+              <div style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", fontWeight: 400 }}>{s.label}</div>
             </div>
-            <span style={{ fontSize: 12, color: guestChallengeCount >= 1 ? "#C4B5FD" : "rgba(255,255,255,0.45)", fontWeight: guestChallengeCount >= 1 ? 700 : 400 }}>
-              {guestChallengeCount >= 1 ? "1/1 challenge used — please give us your feedback" : "1 free challenge available"}
-            </span>
-            {guestChallengeCount >= 1 && (
-              <button onClick={() => setScreen("survey")} style={{ ...btn("#C4B5FD", "#191919"), fontSize: 11, padding: "6px 14px", marginLeft: "auto" }}>Give Feedback →</button>
-            )}
-          </div>
-        )}
+          ))}
+        </div>
 
-        {error && <div style={{ ...card({ background: "rgba(255,69,58,0.08)", border: "1px solid rgba(255,69,58,0.2)" }), fontSize: 13, color: "#FF6B6B", marginBottom: 14 }}>⚠ {error}</div>}
-
-        {/* Stats (unchanged for logged-in, hidden for guest) */}
-        {!isGuest && (
-          <div style={{ ...card(), display: "flex" }} className="au1">
-            {[["TOTAL SESSIONS", total, "#7F6CF0", "#1D1B2E"], ["7+ SCORES", highScores, "#7F6CF0", "#0F2018"]].map(([l, v, c, bg], i) => (
-              <div key={i} style={{ flex: 1, textAlign: "center", background: bg, borderRadius: 14, margin: "0 4px", padding: "16px 8px", border: `1px solid ${c}20` }}>
-                <div style={{ fontSize: 32, fontWeight: 800, color: c, letterSpacing: "-0.03em", lineHeight: 1 }}>{v}</div>
-                <div style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", marginTop: 6, fontWeight: 500 }}>{l}</div>
-              </div>
+        {/* Track selection */}
+        <div style={card()} className="au2">
+          <p style={{ fontSize: 13, color: "rgba(255,255,255,0.45)", lineHeight: 1.6, marginBottom: 16 }}>
+            Choose your track. Get a real scenario. Write a serious answer. Get scored on 4 dimensions.
+          </p>
+          <div style={{ display: "flex", gap: 10 }}>
+            {[
+              { t: "B2B", icon: "🏢", color: "#7F6CF0", bg: "#1D1B2E", desc: "Enterprise & platform" },
+              { t: "B2C", icon: "📱", color: "#C4B5FD", bg: "#1A1826", desc: "Consumer & growth" },
+            ].map(({ t, icon, color, bg, desc }) => (
+              <button key={t} className="trk" onClick={() => startChallenge(t)}
+                style={{ flex: 1, background: bg, border: `1px solid ${color}22`, borderRadius: 10, padding: "16px 14px", cursor: "pointer", fontFamily: font, textAlign: "left" }}>
+                <div style={{ fontSize: 24, marginBottom: 12 }}>{icon}</div>
+                <div style={{ fontSize: 14, fontWeight: 600, color, marginBottom: 4 }}>{t} PM</div>
+                <div style={{ fontSize: 12, color: "rgba(255,255,255,0.35)" }}>{desc}</div>
+              </button>
             ))}
           </div>
-        )}
-
-        {/* Track selection (unchanged, but disabled if guest hit limit) */}
-        <div style={card()} className="au2">
-          {isGuest && guestChallengeCount >= 1 ? (
-            <div style={{ textAlign: "center", padding: "8px 0" }}>
-              <p style={{ fontSize: 14, color: "rgba(255,255,255,0.5)", marginBottom: 14 }}>You've used your free challenge.</p>
-              <button onClick={() => setScreen("survey")} style={{ ...btn("#7F6CF0", "#fff"), boxShadow: "0 4px 16px rgba(127,108,240,0.3)" }}>Give Feedback & See Results →</button>
-            </div>
-          ) : (
-            <>
-              <div style={{ fontSize: 13, color: "rgba(255,255,255,0.5)", lineHeight: 1.7, marginBottom: 18 }}>
-                {isGuest ? "1 free challenge available. Choose your track below." : "Choose your track. Get a real PM scenario. Write a serious answer. Your coach scores you."}
-              </div>
-              <div style={{ display: "flex", gap: 10 }}>
-                {[["B2B", "🏢", "#7F6CF0", "#1D1B2E", "Enterprise & platform"], ["B2C", "📱", "#7F6CF0", "#0F2018", "Consumer & growth"]].map(([t, icon, accent, bg, desc]) => (
-                  <button key={t} onClick={() => startChallenge(t)} className="trk" style={{ flex: 1, background: bg, border: `1.5px solid ${accent}30`, borderRadius: 10, padding: "18px 14px", cursor: "pointer", fontFamily: font, textAlign: "left", boxShadow: "0 4px 16px rgba(0,0,0,0.2)" }}>
-                    <div style={{ width: 44, height: 44, borderRadius: 12, background: accent + "22", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, marginBottom: 14 }}>{icon}</div>
-                    <div style={{ fontSize: 16, fontWeight: 600, color: accent, marginBottom: 4 }}>{t} PM</div>
-                    <div style={{ fontSize: 12, color: "rgba(255,255,255,0.45)", lineHeight: 1.5 }}>{desc}</div>
-                  </button>
-                ))}
-              </div>
-            </>
-          )}
         </div>
 
-        {/* History (hidden for guest) */}
-        {!isGuest && history.length > 0 && (
+        {/* History */}
+        {history.length > 0 && (
           <div style={card()} className="au3">
-            <div style={{ fontSize: 10, color: "rgba(255,255,255,0.35)", letterSpacing: "0.1em", marginBottom: 14 }}>RECENT SESSIONS</div>
-            {history.slice(0, 7).map((s, i) => {
+            <p style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em", marginBottom: 14, fontWeight: 600 }}>RECENT SESSIONS</p>
+            {history.slice(0, 8).map((s, i) => {
               const c = CHALLENGES.B2B.concat(CHALLENGES.B2C).find(x => x.tag === s.tag)?.color || "#64748b";
               const sc = s.scores?.overall;
+              const scColor = sc >= 7 ? "#7F6CF0" : sc >= 5 ? "#C4B5FD" : "#FF6B6B";
               return (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 0", borderBottom: i < Math.min(history.length - 1, 6) ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
-                  <span style={{ fontSize: 10, padding: "2px 7px", borderRadius: 3, background: s.track === "B2C" ? "rgba(10,132,255,0.15)" : "rgba(127,108,240,0.15)", color: s.track === "B2C" ? "#7F6CF0" : "#7F6CF0", fontWeight: 700 }}>{s.track || "B2B"}</span>
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "9px 0", borderBottom: i < Math.min(history.length - 1, 7) ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
+                  <span style={{ fontSize: 10, padding: "2px 7px", borderRadius: 3, background: s.track === "B2C" ? "rgba(196,181,253,0.12)" : "rgba(127,108,240,0.12)", color: s.track === "B2C" ? "#C4B5FD" : "#7F6CF0", fontWeight: 600 }}>{s.track || "B2B"}</span>
                   <span style={pill(c)}>{s.tag}</span>
-                  <span style={{ fontSize: 11, color: "rgba(255,255,255,0.25)", flex: 1 }}>{s.date}</span>
-                  {sc && <span style={{ fontSize: 12, fontWeight: 600, color: sc >= 7 ? "#7F6CF0" : sc >= 5 ? "#C4B5FD" : "#FF6B6B" }}>{sc}/10</span>}
+                  <span style={{ fontSize: 11, color: "rgba(255,255,255,0.2)", flex: 1 }}>{s.date}</span>
+                  {sc && <span style={{ fontSize: 12, fontWeight: 600, color: scColor }}>{sc}/10</span>}
                 </div>
               );
             })}
@@ -348,43 +328,43 @@ export default function App() {
     </div>
   );
 
-  // ── ANSWERING (unchanged) ─────────────────────────────────────────────
+  // ── ANSWERING ─────────────────────────────────────────────────────────
   if (phase === "answering") return (
     <div style={base}>
       <style>{G}</style>
-      <div style={{ maxWidth: 660, margin: "0 auto" }}>
+      <div style={{ maxWidth: 640, margin: "0 auto" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }} className="au">
-          <button onClick={() => setPhase("home")} style={{ ...btn("rgba(255,255,255,0.08)", "rgba(255,255,255,0.6)"), padding: "7px 14px", fontSize: 12 }}>← Back</button>
-          <span style={pill(trackType === "B2C" ? "#7F6CF0" : "#7F6CF0")}>{trackType}</span>
+          <button onClick={() => setPhase("home")} style={{ ...btn("#202020", "rgba(255,255,255,0.55)"), padding: "7px 14px", fontSize: 12, border: "1px solid rgba(255,255,255,0.08)" }}>← Back</button>
+          <span style={pill(trackType === "B2C" ? "#C4B5FD" : "#7F6CF0")}>{trackType}</span>
           {pick && <span style={pill(pick.color)}>{pick.tag}</span>}
-          <span style={{ fontSize: 11, color: "rgba(255,255,255,0.25)", marginLeft: "auto" }}>{today}</span>
+          <span style={{ fontSize: 11, color: "rgba(255,255,255,0.2)", marginLeft: "auto" }}>{today}</span>
         </div>
 
-        <div style={{ ...card({ borderColor: (pick?.color || "#7F6CF0") + "28", background: "#202020" }) }} className="au1">
-          <div style={{ fontSize: 10, color: pick?.color, letterSpacing: "0.1em", marginBottom: 12 }}>CHALLENGE</div>
-          <div style={{ fontSize: 14, color: "rgba(255,255,255,0.75)", lineHeight: 1.85, whiteSpace: "pre-wrap" }}>{challenge}</div>
+        <div style={{ ...card({ borderColor: (pick?.color || "#7F6CF0") + "25", background: "#1D1B2E" }) }} className="au1">
+          <p style={{ fontSize: 10, color: pick?.color, letterSpacing: "0.1em", marginBottom: 12, fontWeight: 600 }}>CHALLENGE</p>
+          <p style={{ fontSize: 14, color: "rgba(255,255,255,0.75)", lineHeight: 1.85, whiteSpace: "pre-wrap" }}>{challenge}</p>
         </div>
 
         {pick?.hint && (
-          <div style={card({ background: "#202020" })} className="au1">
+          <div style={card({ background: "#1A160A" })} className="au1">
             <button onClick={() => setHintOpen(o => !o)} style={{ background: "none", border: "none", cursor: "pointer", width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", padding: 0, fontFamily: font }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <span>💡</span>
-                <span style={{ fontSize: 10, color: "#C4B5FD", letterSpacing: "0.1em" }}>FRAMEWORK HINT</span>
-                <span style={{ fontSize: 10, color: "rgba(255,159,10,0.6)", background: "rgba(255,159,10,0.08)", padding: "2px 8px", borderRadius: 4 }}>{pick.hint.framework}</span>
+                <span style={{ fontSize: 10, color: "#E1EA78", letterSpacing: "0.1em", fontWeight: 600 }}>FRAMEWORK HINT</span>
+                <span style={{ fontSize: 11, color: "rgba(225,234,120,0.5)", background: "rgba(225,234,120,0.08)", padding: "2px 8px", borderRadius: 4 }}>{pick.hint.framework}</span>
               </div>
-              <span style={{ fontSize: 11, color: "rgba(255,255,255,0.35)" }}>{hintOpen ? "hide ▲" : "show ▼"}</span>
+              <span style={{ fontSize: 11, color: "rgba(255,255,255,0.25)" }}>{hintOpen ? "hide ▲" : "show ▼"}</span>
             </button>
             {hintOpen && (
-              <div style={{ marginTop: 16, paddingTop: 16, borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+              <div style={{ marginTop: 16, paddingTop: 16, borderTop: "1px solid rgba(255,255,255,0.05)" }}>
                 {pick.hint.steps.map((s, i) => (
                   <div key={i} style={{ display: "flex", gap: 10, marginBottom: 10 }}>
-                    <span style={{ color: "#C4B5FD", fontWeight: 600, fontSize: 12, minWidth: 18 }}>{i + 1}.</span>
+                    <span style={{ color: "#E1EA78", fontWeight: 600, fontSize: 12, minWidth: 18 }}>{i + 1}.</span>
                     <span style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.6 }}>{s}</span>
                   </div>
                 ))}
-                <div style={{ marginTop: 12, padding: "10px 14px", background: "rgba(255,159,10,0.06)", borderRadius: 8, borderLeft: "2px solid #FF9F0A" }}>
-                  <span style={{ fontSize: 12, color: "rgba(255,159,10,0.7)" }}>⚠ {pick.hint.watch}</span>
+                <div style={{ marginTop: 12, padding: "10px 14px", background: "rgba(225,234,120,0.06)", borderRadius: 8, borderLeft: "2px solid #E1EA78" }}>
+                  <span style={{ fontSize: 12, color: "rgba(225,234,120,0.65)" }}>⚠ {pick.hint.watch}</span>
                 </div>
               </div>
             )}
@@ -392,43 +372,45 @@ export default function App() {
         )}
 
         <div style={card()} className="au2">
-          <div style={{ fontSize: 10, color: "rgba(255,255,255,0.35)", letterSpacing: "0.1em", marginBottom: 10 }}>YOUR ANSWER</div>
-          <textarea value={answer} onChange={e => setAnswer(e.target.value)}
-            placeholder={"Use a framework. Be specific. Think out loud."}
-            style={{ width: "100%", minHeight: 190, background: "#191919", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 8, color: "#E6E6E6", fontFamily: font, fontSize: 14, padding: "13px 16px", lineHeight: 1.8 }}
-          />
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 10 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+            <p style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em", fontWeight: 600 }}>YOUR ANSWER</p>
             <span style={{ fontSize: 11, color: answer.length < 60 ? "#FF6B6B" : "rgba(255,255,255,0.25)" }}>
               {answer.length < 60 ? `${60 - answer.length} more chars` : `${answer.length} chars`}
             </span>
-            <div style={{ display: "flex", gap: 8 }}>
-              <button style={btn("rgba(255,255,255,0.08)", "rgba(255,255,255,0.5)")} onClick={() => setPhase("home")}>Cancel</button>
-              <button style={btn(answer.length >= 60 ? "#7F6CF0" : "rgba(255,255,255,0.08)", answer.length >= 60 ? "#fff" : "rgba(255,255,255,0.25)", answer.length < 60)} onClick={submitAnswer} disabled={answer.length < 60}>Submit →</button>
-            </div>
+          </div>
+          <textarea value={answer} onChange={e => setAnswer(e.target.value)}
+            placeholder="Use a framework. Be specific. Think out loud."
+            style={{ width: "100%", minHeight: 190, background: "#191919", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 8, color: "#E6E6E6", fontFamily: font, fontSize: 14, padding: "12px 14px", lineHeight: 1.8, resize: "vertical" }}
+          />
+          <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 12 }}>
+            <button style={{ ...btn("#202020", "rgba(255,255,255,0.45)"), border: "1px solid rgba(255,255,255,0.08)" }} onClick={() => setPhase("home")}>Cancel</button>
+            <button style={btn(answer.length >= 60 ? "#7F6CF0" : "#202020", answer.length >= 60 ? "#fff" : "rgba(255,255,255,0.2)", answer.length < 60)} onClick={submitAnswer} disabled={answer.length < 60}>
+              Submit →
+            </button>
           </div>
         </div>
       </div>
     </div>
   );
 
-  // ── RESULT (existing + guest survey prompt) ───────────────────────────
+  // ── RESULT ────────────────────────────────────────────────────────────
   if (phase === "result") return (
     <div style={base}>
       <style>{G}</style>
-      <div style={{ maxWidth: 660, margin: "0 auto" }}>
+      <div style={{ maxWidth: 640, margin: "0 auto" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }} className="au">
-          <button onClick={() => setPhase("home")} style={{ ...btn("rgba(255,255,255,0.08)", "rgba(255,255,255,0.6)"), padding: "7px 14px", fontSize: 12 }}>← Home</button>
-          {trackType && <span style={pill(trackType === "B2C" ? "#7F6CF0" : "#7F6CF0")}>{trackType}</span>}
+          <button onClick={() => setPhase("home")} style={{ ...btn("#202020", "rgba(255,255,255,0.55)"), padding: "7px 14px", fontSize: 12, border: "1px solid rgba(255,255,255,0.08)" }}>← Home</button>
+          {trackType && <span style={pill(trackType === "B2C" ? "#C4B5FD" : "#7F6CF0")}>{trackType}</span>}
           {pick && <span style={pill(pick.color)}>{pick.tag}</span>}
-          <span style={{ fontSize: 11, color: "rgba(255,255,255,0.25)", marginLeft: "auto" }}>Assessment</span>
+          <span style={{ fontSize: 11, color: "rgba(255,255,255,0.2)", marginLeft: "auto" }}>Assessment</span>
         </div>
 
         {scores && (
-          <div style={{ ...card(), textAlign: "center", padding: "32px 24px" }} className="au1">
-            <div style={{ fontSize: 88, fontWeight: 900, letterSpacing: "-0.05em", lineHeight: 1, color: scores.overall >= 7 ? "#7F6CF0" : scores.overall >= 5 ? "#C4B5FD" : "#FF6B6B" }}>{scores.overall}</div>
-            <div style={{ fontSize: 13, color: "rgba(255,255,255,0.35)", marginTop: 4 }}>out of 10</div>
-            <div style={{ marginTop: 14, display: "inline-block", background: scores.overall >= 7 ? "rgba(48,209,88,0.1)" : scores.overall >= 5 ? "rgba(255,159,10,0.1)" : "rgba(255,69,58,0.1)", borderRadius: 99, padding: "7px 18px" }}>
-              <span style={{ fontSize: 14, fontWeight: 600, color: scores.overall >= 7 ? "#7F6CF0" : scores.overall >= 5 ? "#C4B5FD" : "#FF6B6B" }}>
+          <div style={{ ...card({ textAlign: "center", padding: "32px 24px" }) }} className="au1">
+            <div style={{ fontSize: 88, fontWeight: 800, letterSpacing: "-0.05em", lineHeight: 1, color: scores.overall >= 7 ? "#7F6CF0" : scores.overall >= 5 ? "#C4B5FD" : "#FF6B6B" }}>{scores.overall}</div>
+            <div style={{ fontSize: 13, color: "rgba(255,255,255,0.3)", marginTop: 4 }}>out of 10</div>
+            <div style={{ marginTop: 14, display: "inline-block", background: scores.overall >= 7 ? "rgba(127,108,240,0.12)" : scores.overall >= 5 ? "rgba(196,181,253,0.12)" : "rgba(255,107,107,0.12)", borderRadius: 99, padding: "7px 18px" }}>
+              <span style={{ fontSize: 14, fontWeight: 500, color: scores.overall >= 7 ? "#7F6CF0" : scores.overall >= 5 ? "#C4B5FD" : "#FF6B6B" }}>
                 {scores.overall >= 7 ? "Solid junior PM thinking 💪" : scores.overall >= 5 ? "Good foundation, keep building 📈" : "Real gaps to close — fix them 🎯"}
               </span>
             </div>
@@ -437,53 +419,41 @@ export default function App() {
 
         {scores && (
           <div style={card()} className="au2">
-            <div style={{ fontSize: 10, color: "rgba(255,255,255,0.35)", letterSpacing: "0.1em", marginBottom: 14 }}>SCORES</div>
+            <p style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em", marginBottom: 14, fontWeight: 600 }}>SCORE BREAKDOWN</p>
             <ScoreBar label="Structured Thinking" score={scores.structured} delay={0}/>
-            <ScoreBar label="Business Acumen" score={scores.business} delay={80}/>
-            <ScoreBar label="Specificity & Depth" score={scores.depth} delay={160}/>
-            <ScoreBar label="PM Maturity" score={scores.maturity} delay={240}/>
+            <ScoreBar label="Business Acumen"     score={scores.business}   delay={80}/>
+            <ScoreBar label="Specificity & Depth"  score={scores.depth}      delay={160}/>
+            <ScoreBar label="PM Maturity"          score={scores.maturity}   delay={240}/>
           </div>
         )}
 
         <div style={card()} className="au3">
-          <div style={{ fontSize: 10, color: "rgba(255,255,255,0.35)", letterSpacing: "0.1em", marginBottom: 14 }}>ASSESSMENT</div>
+          <p style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em", marginBottom: 14, fontWeight: 600 }}>ASSESSMENT</p>
           {renderMD(assessment)}
         </div>
 
         {answerKey && (
-          <div style={{ ...card({ background: showKey ? "rgba(48,209,88,0.05)" : "#202020", border: showKey ? "1px solid rgba(48,209,88,0.2)" : "1px solid rgba(255,255,255,0.08)", transition: "all 0.2s" }) }} className="au4">
+          <div style={{ ...card({ background: showKey ? "rgba(127,108,240,0.05)" : "#202020", border: `1px solid ${showKey ? "rgba(127,108,240,0.2)" : "rgba(255,255,255,0.06)"}`, transition: "all 0.2s" }) }} className="au4">
             <button onClick={() => setShowKey(o => !o)} style={{ background: "none", border: "none", cursor: "pointer", width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", padding: 0, fontFamily: font }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <span>🔑</span>
-                <span style={{ fontSize: 10, color: "#7F6CF0", letterSpacing: "0.1em" }}>ANSWER KEY</span>
+                <span style={{ fontSize: 10, color: "#7F6CF0", letterSpacing: "0.1em", fontWeight: 600 }}>ANSWER KEY</span>
               </div>
-              <span style={{ fontSize: 11, color: "rgba(255,255,255,0.35)" }}>{showKey ? "hide ▲" : "reveal ▼"}</span>
+              <span style={{ fontSize: 11, color: "rgba(255,255,255,0.3)" }}>{showKey ? "hide ▲" : "reveal ▼"}</span>
             </button>
-            {showKey && <div style={{ marginTop: 16, paddingTop: 16, borderTop: "1px solid rgba(48,209,88,0.1)" }}>{renderMD(answerKey, true)}</div>}
+            {showKey && (
+              <div style={{ marginTop: 16, paddingTop: 16, borderTop: "1px solid rgba(127,108,240,0.12)" }}>
+                {renderMD(answerKey, true)}
+              </div>
+            )}
           </div>
         )}
 
-        {/* Guest counter on result screen — 1 challenge limit */}
-        {isGuest && (
-          <div style={{ ...card({ background: "rgba(255,159,10,0.08)", borderColor: "#FF9F0A44" }), display: "flex", alignItems: "center", gap: 12 }}>
-            <div style={{ display: "flex", gap: 5 }}>
-              <div style={{ width: 32, height: 6, borderRadius: 99, background: "#C4B5FD" }}/>
-            </div>
-            <span style={{ fontSize: 12, color: "#C4B5FD", fontWeight: 600, flex: 1 }}>
-              1/1 challenge used · Your feedback helps us improve ✨
-            </span>
-          </div>
-        )}
-
-        <div style={{ display: "flex", gap: 10 }} className="au4">
-          {isGuest ? (
-            <button style={{ ...btn("#7F6CF0", "#fff"), flex: 1, boxShadow: "0 4px 16px rgba(127,108,240,0.3)" }} onClick={() => setScreen("survey")}>Share Your Feedback →</button>
-          ) : (
-            <>
-              <button style={btn("rgba(255,255,255,0.08)", "rgba(255,255,255,0.6)")} onClick={() => setPhase("home")}>← Home</button>
-              <button style={{ ...btn("#7F6CF0", "#fff"), flex: 1 }} onClick={() => { setPhase("home"); setTimeout(() => startChallenge(trackType), 50); }}>Another Challenge →</button>
-            </>
-          )}
+        <div style={{ display: "flex", gap: 10, marginTop: 4 }} className="au4">
+          <button style={{ ...btn("#202020", "rgba(255,255,255,0.5)"), border: "1px solid rgba(255,255,255,0.08)" }} onClick={() => setPhase("home")}>← Home</button>
+          <button style={{ ...btn("#7F6CF0", "#fff"), flex: 1, boxShadow: "0 4px 14px rgba(127,108,240,0.25)" }} onClick={() => { setPhase("home"); setTimeout(() => startChallenge(trackType), 50); }}>
+            Another Challenge →
+          </button>
         </div>
       </div>
     </div>
