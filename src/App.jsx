@@ -8,37 +8,37 @@ function storageList(prefix) { try { return { keys: Object.keys(localStorage).fi
 // ── Challenge data (logic untouched) ─────────────────────────────────────
 const CHALLENGES = {
   B2B: [
-    { tag: "Prioritization", color: "#8B7CF6",
-      hint: { framework: "RICE or MoSCoW", steps: ["Name your framework and justify the choice", "Score each backlog item — don't just list them", "Address the compliance deadline and churn risk explicitly", "End with a ranked list and what gets cut if capacity runs out"], watch: "Describing features ≠ prioritizing them. Defend every trade-off." },
+    { tag: "Prioritization", color: "#8B7CF6", icon: "⚖️",
+      hint: { framework: "RICE or MoSCoW", steps: ["Name your framework and justify the choice","Score each backlog item — don't just list them","Address the compliance deadline and churn risk explicitly","End with a ranked list and what gets cut if capacity runs out"], watch: "Describing features ≠ prioritizing them. Defend every trade-off." },
       prompt: `B2B SaaS prioritization challenge for a junior PM. Include: company context (ARR, customer count), 5 backlog items with effort/value estimates, sprint constraint + 1 enterprise churn risk + 1 compliance deadline. Ask: prioritize using a framework. Be specific and concise.` },
-    { tag: "Metrics", color: "#38BDF8",
-      hint: { framework: "Diagnose → Hypothesize → Measure", steps: ["Describe what you observe in the data first", "Generate 2-3 root cause hypotheses", "Identify what data is missing", "Define 2-3 metrics you'd add to the dashboard"], watch: "Never diagnose from a single data point. Ask: what else would I need to know?" },
+    { tag: "Metrics", color: "#38BDF8", icon: "📊",
+      hint: { framework: "Diagnose → Hypothesize → Measure", steps: ["Describe what you observe in the data first","Generate 2-3 root cause hypotheses","Identify what data is missing","Define 2-3 metrics you'd add to the dashboard"], watch: "Never diagnose from a single data point. Ask: what else would I need to know?" },
       prompt: `B2B platform metrics challenge for a junior PM. Show a 4-metric text dashboard with one red herring. Something is wrong (API errors, adoption drop, or ticket spike). Ask: diagnose the root cause and plan next steps. Be concise.` },
-    { tag: "Stakeholder", color: "#34D399",
-      hint: { framework: "Understand → Align → Decide", steps: ["Find what each stakeholder truly wants beneath their stated position", "Spot any shared goals or constraints", "Make a concrete decision — don't sit on the fence", "State who gets which message and how"], watch: "PMs decide. They don't just mediate. End with a clear recommendation." },
+    { tag: "Stakeholder", color: "#34D399", icon: "🤝",
+      hint: { framework: "Understand → Align → Decide", steps: ["Find what each stakeholder truly wants beneath their stated position","Spot any shared goals or constraints","Make a concrete decision — don't sit on the fence","State who gets which message and how"], watch: "PMs decide. They don't just mediate. End with a clear recommendation." },
       prompt: `B2B stakeholder conflict for a junior PM. 2-3 stakeholders with conflicting goals, distinct motivations, 1 hard sprint deadline. Ask: how do you navigate this and what gets built? Be concise.` },
-    { tag: "Strategy", color: "#A78BFA",
-      hint: { framework: "Situation → Options → Recommendation", steps: ["Summarize the core tension in 1-2 sentences", "Name 2-3 strategic options", "Pick one and defend it with business reasoning", "Explicitly state what you would NOT do and why"], watch: "Every strategy needs a trade-off. What are you giving up?" },
+    { tag: "Strategy", color: "#A78BFA", icon: "🎯",
+      hint: { framework: "Situation → Options → Recommendation", steps: ["Summarize the core tension in 1-2 sentences","Name 2-3 strategic options","Pick one and defend it with business reasoning","Explicitly state what you would NOT do and why"], watch: "Every strategy needs a trade-off. What are you giving up?" },
       prompt: `B2B product strategy challenge for a junior PM. Company at a crossroads with fake market data and real constraints. Ask: what is your strategy and what would you NOT do? Be concise.` },
-    { tag: "Execution", color: "#FB923C",
-      hint: { framework: "Triage → Communicate → Adapt", steps: ["What is most critical in the next 2 hours?", "Who do you talk to and in what order?", "What do you cut or defer?", "How do you run the retrospective after?"], watch: "Focus and communicate. Not heroics. A clear mind beats a busy one." },
+    { tag: "Execution", color: "#FB923C", icon: "⚡",
+      hint: { framework: "Triage → Communicate → Adapt", steps: ["What is most critical in the next 2 hours?","Who do you talk to and in what order?","What do you cut or defer?","How do you run the retrospective after?"], watch: "Focus and communicate. Not heroics. A clear mind beats a busy one." },
       prompt: `B2B sprint execution crisis for a junior PM. Mid-sprint blocker, sprint goal at risk, one panicking stakeholder. Ask: walk through your response step by step. Be concise.` },
   ],
   B2C: [
-    { tag: "Prioritization", color: "#8B7CF6",
-      hint: { framework: "RICE or Impact vs Effort", steps: ["State your framework and why it fits B2C", "Consider user volume, engagement, and retention for each item", "Factor in competitor timing and seasonal context", "Give a final ranked order and what gets cut"], watch: "B2C is about user love at scale. Delight is a valid business metric." },
+    { tag: "Prioritization", color: "#8B7CF6", icon: "⚖️",
+      hint: { framework: "RICE or Impact vs Effort", steps: ["State your framework and why it fits B2C","Consider user volume, engagement, and retention for each item","Factor in competitor timing and seasonal context","Give a final ranked order and what gets cut"], watch: "B2C is about user love at scale. Delight is a valid business metric." },
       prompt: `B2C mobile app prioritization challenge for a junior PM. Consumer app with 5 backlog items, a competitor just launched a similar feature. Ask: prioritize using a framework. Be concise.` },
-    { tag: "Metrics", color: "#38BDF8",
-      hint: { framework: "AARRR Funnel", steps: ["Map each metric to its funnel stage", "Identify the biggest drop-off point", "Form 2-3 hypotheses for the drop-off", "Pick one metric to fix first and defend the choice"], watch: "Find the leak in the funnel. One metric in isolation tells you nothing." },
+    { tag: "Metrics", color: "#38BDF8", icon: "📊",
+      hint: { framework: "AARRR Funnel", steps: ["Map each metric to its funnel stage","Identify the biggest drop-off point","Form 2-3 hypotheses for the drop-off","Pick one metric to fix first and defend the choice"], watch: "Find the leak in the funnel. One metric in isolation tells you nothing." },
       prompt: `B2C consumer app metrics challenge for a junior PM. Funnel problem with 5 fake metrics, one red herring. Ask: diagnose the funnel and recommend one focus area. Be concise.` },
-    { tag: "Growth", color: "#34D399",
-      hint: { framework: "Growth Loops", steps: ["Identify which growth loop is broken or missing", "Pick ONE lever to pull — don't try to fix everything", "Define how you'd measure if your fix worked", "Estimate the impact in user numbers or revenue"], watch: "Growth is a system. Fix the loop. Don't just add features." },
+    { tag: "Growth", color: "#34D399", icon: "🚀",
+      hint: { framework: "Growth Loops", steps: ["Identify which growth loop is broken or missing","Pick ONE lever to pull — don't try to fix everything","Define how you'd measure if your fix worked","Estimate the impact in user numbers or revenue"], watch: "Growth is a system. Fix the loop. Don't just add features." },
       prompt: `B2C growth challenge for a junior PM. Consumer app growth has plateaued with fake metrics showing the problem and limited engineering capacity. Ask: what single growth lever would you pull and why? Be concise.` },
-    { tag: "User Research", color: "#A78BFA",
-      hint: { framework: "Jobs To Be Done", steps: ["Identify the job each user hires the product to do", "Find the gap between expectation and experience", "Separate genuine pain points from nice-to-haves", "Recommend what to build and what to ignore"], watch: "Focus on what users DO, not what they SAY. Behaviour beats words." },
+    { tag: "User Research", color: "#A78BFA", icon: "🔍",
+      hint: { framework: "Jobs To Be Done", steps: ["Identify the job each user hires the product to do","Find the gap between expectation and experience","Separate genuine pain points from nice-to-haves","Recommend what to build and what to ignore"], watch: "Focus on what users DO, not what they SAY. Behaviour beats words." },
       prompt: `B2C user research challenge for a junior PM. 3 user types giving conflicting qualitative feedback on the same feature area. Ask: synthesize the feedback and decide what to build. Be concise.` },
-    { tag: "Execution", color: "#FB923C",
-      hint: { framework: "Triage → Communicate → Ship", steps: ["What is breaking user experience RIGHT NOW?", "Hotfix immediately or wait for proper fix — pick one and justify", "Communicate to users if the issue is visible to them", "Define what resolved looks like and how you'll confirm it"], watch: "B2C crises are public. Users tweet. Think about user communication, not just internal teams." },
+    { tag: "Execution", color: "#FB923C", icon: "⚡",
+      hint: { framework: "Triage → Communicate → Ship", steps: ["What is breaking user experience RIGHT NOW?","Hotfix immediately or wait for proper fix — pick one and justify","Communicate to users if the issue is visible to them","Define what resolved looks like and how you'll confirm it"], watch: "B2C crises are public. Users tweet. Think about user communication, not just internal teams." },
       prompt: `B2C app execution crisis for a junior PM. Consumer-facing incident with public user impact and social media pressure, engineering says 4 hours to fix. Ask: how does the PM handle this step by step? Be concise.` },
   ]
 };
@@ -83,616 +83,937 @@ async function callClaude(system, userMsg) {
   return d.text || "";
 }
 
-// ── Design System ─────────────────────────────────────────────────────────
-const DS = {
-  // Colors
-  bg:        "#0F0F12",
-  surface:   "#17171C",
-  surfaceEl: "#1E1E26",
-  border:    "rgba(255,255,255,0.07)",
-  borderHov: "rgba(255,255,255,0.13)",
-  primary:   "#8B7CF6",
-  primaryDk: "#6D5FD5",
-  text:      "#F0F0F4",
-  textSec:   "rgba(240,240,244,0.5)",
-  textMut:   "rgba(240,240,244,0.28)",
-  success:   "#34D399",
-  warning:   "#FBBF24",
-  danger:    "#F87171",
-  // Spacing
-  sp: (n) => n * 4 + "px",
-  // Radius
-  r: { sm: 6, md: 10, lg: 16, xl: 20, full: 999 },
-};
-
+// ── Global CSS ────────────────────────────────────────────────────────────
 const CSS = `
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { font-size: 16px; }
-  body { background: ${DS.bg}; font-family: 'Inter', -apple-system, sans-serif; -webkit-font-smoothing: antialiased; color: ${DS.text}; }
-  ::selection { background: rgba(139,124,246,0.35); color: #fff; }
-  input, textarea, button { font-family: inherit; }
+  html, body { background: #F7F7F7; font-family: 'Nunito', sans-serif; -webkit-font-smoothing: antialiased; color: #3C3C3C; }
+  ::selection { background: rgba(88,204,2,0.25); }
+  input, textarea, button, select { font-family: 'Nunito', sans-serif; }
   textarea { outline: none; resize: vertical; }
   input { outline: none; }
   button { cursor: pointer; border: none; }
-  a { color: inherit; }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
+
+  @keyframes fadeUp   { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeIn   { from { opacity:0; } to { opacity:1; } }
+  @keyframes spin     { to { transform:rotate(360deg); } }
+  @keyframes bounce   { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+  @keyframes popIn    { 0%{transform:scale(0.85);opacity:0} 70%{transform:scale(1.04)} 100%{transform:scale(1);opacity:1} }
+  @keyframes shake    { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+  @keyframes pulse    { 0%,100%{box-shadow:0 0 0 0 rgba(88,204,2,0.4)} 50%{box-shadow:0 0 0 12px rgba(88,204,2,0)} }
+
+  .fade-up   { animation: fadeUp 0.4s cubic-bezier(0.16,1,0.3,1) both; }
+  .fade-up-1 { animation: fadeUp 0.4s 0.06s cubic-bezier(0.16,1,0.3,1) both; }
+  .fade-up-2 { animation: fadeUp 0.4s 0.12s cubic-bezier(0.16,1,0.3,1) both; }
+  .fade-up-3 { animation: fadeUp 0.4s 0.18s cubic-bezier(0.16,1,0.3,1) both; }
+  .fade-up-4 { animation: fadeUp 0.4s 0.24s cubic-bezier(0.16,1,0.3,1) both; }
+  .pop-in    { animation: popIn 0.35s cubic-bezier(0.16,1,0.3,1) both; }
+  .spinner   { animation: spin 0.75s linear infinite; }
+
+  /* Buttons */
+  .btn-green {
+    background: #58CC02; color: #fff; border-radius: 14px; padding: 14px 28px;
+    font-size: 16px; font-weight: 800; border: none; cursor: pointer;
+    box-shadow: 0 4px 0 #4aab00; transition: all 0.12s; letter-spacing: 0.01em;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
-  .fade-up   { animation: fadeUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) both; }
-  .fade-up-1 { animation: fadeUp 0.45s 0.07s cubic-bezier(0.16, 1, 0.3, 1) both; }
-  .fade-up-2 { animation: fadeUp 0.45s 0.14s cubic-bezier(0.16, 1, 0.3, 1) both; }
-  .fade-up-3 { animation: fadeUp 0.45s 0.21s cubic-bezier(0.16, 1, 0.3, 1) both; }
-  .fade-up-4 { animation: fadeUp 0.45s 0.28s cubic-bezier(0.16, 1, 0.3, 1) both; }
-  .spinner { animation: spin 0.75s linear infinite; }
-  /* Interactive states */
-  .btn-primary { background: ${DS.primary}; color: #fff; transition: all 0.15s; }
-  .btn-primary:hover { background: ${DS.primaryDk}; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(139,124,246,0.35); }
-  .btn-primary:active { transform: translateY(0); box-shadow: none; }
-  .btn-ghost { background: transparent; border: 1px solid ${DS.border}; color: ${DS.textSec}; transition: all 0.15s; }
-  .btn-ghost:hover { border-color: ${DS.borderHov}; color: ${DS.text}; background: ${DS.surfaceEl}; }
-  .card-interactive { transition: border-color 0.15s, background 0.15s; }
-  .card-interactive:hover { border-color: rgba(139,124,246,0.25) !important; background: #1B1B23 !important; }
-  .track-card { transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); cursor: pointer; }
-  .track-card:hover { transform: translateY(-2px); border-color: rgba(139,124,246,0.3) !important; }
-  input:focus { border-color: ${DS.primary} !important; box-shadow: 0 0 0 3px rgba(139,124,246,0.12) !important; }
-  textarea:focus { border-color: ${DS.primary} !important; box-shadow: 0 0 0 3px rgba(139,124,246,0.12) !important; }
-  .hint-row:hover { background: rgba(255,255,255,0.03); border-radius: 6px; }
+  .btn-green:hover { background: #4cbb00; transform: translateY(-1px); box-shadow: 0 5px 0 #3d9600; }
+  .btn-green:active { transform: translateY(2px); box-shadow: 0 2px 0 #4aab00; }
+
+  .btn-outline {
+    background: #fff; color: #58CC02; border-radius: 14px; padding: 14px 28px;
+    font-size: 16px; font-weight: 800; border: 2px solid #58CC02; cursor: pointer;
+    transition: all 0.12s; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .btn-outline:hover { background: #f0fff0; transform: translateY(-1px); }
+  .btn-outline:active { transform: translateY(1px); }
+
+  .btn-purple {
+    background: #8B7CF6; color: #fff; border-radius: 14px; padding: 14px 28px;
+    font-size: 16px; font-weight: 800; border: none; cursor: pointer;
+    box-shadow: 0 4px 0 #6d5fd5; transition: all 0.12s;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .btn-purple:hover { background: #7c6cf0; transform: translateY(-1px); box-shadow: 0 5px 0 #5d4fc0; }
+  .btn-purple:active { transform: translateY(2px); box-shadow: 0 2px 0 #6d5fd5; }
+
+  .btn-ghost {
+    background: transparent; color: #777; border-radius: 12px; padding: 10px 20px;
+    font-size: 14px; font-weight: 700; border: 2px solid #e0e0e0; cursor: pointer;
+    transition: all 0.12s; display: inline-flex; align-items: center; gap: 6px;
+  }
+  .btn-ghost:hover { border-color: #bbb; color: #555; background: #f5f5f5; }
+
+  .btn-disabled {
+    background: #e5e5e5; color: #aaa; border-radius: 14px; padding: 14px 28px;
+    font-size: 16px; font-weight: 800; border: none; cursor: not-allowed;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+
+  /* Cards */
+  .card {
+    background: #fff; border-radius: 20px; padding: 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 2px solid #eee;
+  }
+  .card-hover { transition: all 0.18s; }
+  .card-hover:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); border-color: #ddd; }
+
+  /* Challenge path nodes */
+  .path-node { transition: all 0.18s; }
+  .path-node:hover { transform: scale(1.04); }
+  .path-node-active { animation: pulse 2s infinite; }
+
+  /* Input */
+  .input-field {
+    width: 100%; background: #fff; border: 2px solid #e0e0e0; border-radius: 14px;
+    padding: 14px 16px; font-size: 15px; color: #3C3C3C; font-family: 'Nunito', sans-serif;
+    transition: border 0.15s;
+  }
+  .input-field:focus { border-color: #58CC02; box-shadow: 0 0 0 3px rgba(88,204,2,0.12); }
+  .input-field::placeholder { color: #bbb; }
+
+  /* Textarea */
+  .textarea-field {
+    width: 100%; background: #fff; border: 2px solid #e0e0e0; border-radius: 14px;
+    padding: 14px 16px; font-size: 15px; color: #3C3C3C; font-family: 'Nunito', sans-serif;
+    line-height: 1.7; transition: border 0.15s; min-height: 180px;
+  }
+  .textarea-field:focus { border-color: #58CC02; box-shadow: 0 0 0 3px rgba(88,204,2,0.12); }
+
+  /* Progress bar */
+  .xp-bar { height: 14px; background: #e8e8e8; border-radius: 99px; overflow: hidden; }
+  .xp-fill { height: 100%; background: linear-gradient(90deg, #58CC02, #89E219); border-radius: 99px; transition: width 1s cubic-bezier(0.4,0,0.2,1); }
+
+  /* Track tabs */
+  .track-tab { transition: all 0.15s; cursor: pointer; }
+  .track-tab.active { background: #58CC02 !important; color: #fff !important; border-color: #58CC02 !important; }
+
+  /* Answer reveal */
+  .key-section { background: linear-gradient(135deg, #f0fff0, #e8f5e8); border: 2px solid #c3e6c3; border-radius: 16px; }
+
   /* Scrollbar */
   ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 99px; }
-  /* Mobile */
-  @media (max-width: 600px) {
-    .hide-mobile { display: none !important; }
-    .stack-mobile { flex-direction: column !important; }
-    .full-mobile { width: 100% !important; }
+  ::-webkit-scrollbar-track { background: #f0f0f0; }
+  ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 99px; }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .hide-sm { display: none !important; }
+    .full-sm { width: 100% !important; }
+    .stack-sm { flex-direction: column !important; }
+    .px-sm { padding-left: 16px !important; padding-right: 16px !important; }
   }
 `;
 
-// ── Reusable Components ───────────────────────────────────────────────────
-
-function Badge({ label, color }) {
-  return (
-    <span style={{ fontSize: 11, fontWeight: 600, color, background: color + "18",
-      padding: "3px 10px", borderRadius: DS.r.full, letterSpacing: "0.01em", display: "inline-flex", alignItems: "center" }}>
-      {label}
-    </span>
-  );
-}
-
-function Divider() {
-  return <div style={{ height: 1, background: DS.border, margin: "4px 0" }} />;
-}
-
-function ScoreBar({ label, score, delay = 0 }) {
-  const [w, setW] = useState(0);
-  useEffect(() => {
-    const t = setTimeout(() => setW(score * 10), 250 + delay);
-    return () => clearTimeout(t);
-  }, [score]);
-  const color = score >= 7 ? DS.success : score >= 5 ? DS.warning : DS.danger;
-  return (
-    <div style={{ padding: "10px 0" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-        <span style={{ fontSize: 13, color: DS.textSec, fontWeight: 400 }}>{label}</span>
-        <span style={{ fontSize: 13, fontWeight: 700, color, fontVariantNumeric: "tabular-nums" }}>{score}<span style={{ color: DS.textMut, fontWeight: 400 }}>/10</span></span>
-      </div>
-      <div style={{ height: 4, background: "rgba(255,255,255,0.06)", borderRadius: DS.r.full, overflow: "hidden" }}>
-        <div style={{ height: "100%", width: `${w}%`, background: color, borderRadius: DS.r.full, transition: "width 0.9s cubic-bezier(0.4,0,0.2,1)", opacity: 0.85 }} />
-      </div>
-    </div>
-  );
-}
-
+// ── Markdown renderer ─────────────────────────────────────────────────────
 function renderMD(text, isKey = false) {
   return text.trim().split("\n").map((line, i) => {
-    if (line.startsWith("**") && line.endsWith("**")) {
-      return <p key={i} style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
-        color: isKey ? DS.success : DS.textMut, marginTop: 24, marginBottom: 8 }}>
-        {line.replace(/\*\*/g, "")}
-      </p>;
-    }
-    if (line.includes("━")) return <div key={i} style={{ height: 1, background: DS.border, margin: "12px 0" }} />;
+    if (line.startsWith("**") && line.endsWith("**"))
+      return <p key={i} style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase",
+        color: isKey ? "#2d9c2d" : "#aaa", marginTop: 20, marginBottom: 6 }}>{line.replace(/\*\*/g, "")}</p>;
+    if (line.includes("━")) return <div key={i} style={{ height: 2, background: "#f0f0f0", margin: "10px 0" }} />;
     if (!line.trim()) return <div key={i} style={{ height: 8 }} />;
     const parts = line.split(/(\*\*[^*]+\*\*)/g);
-    return <p key={i} style={{ fontSize: 15, lineHeight: 1.85, color: isKey ? "rgba(52,211,153,0.8)" : DS.textSec }}>
+    return <p key={i} style={{ fontSize: 15, lineHeight: 1.8, color: isKey ? "#1a5c1a" : "#555" }}>
       {parts.map((p, j) => p.startsWith("**")
-        ? <strong key={j} style={{ color: isKey ? DS.success : DS.text, fontWeight: 600 }}>{p.replace(/\*\*/g, "")}</strong>
+        ? <strong key={j} style={{ color: isKey ? "#2d7a2d" : "#3C3C3C", fontWeight: 700 }}>{p.replace(/\*\*/g, "")}</strong>
         : p)}
     </p>;
   });
 }
 
-// ── App Shell ─────────────────────────────────────────────────────────────
-const Page = ({ children, center = false }) => (
-  <div style={{ minHeight: "100vh", background: DS.bg, padding: center ? "0 20px" : "0 20px 80px",
-    display: center ? "flex" : "block", alignItems: center ? "center" : "initial", justifyContent: center ? "center" : "initial" }}>
-    <style>{CSS}</style>
-    {children}
-  </div>
-);
+// ── Score bar ─────────────────────────────────────────────────────────────
+function ScoreBar({ label, score, delay = 0 }) {
+  const [w, setW] = useState(0);
+  useEffect(() => { const t = setTimeout(() => setW(score * 10), 300 + delay); return () => clearTimeout(t); }, [score]);
+  const color = score >= 7 ? "#58CC02" : score >= 5 ? "#FFC800" : "#FF4B4B";
+  const bg    = score >= 7 ? "#e8f9d5" : score >= 5 ? "#fff3cc" : "#ffe0e0";
+  return (
+    <div style={{ padding: "10px 0", borderBottom: "1px solid #f0f0f0" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
+        <span style={{ fontSize: 14, color: "#555", fontWeight: 600 }}>{label}</span>
+        <span style={{ fontSize: 13, fontWeight: 800, color, background: bg, padding: "2px 10px", borderRadius: 99 }}>{score}/10</span>
+      </div>
+      <div className="xp-bar">
+        <div style={{ width: `${w}%`, height: "100%", background: color, borderRadius: 99, transition: "width 0.9s cubic-bezier(.4,0,.2,1)" }} />
+      </div>
+    </div>
+  );
+}
 
-const Container = ({ children, width = 640 }) => (
-  <div style={{ maxWidth: width, margin: "0 auto", width: "100%" }}>
-    {children}
-  </div>
-);
+// ── XP / Progress helpers ─────────────────────────────────────────────────
+function XPBar({ value, max }) {
+  const pct = Math.min(100, Math.round((value / max) * 100));
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+      <span style={{ fontSize: 12, fontWeight: 700, color: "#58CC02", whiteSpace: "nowrap" }}>⭐ {value} XP</span>
+      <div className="xp-bar" style={{ flex: 1 }}>
+        <div className="xp-fill" style={{ width: `${pct}%` }} />
+      </div>
+      <span style={{ fontSize: 12, color: "#aaa", fontWeight: 600 }}>{max}</span>
+    </div>
+  );
+}
 
-const Card = ({ children, style = {}, className = "", onClick }) => (
-  <div className={className} onClick={onClick} style={{
-    background: DS.surface, border: `1px solid ${DS.border}`,
-    borderRadius: DS.r.lg, padding: 24, ...style
-  }}>
-    {children}
-  </div>
-);
+// ── Challenge path node ───────────────────────────────────────────────────
+function PathNode({ challenge, idx, status, onClick }) {
+  // status: 'done' | 'active' | 'locked'
+  const isDone   = status === "done";
+  const isActive = status === "active";
+  const isLocked = status === "locked";
 
-const Label = ({ children }) => (
-  <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase",
-    color: DS.textMut, marginBottom: 12 }}>
-    {children}
-  </p>
-);
+  const bg     = isDone ? "#58CC02" : isActive ? "#fff" : "#e8e8e8";
+  const border = isDone ? "#4aab00" : isActive ? "#58CC02" : "#d0d0d0";
+  const shadow = isActive ? "0 0 0 4px rgba(88,204,2,0.2), 0 4px 16px rgba(88,204,2,0.25)" : isDone ? "0 4px 12px rgba(88,204,2,0.3)" : "none";
 
-// ── Main App ──────────────────────────────────────────────────────────────
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 16, opacity: isLocked ? 0.55 : 1 }}>
+      {/* Node circle */}
+      <button
+        className={`path-node ${isActive ? "path-node-active" : ""}`}
+        onClick={isLocked ? undefined : onClick}
+        style={{ width: 64, height: 64, borderRadius: "50%", background: bg,
+          border: `3px solid ${border}`, cursor: isLocked ? "default" : "pointer",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontSize: 26, flexShrink: 0, boxShadow: shadow, transition: "all 0.2s" }}>
+        {isDone ? "✅" : isLocked ? "🔒" : challenge.icon}
+      </button>
+
+      {/* Label */}
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: isActive ? "#58CC02" : "#bbb",
+          letterSpacing: "0.06em", marginBottom: 3 }}>
+          {isActive ? "CURRENT" : isDone ? "COMPLETED" : "LOCKED"}
+        </div>
+        <div style={{ fontSize: 16, fontWeight: 800, color: isLocked ? "#aaa" : "#3C3C3C",
+          whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+          {challenge.tag}
+        </div>
+        {isDone && <div style={{ fontSize: 12, color: "#58CC02", fontWeight: 700, marginTop: 2 }}>Done ✓</div>}
+        {isActive && (
+          <button className="btn-green" onClick={onClick}
+            style={{ marginTop: 8, padding: "8px 18px", fontSize: 13, borderRadius: 10, boxShadow: "0 3px 0 #4aab00" }}>
+            Start →
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── Main component ────────────────────────────────────────────────────────
 export default function PMApp() {
-  const [phase, setPhase] = useState("home");
-  const [trackType, setTrackType] = useState(null);
-  const [challenge, setChallenge] = useState("");
+  // ── Auth state ──
+  const [screen, setScreen] = useState("login"); // login | home | challenge | result | feedback | thanks
+  const [isGuest, setIsGuest] = useState(false);
+  const [pwInput, setPwInput] = useState("");
+  const [pwError, setPwError] = useState(false);
+
+  // ── Track & challenge state ──
+  const [track, setTrack] = useState("B2B");
+  const [currentIdx, setCurrentIdx] = useState(null);
+  const [challengeText, setChallengeText] = useState("");
   const [pick, setPick] = useState(null);
   const [hintOpen, setHintOpen] = useState(false);
   const [answer, setAnswer] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  // ── Result state ──
   const [assessment, setAssessment] = useState("");
   const [answerKey, setAnswerKey] = useState("");
   const [showKey, setShowKey] = useState(false);
   const [scores, setScores] = useState(null);
-  const [total, setTotal] = useState(0);
-  const [highScores, setHighScores] = useState(0);
+
+  // ── Progress state ──
+  const [completedIdxs, setCompletedIdxs] = useState(() => {
+    const s = storageGet("pm_completed");
+    return s ? JSON.parse(s.value) : { B2B: [], B2C: [] };
+  });
+  const [totalXP, setTotalXP] = useState(() => {
+    const s = storageGet("pm_xp");
+    return s ? parseInt(s.value) : 0;
+  });
   const [history, setHistory] = useState([]);
   const [error, setError] = useState("");
-  const [unlocked, setUnlocked] = useState(() => storageGet("pm_auth")?.value === "true");
-  const [pwInput, setPwInput] = useState("");
-  const [pwError, setPwError] = useState(false);
+
+  // ── Guest feedback state ──
+  const [fbUseful, setFbUseful] = useState(0);
+  const [fbEasy, setFbEasy] = useState("");
+  const [fbImprove, setFbImprove] = useState("");
+  const [fbSending, setFbSending] = useState(false);
 
   const today = new Date().toISOString().slice(0, 10);
-  const dateLabel = new Date().toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
 
   useEffect(() => {
     const hR = storageList("pm_session:");
     if (hR?.keys?.length) {
-      const sessions = hR.keys
-        .map(k => { const r = storageGet(k); return r ? JSON.parse(r.value) : null; })
-        .filter(Boolean).reverse();
-      setHistory(sessions.slice(0, 30));
-      setTotal(sessions.length);
-      setHighScores(sessions.filter(x => x.scores?.overall >= 7).length);
+      const s = hR.keys.map(k => { const r = storageGet(k); return r ? JSON.parse(r.value) : null; }).filter(Boolean).reverse();
+      setHistory(s.slice(0, 30));
     }
   }, []);
 
-  function checkPassword() {
+  // ── Auth ──
+  function loginFull() {
     if (pwInput.trim() === "Siddhant@0812") {
       storageSet("pm_auth", "true");
-      setUnlocked(true);
+      setIsGuest(false);
+      setScreen("home");
     } else {
       setPwError(true);
       setPwInput("");
     }
   }
 
-  async function startChallenge(track) {
-    setTrackType(track); setPhase("loading"); setError("");
-    const pool = CHALLENGES[track];
-    const lastR = storageGet("pm_last_tag");
-    let p2 = pool.filter(c => c.tag !== lastR?.value);
-    if (!p2.length) p2 = pool;
-    const chosen = p2[Math.floor(Math.random() * p2.length)];
-    setPick(chosen); setHintOpen(false);
+  function loginGuest() {
+    setIsGuest(true);
+    setScreen("home");
+  }
+
+  // ── Challenge flow ──
+  async function openChallenge(idx) {
+    if (isGuest && idx > 0) return; // guests only get first challenge
+    const chosen = CHALLENGES[track][idx];
+    setPick(chosen); setCurrentIdx(idx); setHintOpen(false);
+    setLoading(true); setError("");
+    setChallengeText(""); setAnswer("");
+    setScreen("challenge");
     try {
       const text = await callClaude(`You are a ${track} PM coach. Generate a concise, realistic, specific challenge.`, chosen.prompt);
-      setChallenge(text); setAnswer(""); setPhase("answering");
-    } catch (e) { setError(e.message); setPhase("home"); }
+      setChallengeText(text);
+    } catch (e) { setError(e.message); }
+    setLoading(false);
   }
 
   async function submitAnswer() {
     if (answer.trim().length < 60) return;
-    setPhase("loading");
+    setLoading(true);
     try {
-      const result = await callClaude(ASSESS_SYSTEM, `TRACK: ${trackType}\nTYPE: ${pick?.tag}\n\nCHALLENGE:\n${challenge}\n\nANSWER:\n${answer}`);
+      const result = await callClaude(ASSESS_SYSTEM,
+        `TRACK: ${track}\nTYPE: ${pick?.tag}\n\nCHALLENGE:\n${challengeText}\n\nANSWER:\n${answer}`);
       const idx = result.indexOf("---KEY---");
       setAssessment(idx > -1 ? result.slice(0, idx) : result);
       setAnswerKey(idx > -1 ? result.slice(idx + 9) : "");
       setShowKey(false);
       const m = l => { const r = new RegExp(l + "[:\\s]+(\\d+)/10", "i"); const x = result.match(r); return x ? parseInt(x[1]) : 5; };
       const s = { structured: m("Structured Thinking"), business: m("Business Acumen"), depth: m("Specificity"), maturity: m("PM Maturity"), overall: m("Overall") };
-      setScores(s); saveSession(s); setPhase("result");
-    } catch (e) { setError(e.message); setPhase("answering"); }
+      setScores(s);
+      saveProgress(s);
+      setScreen("result");
+    } catch (e) { setError(e.message); }
+    setLoading(false);
   }
 
-  function saveSession(s) {
+  function saveProgress(s) {
+    // Save session
     storageSet("pm_last_tag", pick?.tag);
-    storageSet(`pm_session:${Date.now()}`, JSON.stringify({ date: today, tag: pick?.tag, track: trackType, scores: s }));
-    const ns = { date: today, tag: pick?.tag, track: trackType, scores: s };
+    storageSet(`pm_session:${Date.now()}`, JSON.stringify({ date: today, tag: pick?.tag, track, scores: s }));
+    // Mark completed
+    if (!isGuest) {
+      const updated = { ...completedIdxs, [track]: [...new Set([...completedIdxs[track], currentIdx])] };
+      setCompletedIdxs(updated);
+      storageSet("pm_completed", JSON.stringify(updated));
+      // XP
+      const gained = 10 + (s.overall * 5);
+      const newXP = totalXP + gained;
+      setTotalXP(newXP);
+      storageSet("pm_xp", String(newXP));
+    }
+    const ns = { date: today, tag: pick?.tag, track, scores: s };
     setHistory(prev => [ns, ...prev].slice(0, 30));
-    setTotal(p => p + 1);
-    if (s.overall >= 7) setHighScores(p => p + 1);
   }
 
-  // ── PASSWORD ──────────────────────────────────────────────────────────
-  if (!unlocked) return (
-    <Page center>
-      <Container width={380}>
-        <div className="fade-up" style={{ textAlign: "center", marginBottom: 40 }}>
-          {/* Logo mark */}
-          <div style={{ width: 52, height: 52, borderRadius: DS.r.lg, background: `linear-gradient(135deg, ${DS.primary}, ${DS.primaryDk})`,
-            display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px",
-            boxShadow: "0 12px 32px rgba(139,124,246,0.3)" }}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M3 17L7.5 9.5L11 13L15 6.5L20 11" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-              <circle cx="20" cy="5.5" r="2" fill="white"/>
-            </svg>
-          </div>
-          <h1 style={{ fontSize: 22, fontWeight: 700, color: DS.text, marginBottom: 8, letterSpacing: "-0.02em" }}>PM Training</h1>
-          <p style={{ fontSize: 14, color: DS.textSec, lineHeight: 1.5 }}>Your personal PM practice space</p>
-        </div>
+  async function submitGuestFeedback() {
+    if (fbUseful === 0) return;
+    setFbSending(true);
+    try {
+      await fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: "Guest", rating: fbUseful, easyToUse: fbEasy, improve: fbImprove, sessions: 1 })
+      });
+    } catch (_) {}
+    setFbSending(false);
+    setScreen("thanks");
+  }
 
-        <div className="fade-up-1">
-          <input
-            type="password" value={pwInput} autoFocus
-            onChange={e => { setPwInput(e.target.value); setPwError(false); }}
-            onKeyDown={e => e.key === "Enter" && checkPassword()}
-            placeholder="Enter access code"
-            style={{ width: "100%", background: DS.surfaceEl, border: `1px solid ${pwError ? DS.danger + "60" : DS.border}`,
-              borderRadius: DS.r.md, padding: "14px 16px", fontSize: 15, color: DS.text,
-              marginBottom: 12, display: "block", transition: "all 0.15s" }}
-          />
-          {pwError && (
-            <p style={{ fontSize: 13, color: DS.danger, marginBottom: 12, textAlign: "center" }}>
-              Incorrect code — try again
+  // ── Status helper ──
+  function getStatus(idx) {
+    if (isGuest) return idx === 0 ? "active" : "locked";
+    if (completedIdxs[track].includes(idx)) return "done";
+    const firstIncomplete = CHALLENGES[track].findIndex((_, i) => !completedIdxs[track].includes(i));
+    return idx === firstIncomplete ? "active" : idx < firstIncomplete ? "done" : "locked";
+  }
+
+  const challenges = CHALLENGES[track];
+  const doneCount  = completedIdxs[track].length;
+  const pct        = Math.round((doneCount / challenges.length) * 100);
+
+  // ─────────────────────────────────────────────────────────────────────
+  // SCREEN: LOGIN
+  // ─────────────────────────────────────────────────────────────────────
+  if (screen === "login") return (
+    <div style={{ minHeight: "100vh", background: "#fff", display: "flex", flexDirection: "column" }}>
+      <style>{CSS}</style>
+
+      {/* Top bar */}
+      <div style={{ background: "#58CC02", padding: "14px 24px", display: "flex", alignItems: "center", gap: 10 }}>
+        <span style={{ fontSize: 22 }}>📈</span>
+        <span style={{ fontSize: 18, fontWeight: 900, color: "#fff", letterSpacing: "-0.01em" }}>PM Training</span>
+      </div>
+
+      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "32px 20px" }}>
+        <div style={{ width: "100%", maxWidth: 440 }}>
+
+          {/* Hero */}
+          <div className="fade-up" style={{ textAlign: "center", marginBottom: 40 }}>
+            <div style={{ fontSize: 56, marginBottom: 16 }}>🎯</div>
+            <h1 style={{ fontSize: 28, fontWeight: 900, color: "#3C3C3C", marginBottom: 10, lineHeight: 1.2 }}>
+              Product Management<br/>Learning Challenges
+            </h1>
+            <p style={{ fontSize: 16, color: "#777", lineHeight: 1.6 }}>
+              Real PM scenarios. AI coaching. Level up your skills.
             </p>
-          )}
-          <button className="btn-primary" onClick={checkPassword}
-            style={{ width: "100%", padding: "14px", borderRadius: DS.r.md, fontSize: 15, fontWeight: 600 }}>
-            Continue
+          </div>
+
+          {/* Full access */}
+          <div className="card fade-up-1" style={{ marginBottom: 16 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+              <span style={{ fontSize: 20 }}>🔐</span>
+              <span style={{ fontSize: 16, fontWeight: 800, color: "#3C3C3C" }}>Full Access</span>
+            </div>
+            <input className="input-field" type="password" value={pwInput}
+              onChange={e => { setPwInput(e.target.value); setPwError(false); }}
+              onKeyDown={e => e.key === "Enter" && loginFull()}
+              placeholder="Enter access code"
+              style={{ marginBottom: 10 }}
+            />
+            {pwError && (
+              <p style={{ fontSize: 13, color: "#FF4B4B", fontWeight: 700, marginBottom: 10, textAlign: "center" }}>
+                ❌ Incorrect code — try again
+              </p>
+            )}
+            <button className="btn-green full-sm" onClick={loginFull} style={{ width: "100%" }}>
+              Start Learning →
+            </button>
+          </div>
+
+          {/* Divider */}
+          <div className="fade-up-2" style={{ display: "flex", alignItems: "center", gap: 12, margin: "20px 0" }}>
+            <div style={{ flex: 1, height: 1, background: "#eee" }} />
+            <span style={{ fontSize: 13, color: "#bbb", fontWeight: 700 }}>OR</span>
+            <div style={{ flex: 1, height: 1, background: "#eee" }} />
+          </div>
+
+          {/* Guest */}
+          <div className="fade-up-2" style={{ textAlign: "center" }}>
+            <button className="btn-outline full-sm" onClick={loginGuest} style={{ width: "100%" }}>
+              👋 Continue as Guest
+            </button>
+            <p style={{ fontSize: 12, color: "#bbb", marginTop: 10, fontWeight: 600 }}>
+              1 free challenge · No sign-up needed
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  // ─────────────────────────────────────────────────────────────────────
+  // SCREEN: HOME
+  // ─────────────────────────────────────────────────────────────────────
+  if (screen === "home") return (
+    <div style={{ minHeight: "100vh", background: "#F7F7F7" }}>
+      <style>{CSS}</style>
+
+      {/* Header */}
+      <div style={{ background: "#58CC02", padding: "0 20px" }}>
+        <div style={{ maxWidth: 680, margin: "0 auto", padding: "14px 0",
+          display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <span style={{ fontSize: 20 }}>📈</span>
+            <span style={{ fontSize: 17, fontWeight: 900, color: "#fff" }}>PM Training</span>
+            {isGuest && (
+              <span style={{ fontSize: 11, fontWeight: 700, color: "#fff", background: "rgba(255,255,255,0.25)",
+                padding: "3px 10px", borderRadius: 99 }}>GUEST</span>
+            )}
+          </div>
+          <button className="btn-ghost" onClick={() => { storageSet("pm_auth","false"); setScreen("login"); }}
+            style={{ fontSize: 12, padding: "6px 14px", borderColor: "rgba(255,255,255,0.4)", color: "#fff",
+              background: "rgba(255,255,255,0.15)" }}>
+            {isGuest ? "Exit" : "Sign Out"}
           </button>
         </div>
-      </Container>
-    </Page>
-  );
-
-  // ── LOADING ───────────────────────────────────────────────────────────
-  if (phase === "loading") return (
-    <Page center>
-      <div style={{ textAlign: "center" }}>
-        <div className="spinner" style={{ width: 32, height: 32, border: `2.5px solid ${DS.border}`,
-          borderTopColor: DS.primary, borderRadius: "50%", margin: "0 auto 16px" }} />
-        <p style={{ fontSize: 14, color: DS.textSec }}>Preparing your challenge…</p>
       </div>
-    </Page>
-  );
 
-  // ── HOME ──────────────────────────────────────────────────────────────
-  if (phase === "home") return (
-    <Page>
-      <Container width={680}>
-        {/* Top nav */}
-        <div className="fade-up" style={{ display: "flex", alignItems: "center", justifyContent: "space-between",
-          padding: "32px 0 40px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{ width: 32, height: 32, borderRadius: 9, background: `linear-gradient(135deg, ${DS.primary}, ${DS.primaryDk})`,
-              display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path d="M3 17L7.5 9.5L11 13L15 6.5L20 11" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <circle cx="20" cy="5.5" r="2" fill="white"/>
-              </svg>
-            </div>
-            <span style={{ fontSize: 15, fontWeight: 600, color: DS.text }}>PM Training</span>
-          </div>
-          <span style={{ fontSize: 13, color: DS.textMut }}>{dateLabel}</span>
-        </div>
+      <div style={{ maxWidth: 680, margin: "0 auto", padding: "24px 20px 80px" }}>
 
-        {/* Hero */}
-        <div className="fade-up" style={{ marginBottom: 40 }}>
-          <h1 style={{ fontSize: 32, fontWeight: 800, color: DS.text, letterSpacing: "-0.03em",
-            lineHeight: 1.15, marginBottom: 10 }}>
-            Good day, Siddhant.
+        {/* Greeting */}
+        <div className="fade-up" style={{ marginBottom: 24 }}>
+          <h1 style={{ fontSize: 26, fontWeight: 900, color: "#3C3C3C", marginBottom: 6 }}>
+            {isGuest ? "Welcome, Guest! 👋" : "Good day, Siddhant! 👋"}
           </h1>
-          <p style={{ fontSize: 16, color: DS.textSec, lineHeight: 1.6, maxWidth: 440 }}>
-            Practice real PM scenarios. Get scored by AI. Ship better products.
-          </p>
+          {isGuest ? (
+            <p style={{ fontSize: 15, color: "#777" }}>Try 1 free challenge to see how it works.</p>
+          ) : (
+            <XPBar value={totalXP} max={Math.max(totalXP + 50, 100)} />
+          )}
         </div>
 
+        {/* Error */}
         {error && (
-          <div className="fade-up" style={{ background: DS.danger + "12", border: `1px solid ${DS.danger}30`,
-            borderRadius: DS.r.md, padding: "12px 16px", marginBottom: 24, fontSize: 14, color: DS.danger }}>
+          <div style={{ background: "#fff0f0", border: "2px solid #ffcaca", borderRadius: 14,
+            padding: "12px 16px", marginBottom: 16, fontSize: 14, color: "#c00", fontWeight: 600 }}>
             ⚠ {error}
           </div>
         )}
 
-        {/* Stats */}
-        <div className="fade-up-1" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
-          {[
-            { label: "Challenges completed", value: total,      icon: "📚", color: DS.primary },
-            { label: "Scored 7 or higher",   value: highScores, icon: "⭐", color: DS.success },
-          ].map((s, i) => (
-            <Card key={i} style={{ padding: "20px 22px" }}>
-              <div style={{ fontSize: 22, marginBottom: 12 }}>{s.icon}</div>
-              <div style={{ fontSize: 34, fontWeight: 800, color: s.color, letterSpacing: "-0.04em",
-                lineHeight: 1, marginBottom: 6 }}>
-                {s.value || 0}
-              </div>
-              <div style={{ fontSize: 13, color: DS.textSec }}>{s.label}</div>
-            </Card>
-          ))}
-        </div>
+        {/* Track tabs */}
+        {!isGuest && (
+          <div className="fade-up-1" style={{ display: "flex", gap: 10, marginBottom: 20 }}>
+            {["B2B", "B2C"].map(t => (
+              <button key={t} className={`track-tab btn-ghost ${track === t ? "active" : ""}`}
+                onClick={() => setTrack(t)}
+                style={{ flex: 1, justifyContent: "center", borderRadius: 12, fontSize: 15, fontWeight: 800,
+                  background: track === t ? "#58CC02" : "#fff",
+                  color: track === t ? "#fff" : "#777",
+                  borderColor: track === t ? "#58CC02" : "#e0e0e0" }}>
+                {t === "B2B" ? "🏢 B2B" : "📱 B2C"}
+              </button>
+            ))}
+          </div>
+        )}
 
-        {/* Track selection */}
-        <div className="fade-up-2" style={{ marginBottom: 12 }}>
-          <Card style={{ padding: "24px 24px 20px" }}>
-            <Label>Choose a track to start</Label>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+        {/* Progress card */}
+        {!isGuest && (
+          <div className="card fade-up-1" style={{ marginBottom: 20, padding: "18px 20px" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
+              <span style={{ fontSize: 14, fontWeight: 800, color: "#3C3C3C" }}>
+                {track} Progress
+              </span>
+              <span style={{ fontSize: 13, fontWeight: 700, color: "#58CC02" }}>
+                {doneCount}/{challenges.length} done
+              </span>
+            </div>
+            <div className="xp-bar">
+              <div className="xp-fill" style={{ width: `${pct}%` }} />
+            </div>
+            <div style={{ display: "flex", gap: 16, marginTop: 12 }}>
               {[
-                { t: "B2B", label: "B2B / Enterprise", desc: "Stakeholders, compliance, platform products", color: DS.primary,
-                  types: ["Prioritization", "Metrics", "Stakeholder", "Strategy", "Execution"] },
-                { t: "B2C", label: "B2C / Consumer", desc: "Growth loops, funnels, user research", color: "#A78BFA",
-                  types: ["Prioritization", "Metrics", "Growth", "User Research", "Execution"] },
-              ].map(({ t, label, desc, color, types }) => (
-                <div key={t} className="track-card" onClick={() => startChallenge(t)}
-                  style={{ background: DS.surfaceEl, border: `1px solid ${DS.border}`, borderRadius: DS.r.md,
-                    padding: "18px 16px", userSelect: "none" }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
-                    <Badge label={t} color={color} />
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                      <path d="M3 7H11M7.5 3.5L11 7L7.5 10.5" stroke={DS.textMut} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </div>
-                  <p style={{ fontSize: 14, fontWeight: 600, color: DS.text, marginBottom: 4 }}>{label}</p>
-                  <p style={{ fontSize: 12, color: DS.textSec, lineHeight: 1.5, marginBottom: 12 }}>{desc}</p>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
-                    {types.map(tp => (
-                      <span key={tp} style={{ fontSize: 10, color: DS.textMut, background: "rgba(255,255,255,0.05)",
-                        padding: "3px 8px", borderRadius: DS.r.full }}>
-                        {tp}
-                      </span>
-                    ))}
-                  </div>
+                { label: "Completed", value: doneCount, icon: "✅" },
+                { label: "Remaining", value: challenges.length - doneCount, icon: "🎯" },
+                { label: "Total XP", value: totalXP, icon: "⭐" },
+              ].map((s, i) => (
+                <div key={i} style={{ textAlign: "center", flex: 1 }}>
+                  <div style={{ fontSize: 18 }}>{s.icon}</div>
+                  <div style={{ fontSize: 18, fontWeight: 900, color: "#3C3C3C" }}>{s.value}</div>
+                  <div style={{ fontSize: 11, color: "#aaa", fontWeight: 600 }}>{s.label}</div>
                 </div>
               ))}
             </div>
-          </Card>
+          </div>
+        )}
+
+        {/* Challenge path */}
+        <div className="card fade-up-2" style={{ marginBottom: 20 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
+            <span style={{ fontSize: 18 }}>🗺️</span>
+            <h2 style={{ fontSize: 18, fontWeight: 900, color: "#3C3C3C" }}>
+              {isGuest ? "Your Free Challenge" : `${track} Learning Path`}
+            </h2>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+            {(isGuest ? challenges.slice(0, 1) : challenges).map((ch, idx) => (
+              <div key={idx}>
+                {idx > 0 && (
+                  <div style={{ display: "flex", justifyContent: "center", margin: "-10px 0 -10px 30px" }}>
+                    <div style={{ width: 2, height: 20, background: getStatus(idx) === "locked" ? "#e0e0e0" : "#58CC02" }} />
+                  </div>
+                )}
+                <PathNode challenge={ch} idx={idx} status={getStatus(idx)} onClick={() => openChallenge(idx)} />
+              </div>
+            ))}
+          </div>
+
+          {isGuest && (
+            <div style={{ marginTop: 24, padding: "16px", background: "#f0fff0",
+              border: "2px dashed #58CC02", borderRadius: 14, textAlign: "center" }}>
+              <p style={{ fontSize: 14, fontWeight: 700, color: "#2d7a2d" }}>
+                🔓 Full access unlocks all 10 challenges + AI scoring
+              </p>
+            </div>
+          )}
         </div>
 
-        {/* History */}
-        {history.length > 0 ? (
-          <div className="fade-up-3">
-            <Card style={{ padding: 0, overflow: "hidden" }}>
-              <div style={{ padding: "20px 24px 14px" }}>
-                <Label>Recent sessions</Label>
+        {/* Recent history */}
+        {!isGuest && history.length > 0 && (
+          <div className="card fade-up-3">
+            <h3 style={{ fontSize: 16, fontWeight: 800, color: "#3C3C3C", marginBottom: 14 }}>📋 Recent Sessions</h3>
+            {history.slice(0, 5).map((s, i) => {
+              const c = CHALLENGES.B2B.concat(CHALLENGES.B2C).find(x => x.tag === s.tag)?.color || "#888";
+              const sc = s.scores?.overall;
+              const scColor = sc >= 7 ? "#58CC02" : sc >= 5 ? "#FFC800" : "#FF4B4B";
+              return (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 0",
+                  borderBottom: i < Math.min(history.length - 1, 4) ? "1px solid #f5f5f5" : "none" }}>
+                  <div style={{ width: 38, height: 38, borderRadius: 12, background: c + "18",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 16, flexShrink: 0 }}>
+                    {CHALLENGES.B2B.concat(CHALLENGES.B2C).find(x => x.tag === s.tag)?.icon || "📋"}
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: "#3C3C3C" }}>{s.tag}</div>
+                    <div style={{ fontSize: 12, color: "#aaa" }}>{s.track} · {s.date}</div>
+                  </div>
+                  {sc != null && (
+                    <div style={{ textAlign: "right" }}>
+                      <span style={{ fontSize: 16, fontWeight: 900, color: scColor }}>{sc}</span>
+                      <span style={{ fontSize: 12, color: "#ccc" }}>/10</span>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  // ─────────────────────────────────────────────────────────────────────
+  // SCREEN: CHALLENGE
+  // ─────────────────────────────────────────────────────────────────────
+  if (screen === "challenge") return (
+    <div style={{ minHeight: "100vh", background: "#F7F7F7" }}>
+      <style>{CSS}</style>
+
+      {/* Header */}
+      <div style={{ background: "#fff", borderBottom: "2px solid #f0f0f0", padding: "0 20px", position: "sticky", top: 0, zIndex: 10 }}>
+        <div style={{ maxWidth: 680, margin: "0 auto", padding: "12px 0",
+          display: "flex", alignItems: "center", gap: 12 }}>
+          <button className="btn-ghost" onClick={() => setScreen("home")}
+            style={{ padding: "8px 14px", fontSize: 13 }}>
+            ← Back
+          </button>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#aaa", letterSpacing: "0.06em" }}>CHALLENGE</div>
+            <div style={{ fontSize: 15, fontWeight: 800, color: "#3C3C3C" }}>
+              {pick?.icon} {pick?.tag}
+            </div>
+          </div>
+          <span style={{ fontSize: 12, color: "#bbb", fontWeight: 600 }}>{track}</span>
+        </div>
+      </div>
+
+      <div style={{ maxWidth: 680, margin: "0 auto", padding: "24px 20px 80px" }}>
+
+        {/* Loading */}
+        {loading && !challengeText && (
+          <div style={{ textAlign: "center", padding: "60px 20px" }}>
+            <div className="spinner" style={{ width: 40, height: 40, border: "3px solid #e8e8e8",
+              borderTopColor: "#58CC02", borderRadius: "50%", margin: "0 auto 16px" }} />
+            <p style={{ fontSize: 15, color: "#aaa", fontWeight: 600 }}>Generating your challenge…</p>
+          </div>
+        )}
+
+        {challengeText && (
+          <>
+            {/* Challenge card */}
+            <div className="card fade-up" style={{ marginBottom: 16, borderColor: pick?.color + "40",
+              background: "linear-gradient(135deg, #fff, #fafffe)" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
+                <div style={{ width: 10, height: 10, borderRadius: "50%", background: pick?.color,
+                  boxShadow: `0 0 8px ${pick?.color}` }} />
+                <span style={{ fontSize: 11, fontWeight: 800, color: pick?.color, letterSpacing: "0.08em" }}>
+                  YOUR CHALLENGE
+                </span>
               </div>
-              {history.slice(0, 6).map((s, i) => {
-                const c = CHALLENGES.B2B.concat(CHALLENGES.B2C).find(x => x.tag === s.tag)?.color || DS.textSec;
-                const sc = s.scores?.overall;
-                const scColor = sc >= 7 ? DS.success : sc >= 5 ? DS.warning : DS.danger;
-                return (
-                  <div key={i}>
-                    {i > 0 && <Divider />}
-                    <div className="card-interactive" style={{ display: "flex", alignItems: "center",
-                      gap: 12, padding: "13px 24px", cursor: "default" }}>
-                      <div style={{ width: 36, height: 36, borderRadius: DS.r.md, background: c + "15",
-                        display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                        <div style={{ width: 8, height: 8, borderRadius: DS.r.full, background: c }} />
+              <p style={{ fontSize: 15, color: "#444", lineHeight: 1.9, whiteSpace: "pre-wrap" }}>{challengeText}</p>
+            </div>
+
+            {/* Hint */}
+            {pick?.hint && (
+              <div className="card fade-up-1" style={{ marginBottom: 16, borderColor: "#FFC800", background: "#fffef5" }}>
+                <button onClick={() => setHintOpen(o => !o)}
+                  style={{ background: "none", width: "100%", display: "flex",
+                    alignItems: "center", justifyContent: "space-between", padding: 0, cursor: "pointer" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <span style={{ fontSize: 18 }}>💡</span>
+                    <span style={{ fontSize: 14, fontWeight: 800, color: "#B8860B" }}>Framework Hint</span>
+                    <span style={{ fontSize: 12, color: "#999", background: "#fff5cc",
+                      padding: "2px 10px", borderRadius: 99, fontWeight: 600 }}>{pick.hint.framework}</span>
+                  </div>
+                  <span style={{ fontSize: 12, color: "#aaa", fontWeight: 700 }}>{hintOpen ? "▲" : "▼"}</span>
+                </button>
+                {hintOpen && (
+                  <div style={{ marginTop: 16, paddingTop: 16, borderTop: "1px solid #ffe88a" }}>
+                    {pick.hint.steps.map((s, i) => (
+                      <div key={i} style={{ display: "flex", gap: 10, marginBottom: 10, padding: "4px 0" }}>
+                        <span style={{ fontSize: 13, fontWeight: 900, color: "#FFC800",
+                          background: "#fffae0", width: 24, height: 24, borderRadius: "50%",
+                          display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{i+1}</span>
+                        <span style={{ fontSize: 14, color: "#555", lineHeight: 1.65 }}>{s}</span>
                       </div>
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <p style={{ fontSize: 14, fontWeight: 500, color: DS.text, marginBottom: 2 }}>{s.tag}</p>
-                        <p style={{ fontSize: 12, color: DS.textSec }}>{s.track} · {s.date}</p>
-                      </div>
-                      {sc != null && (
-                        <div style={{ textAlign: "right", flexShrink: 0 }}>
-                          <span style={{ fontSize: 15, fontWeight: 700, color: scColor }}>{sc}</span>
-                          <span style={{ fontSize: 12, color: DS.textMut }}>/10</span>
-                        </div>
-                      )}
+                    ))}
+                    <div style={{ marginTop: 12, padding: "10px 14px", background: "#fff3cc",
+                      borderRadius: 10, borderLeft: "3px solid #FFC800", fontSize: 13, color: "#7a5c00", fontWeight: 600 }}>
+                      ⚠ {pick.hint.watch}
                     </div>
                   </div>
-                );
-              })}
-            </Card>
-          </div>
-        ) : (
-          <div className="fade-up-3">
-            <Card style={{ textAlign: "center", padding: "40px 24px" }}>
-              <div style={{ fontSize: 32, marginBottom: 12 }}>🎯</div>
-              <p style={{ fontSize: 15, fontWeight: 500, color: DS.text, marginBottom: 6 }}>No sessions yet</p>
-              <p style={{ fontSize: 14, color: DS.textSec }}>Pick a track above to start your first challenge.</p>
-            </Card>
-          </div>
-        )}
-      </Container>
-    </Page>
-  );
-
-  // ── ANSWERING ─────────────────────────────────────────────────────────
-  if (phase === "answering") return (
-    <Page>
-      <Container width={700}>
-        {/* Nav */}
-        <div className="fade-up" style={{ display: "flex", alignItems: "center", gap: 10, padding: "28px 0 24px" }}>
-          <button className="btn-ghost" onClick={() => setPhase("home")}
-            style={{ borderRadius: DS.r.md, padding: "7px 14px", fontSize: 13, fontWeight: 500, display: "flex", alignItems: "center", gap: 6 }}>
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7L9 12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            Back
-          </button>
-          {trackType && <Badge label={trackType} color={DS.primary} />}
-          {pick && <Badge label={pick.tag} color={pick.color} />}
-          <span style={{ marginLeft: "auto", fontSize: 12, color: DS.textMut }}>{today}</span>
-        </div>
-
-        {/* Challenge */}
-        <Card className="fade-up-1" style={{ marginBottom: 12, borderColor: (pick?.color || DS.primary) + "30",
-          background: DS.surface, padding: "24px 26px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
-            <div style={{ width: 8, height: 8, borderRadius: DS.r.full, background: pick?.color || DS.primary,
-              boxShadow: `0 0 8px ${pick?.color || DS.primary}` }} />
-            <Label style={{ margin: 0, fontSize: 10 }}>Challenge</Label>
-          </div>
-          <p style={{ fontSize: 15, color: "rgba(240,240,244,0.82)", lineHeight: 1.9, whiteSpace: "pre-wrap" }}>
-            {challenge}
-          </p>
-        </Card>
-
-        {/* Hint */}
-        {pick?.hint && (
-          <Card className="fade-up-1" style={{ marginBottom: 12, background: "#18160A", borderColor: "rgba(251,191,36,0.15)" }}>
-            <button onClick={() => setHintOpen(o => !o)} style={{ background: "none", width: "100%",
-              display: "flex", alignItems: "center", justifyContent: "space-between", padding: 0, gap: 10 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <span style={{ fontSize: 16 }}>💡</span>
-                <span style={{ fontSize: 12, fontWeight: 600, color: DS.warning, letterSpacing: "0.04em" }}>Framework Hint</span>
-                <span style={{ fontSize: 12, color: "rgba(251,191,36,0.5)", background: "rgba(251,191,36,0.08)",
-                  padding: "2px 10px", borderRadius: DS.r.full }}>{pick.hint.framework}</span>
-              </div>
-              <span style={{ fontSize: 12, color: DS.textMut }}>{hintOpen ? "▲ hide" : "▼ show"}</span>
-            </button>
-            {hintOpen && (
-              <div style={{ marginTop: 18, paddingTop: 18, borderTop: "1px solid rgba(251,191,36,0.1)" }}>
-                <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 14 }}>
-                  {pick.hint.steps.map((s, i) => (
-                    <div key={i} className="hint-row" style={{ display: "flex", gap: 12, padding: "6px 8px" }}>
-                      <span style={{ fontSize: 12, fontWeight: 700, color: DS.warning, minWidth: 20, paddingTop: 1 }}>{i + 1}.</span>
-                      <span style={{ fontSize: 14, color: DS.textSec, lineHeight: 1.65 }}>{s}</span>
-                    </div>
-                  ))}
-                </div>
-                <div style={{ padding: "10px 14px", background: "rgba(251,191,36,0.06)", borderRadius: DS.r.sm,
-                  borderLeft: `2px solid ${DS.warning}`, display: "flex", gap: 10 }}>
-                  <span style={{ fontSize: 13, color: "rgba(251,191,36,0.7)", lineHeight: 1.6 }}>⚠ {pick.hint.watch}</span>
-                </div>
+                )}
               </div>
             )}
-          </Card>
-        )}
 
-        {/* Answer */}
-        <Card className="fade-up-2" style={{ marginBottom: 20, padding: "20px 22px" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-            <Label style={{ margin: 0 }}>Your Answer</Label>
-            <span style={{ fontSize: 12, color: answer.length < 60 ? DS.danger : DS.textMut, transition: "color 0.2s" }}>
-              {answer.length < 60 ? `${60 - answer.length} chars to go` : `${answer.length} chars`}
-            </span>
-          </div>
-          <textarea value={answer} onChange={e => setAnswer(e.target.value)}
-            placeholder="Name a framework. Apply it. Be specific about your reasoning and trade-offs."
-            style={{ width: "100%", minHeight: 200, background: DS.bg, border: `1px solid ${DS.border}`,
-              borderRadius: DS.r.md, color: DS.text, fontSize: 15, padding: "14px 16px", lineHeight: 1.8 }}
-          />
-          <div style={{ display: "flex", gap: 10, marginTop: 14, justifyContent: "flex-end" }}>
-            <button className="btn-ghost" onClick={() => setPhase("home")}
-              style={{ borderRadius: DS.r.md, padding: "10px 20px", fontSize: 14 }}>
-              Cancel
-            </button>
-            <button className="btn-primary" onClick={submitAnswer} disabled={answer.length < 60}
-              style={{ borderRadius: DS.r.md, padding: "10px 28px", fontSize: 14, fontWeight: 600,
-                opacity: answer.length < 60 ? 0.4 : 1, cursor: answer.length < 60 ? "not-allowed" : "pointer" }}>
-              Submit for Assessment →
-            </button>
-          </div>
-        </Card>
-      </Container>
-    </Page>
+            {/* Answer */}
+            <div className="card fade-up-2" style={{ marginBottom: 20 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+                <h3 style={{ fontSize: 15, fontWeight: 800, color: "#3C3C3C" }}>✍️ Your Answer</h3>
+                <span style={{ fontSize: 12, fontWeight: 700,
+                  color: answer.length < 60 ? "#FF4B4B" : "#58CC02" }}>
+                  {answer.length < 60 ? `${60 - answer.length} more to go` : `${answer.length} chars ✓`}
+                </span>
+              </div>
+              <textarea className="textarea-field" value={answer} onChange={e => setAnswer(e.target.value)}
+                placeholder="Name a framework. Apply it. Be specific about trade-offs and your reasoning..." />
+
+              {error && (
+                <div style={{ fontSize: 13, color: "#FF4B4B", fontWeight: 700, marginTop: 8 }}>⚠ {error}</div>
+              )}
+
+              <div style={{ display: "flex", gap: 10, marginTop: 14, justifyContent: "flex-end" }} className="stack-sm">
+                <button className="btn-ghost full-sm" onClick={() => setScreen("home")}>Cancel</button>
+                {loading ? (
+                  <button className="btn-disabled full-sm">Submitting…</button>
+                ) : (
+                  <button
+                    className={answer.length >= 60 ? "btn-green full-sm" : "btn-disabled full-sm"}
+                    onClick={answer.length >= 60 ? submitAnswer : undefined}
+                    disabled={answer.length < 60}>
+                    Submit for Assessment →
+                  </button>
+                )}
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
   );
 
-  // ── RESULT ────────────────────────────────────────────────────────────
-  if (phase === "result") return (
-    <Page>
-      <Container width={700}>
-        {/* Nav */}
-        <div className="fade-up" style={{ display: "flex", alignItems: "center", gap: 10, padding: "28px 0 24px" }}>
-          <button className="btn-ghost" onClick={() => setPhase("home")}
-            style={{ borderRadius: DS.r.md, padding: "7px 14px", fontSize: 13, fontWeight: 500, display: "flex", alignItems: "center", gap: 6 }}>
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7L9 12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            Home
-          </button>
-          {trackType && <Badge label={trackType} color={DS.primary} />}
-          {pick && <Badge label={pick.tag} color={pick.color} />}
-          <span style={{ marginLeft: "auto", fontSize: 12, color: DS.textMut }}>Assessment</span>
+  // ─────────────────────────────────────────────────────────────────────
+  // SCREEN: RESULT
+  // ─────────────────────────────────────────────────────────────────────
+  if (screen === "result") return (
+    <div style={{ minHeight: "100vh", background: "#F7F7F7" }}>
+      <style>{CSS}</style>
+
+      {/* Header */}
+      <div style={{ background: "#fff", borderBottom: "2px solid #f0f0f0", padding: "0 20px" }}>
+        <div style={{ maxWidth: 680, margin: "0 auto", padding: "12px 0",
+          display: "flex", alignItems: "center", gap: 12 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ fontSize: 18 }}>📊</span>
+            <span style={{ fontSize: 16, fontWeight: 800, color: "#3C3C3C" }}>Your Assessment</span>
+          </div>
+          {pick && <span style={{ fontSize: 11, color: "#aaa", marginLeft: "auto", fontWeight: 600 }}>
+            {track} · {pick.tag}
+          </span>}
         </div>
+      </div>
+
+      <div style={{ maxWidth: 680, margin: "0 auto", padding: "24px 20px 80px" }}>
 
         {/* Score hero */}
         {scores && (() => {
           const sc = scores.overall;
-          const color = sc >= 7 ? DS.success : sc >= 5 ? DS.warning : DS.danger;
-          const label = sc >= 7 ? "Solid PM thinking" : sc >= 5 ? "Good foundation" : "Gaps to close";
-          const emoji = sc >= 7 ? "💪" : sc >= 5 ? "📈" : "🎯";
+          const color  = sc >= 7 ? "#58CC02" : sc >= 5 ? "#FFC800" : "#FF4B4B";
+          const bg     = sc >= 7 ? "linear-gradient(135deg,#f0fff0,#e4f9d5)" : sc >= 5 ? "linear-gradient(135deg,#fffcf0,#fff3cc)" : "linear-gradient(135deg,#fff0f0,#ffe0e0)";
+          const label  = sc >= 7 ? "Great work! 🎉" : sc >= 5 ? "Good effort! 📈" : "Keep practising 💪";
           return (
-            <Card className="fade-up-1" style={{ marginBottom: 12, padding: "32px 28px", textAlign: "center" }}>
-              <div style={{ fontSize: 80, fontWeight: 900, color, letterSpacing: "-0.06em", lineHeight: 1, marginBottom: 6 }}>
-                {sc}
+            <div className="card pop-in" style={{ marginBottom: 16, background: bg,
+              borderColor: color + "40", textAlign: "center", padding: "32px 24px" }}>
+              <div style={{ fontSize: 72, fontWeight: 900, color, letterSpacing: "-0.04em",
+                lineHeight: 1, marginBottom: 6 }}>{sc}</div>
+              <div style={{ fontSize: 15, color: "#999", marginBottom: 14 }}>out of 10</div>
+              <div style={{ display: "inline-block", background: color + "18",
+                borderRadius: 99, padding: "8px 20px" }}>
+                <span style={{ fontSize: 16, fontWeight: 800, color }}>{label}</span>
               </div>
-              <div style={{ fontSize: 14, color: DS.textMut, marginBottom: 16 }}>out of 10</div>
-              <div style={{ display: "inline-flex", alignItems: "center", gap: 6,
-                background: color + "14", borderRadius: DS.r.full, padding: "8px 18px" }}>
-                <span>{emoji}</span>
-                <span style={{ fontSize: 14, fontWeight: 500, color }}>{label}</span>
-              </div>
-            </Card>
+              {!isGuest && (
+                <div style={{ marginTop: 14, fontSize: 14, color: "#777", fontWeight: 600 }}>
+                  +{10 + (sc * 5)} XP earned 🌟
+                </div>
+              )}
+            </div>
           );
         })()}
 
         {/* Score breakdown */}
         {scores && (
-          <Card className="fade-up-2" style={{ marginBottom: 12 }}>
-            <Label>Score Breakdown</Label>
+          <div className="card fade-up-1" style={{ marginBottom: 16 }}>
+            <h3 style={{ fontSize: 15, fontWeight: 800, color: "#3C3C3C", marginBottom: 14 }}>📉 Score Breakdown</h3>
             <ScoreBar label="Structured Thinking" score={scores.structured} delay={0} />
             <ScoreBar label="Business Acumen"     score={scores.business}   delay={80} />
             <ScoreBar label="Specificity & Depth"  score={scores.depth}      delay={160} />
             <ScoreBar label="PM Maturity"          score={scores.maturity}   delay={240} />
-          </Card>
+          </div>
         )}
 
         {/* Assessment */}
-        <Card className="fade-up-3" style={{ marginBottom: 12 }}>
-          <Label>Assessment</Label>
+        <div className="card fade-up-2" style={{ marginBottom: 16 }}>
+          <h3 style={{ fontSize: 15, fontWeight: 800, color: "#3C3C3C", marginBottom: 14 }}>🧠 Coach Feedback</h3>
           {renderMD(assessment)}
-        </Card>
+        </div>
 
         {/* Answer key */}
         {answerKey && (
-          <Card className="fade-up-4" style={{ marginBottom: 24,
-            background: showKey ? "rgba(52,211,153,0.04)" : DS.surface,
-            borderColor: showKey ? "rgba(52,211,153,0.2)" : DS.border, transition: "all 0.2s" }}>
-            <button onClick={() => setShowKey(o => !o)} style={{ background: "none", width: "100%",
-              display: "flex", alignItems: "center", justifyContent: "space-between", padding: 0 }}>
+          <div className="fade-up-3" style={{ marginBottom: 24 }}>
+            <button onClick={() => setShowKey(o => !o)}
+              style={{ width: "100%", background: showKey ? "#e8f9d5" : "#f5f5f5",
+                border: `2px solid ${showKey ? "#58CC02" : "#ddd"}`, borderRadius: 16,
+                padding: "14px 20px", cursor: "pointer", display: "flex",
+                alignItems: "center", justifyContent: "space-between",
+                transition: "all 0.2s", fontFamily: "'Nunito', sans-serif" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <span style={{ fontSize: 16 }}>🔑</span>
-                <span style={{ fontSize: 13, fontWeight: 600, color: DS.success }}>Model Answer</span>
-                <span style={{ fontSize: 12, color: DS.textMut }}>— see what a strong response looks like</span>
+                <span style={{ fontSize: 18 }}>🔑</span>
+                <span style={{ fontSize: 15, fontWeight: 800, color: showKey ? "#2d7a2d" : "#555" }}>
+                  Model Answer
+                </span>
+                <span style={{ fontSize: 12, color: "#aaa", fontWeight: 600 }}>tap to reveal</span>
               </div>
-              <span style={{ fontSize: 12, color: DS.textMut }}>{showKey ? "▲ hide" : "▼ reveal"}</span>
+              <span style={{ fontSize: 14, fontWeight: 800, color: "#aaa" }}>{showKey ? "▲" : "▼"}</span>
             </button>
             {showKey && (
-              <div style={{ marginTop: 20, paddingTop: 20, borderTop: "1px solid rgba(52,211,153,0.1)" }}>
+              <div className="key-section pop-in" style={{ padding: "20px", marginTop: 8 }}>
                 {renderMD(answerKey, true)}
               </div>
             )}
-          </Card>
+          </div>
         )}
 
         {/* Actions */}
-        <div className="fade-up-4" style={{ display: "flex", gap: 10 }}>
-          <button className="btn-ghost" onClick={() => setPhase("home")}
-            style={{ borderRadius: DS.r.md, padding: "12px 20px", fontSize: 14 }}>
-            Back to Home
-          </button>
-          <button className="btn-primary" onClick={() => { setPhase("home"); setTimeout(() => startChallenge(trackType), 50); }}
-            style={{ flex: 1, borderRadius: DS.r.md, padding: "12px 24px", fontSize: 14, fontWeight: 600 }}>
-            Another Challenge →
+        <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }} className="stack-sm fade-up-4">
+          <button className="btn-ghost full-sm" onClick={() => setScreen("home")}>← Back to Path</button>
+          {isGuest ? (
+            <button className="btn-green full-sm" style={{ flex: 1 }}
+              onClick={() => setScreen("feedback")}>
+              Give Feedback →
+            </button>
+          ) : (
+            <button className="btn-green full-sm" style={{ flex: 1 }}
+              onClick={() => { setScreen("home"); setTimeout(() => openChallenge(
+                Math.min(currentIdx + 1, challenges.length - 1)
+              ), 50); }}>
+              Next Challenge →
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+
+  // ─────────────────────────────────────────────────────────────────────
+  // SCREEN: GUEST FEEDBACK
+  // ─────────────────────────────────────────────────────────────────────
+  if (screen === "feedback") return (
+    <div style={{ minHeight: "100vh", background: "#F7F7F7", display: "flex", alignItems: "center", padding: "32px 20px" }}>
+      <style>{CSS}</style>
+      <div style={{ maxWidth: 480, margin: "0 auto", width: "100%" }}>
+
+        <div className="fade-up" style={{ textAlign: "center", marginBottom: 32 }}>
+          <div style={{ fontSize: 40, marginBottom: 10 }}>📝</div>
+          <h2 style={{ fontSize: 24, fontWeight: 900, color: "#3C3C3C", marginBottom: 8 }}>Quick Feedback</h2>
+          <p style={{ fontSize: 15, color: "#777" }}>Takes 60 seconds. Helps us improve.</p>
+        </div>
+
+        <div className="card fade-up-1" style={{ marginBottom: 16 }}>
+          {/* Q1 */}
+          <div style={{ marginBottom: 20 }}>
+            <p style={{ fontSize: 15, fontWeight: 700, color: "#3C3C3C", marginBottom: 12 }}>
+              1. How useful was this challenge?
+            </p>
+            <div style={{ display: "flex", gap: 8 }}>
+              {[1,2,3,4,5].map(n => (
+                <button key={n} onClick={() => setFbUseful(n)}
+                  style={{ flex: 1, padding: "12px 0", borderRadius: 12, border: `2px solid ${fbUseful >= n ? "#58CC02" : "#e0e0e0"}`,
+                    background: fbUseful >= n ? "#58CC02" : "#fff", color: fbUseful >= n ? "#fff" : "#bbb",
+                    fontSize: 16, fontWeight: 800, cursor: "pointer", transition: "all 0.12s" }}>
+                  {n}
+                </button>
+              ))}
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6 }}>
+              <span style={{ fontSize: 11, color: "#bbb", fontWeight: 600 }}>Not useful</span>
+              <span style={{ fontSize: 11, color: "#bbb", fontWeight: 600 }}>Very useful</span>
+            </div>
+          </div>
+
+          {/* Q2 */}
+          <div style={{ marginBottom: 20 }}>
+            <p style={{ fontSize: 15, fontWeight: 700, color: "#3C3C3C", marginBottom: 10 }}>
+              2. Was the interface easy to use?
+            </p>
+            <div style={{ display: "flex", gap: 10 }}>
+              {["Yes", "No"].map(v => (
+                <button key={v} onClick={() => setFbEasy(v)}
+                  style={{ flex: 1, padding: "12px", borderRadius: 12,
+                    border: `2px solid ${fbEasy === v ? "#58CC02" : "#e0e0e0"}`,
+                    background: fbEasy === v ? "#f0fff0" : "#fff",
+                    color: fbEasy === v ? "#2d7a2d" : "#777",
+                    fontSize: 15, fontWeight: 800, cursor: "pointer", transition: "all 0.12s" }}>
+                  {v === "Yes" ? "👍 Yes" : "👎 No"}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Q3 */}
+          <div>
+            <p style={{ fontSize: 15, fontWeight: 700, color: "#3C3C3C", marginBottom: 10 }}>
+              3. What could be improved? <span style={{ color: "#bbb", fontWeight: 600 }}>(optional)</span>
+            </p>
+            <textarea className="textarea-field" value={fbImprove} onChange={e => setFbImprove(e.target.value)}
+              placeholder="Any suggestions are welcome…" style={{ minHeight: 100 }} />
+          </div>
+        </div>
+
+        <div className="fade-up-2" style={{ display: "flex", gap: 10 }} className="stack-sm">
+          <button className="btn-ghost full-sm" onClick={() => setScreen("result")}>← Back</button>
+          <button
+            className={fbUseful > 0 ? "btn-green full-sm" : "btn-disabled full-sm"}
+            style={{ flex: 1 }} disabled={fbUseful === 0 || fbSending}
+            onClick={fbUseful > 0 ? submitGuestFeedback : undefined}>
+            {fbSending ? "Sending…" : "Submit Feedback →"}
           </button>
         </div>
-      </Container>
-    </Page>
+      </div>
+    </div>
+  );
+
+  // ─────────────────────────────────────────────────────────────────────
+  // SCREEN: THANKS
+  // ─────────────────────────────────────────────────────────────────────
+  if (screen === "thanks") return (
+    <div style={{ minHeight: "100vh", background: "#F7F7F7", display: "flex", alignItems: "center",
+      justifyContent: "center", padding: "32px 20px" }}>
+      <style>{CSS}</style>
+      <div className="card pop-in" style={{ maxWidth: 420, width: "100%", textAlign: "center", padding: "48px 32px" }}>
+        <div style={{ fontSize: 56, marginBottom: 16 }}>🎉</div>
+        <h2 style={{ fontSize: 26, fontWeight: 900, color: "#3C3C3C", marginBottom: 12 }}>
+          Thanks for trying it!
+        </h2>
+        <p style={{ fontSize: 15, color: "#777", lineHeight: 1.7, marginBottom: 28 }}>
+          Thanks for trying the app.<br/>
+          <strong style={{ color: "#3C3C3C" }}>Full access requires an access code.</strong><br/>
+          Contact Siddhant on LinkedIn to get yours.
+        </p>
+        <button className="btn-green" style={{ width: "100%" }} onClick={() => {
+          setScreen("login"); setIsGuest(false); setPwInput(""); setPwError(false);
+        }}>
+          Back to Home
+        </button>
+      </div>
+    </div>
   );
 
   return null;
