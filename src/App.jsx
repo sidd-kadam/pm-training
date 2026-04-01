@@ -191,6 +191,11 @@ const CSS = `
   /* Answer reveal */
   .key-section { background: linear-gradient(135deg, #f0fff0, #e8f5e8); border: 2px solid #c3e6c3; border-radius: 16px; }
 
+  /* Tables */
+  table { border-radius: 12px; overflow: hidden; }
+  th:first-child { border-radius: 12px 0 0 0; }
+  th:last-child  { border-radius: 0 12px 0 0; }
+
   /* Scrollbar */
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: #f0f0f0; }
@@ -206,17 +211,124 @@ const CSS = `
 `;
 
 // ── Markdown renderer ─────────────────────────────────────────────────────
+function inlineFormat(text) {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((p, i) =>
+    p.startsWith("**") ? <strong key={i} style={{ fontWeight: 700, color: "#2d2d2d" }}>{p.replace(/\*\*/g,"")}</strong> : p
+  );
+}
+
+function renderChallenge(text) {
+  const lines = text.split("\n");
+  const result = [];
+  let tableBuffer = [];
+  let inTable = false;
+
+  const flushTable = (key) => {
+    if (tableBuffer.length === 0) return;
+    const rows = tableBuffer.filter(r => !r.match(/^\s*\|[-|\s]+\|\s*$/));
+    const parsed = rows.map(r => r.split("|").filter((c,i) => i>0 && i<r.split("|").length-1).map(c=>c.trim()));
+    if (parsed.length === 0) { tableBuffer=[]; inTable=false; return; }
+    const [head, ...body] = parsed;
+    result.push(
+      <div key={key} style={{ overflowX:"auto", margin:"16px 0" }}>
+        <table style={{ width:"100%", borderCollapse:"collapse", fontSize:14, fontFamily:"'Nunito',sans-serif" }}>
+          <thead>
+            <tr>{head.map((h,i)=><th key={i} style={{ background:"#58CC02", color:"#fff", padding:"10px 14px", textAlign:"left", fontWeight:800, fontSize:13, whiteSpace:"nowrap" }}>{h}</th>)}</tr>
+          </thead>
+          <tbody>
+            {body.map((row,ri)=>(
+              <tr key={ri} style={{ background: ri%2===0?"#fff":"#f8fdf5" }}>
+                {row.map((cell,ci)=><td key={ci} style={{ padding:"10px 14px", borderBottom:"1px solid #eee", fontSize:14, color:"#3C3C3C", verticalAlign:"top" }}>{inlineFormat(cell)}</td>)}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+    tableBuffer=[]; inTable=false;
+  };
+
+  lines.forEach((line, i) => {
+    if (line.trim().startsWith("|")) {
+      inTable = true;
+      tableBuffer.push(line.trim());
+      return;
+    }
+    if (inTable) flushTable(`tbl-${i}`);
+
+    // H1
+    if (line.startsWith("# ")) {
+      result.push(<h2 key={i} style={{ fontSize:20, fontWeight:900, color:"#3C3C3C", marginTop:24, marginBottom:8, lineHeight:1.3 }}>{line.slice(2)}</h2>);
+      return;
+    }
+    // H2
+    if (line.startsWith("## ")) {
+      result.push(<h3 key={i} style={{ fontSize:16, fontWeight:800, color:"#3C3C3C", marginTop:22, marginBottom:8, paddingBottom:6, borderBottom:"2px solid #f0f0f0" }}>{line.slice(3)}</h3>);
+      return;
+    }
+    // H3
+    if (line.startsWith("### ")) {
+      result.push(<h4 key={i} style={{ fontSize:14, fontWeight:800, color:"#555", marginTop:16, marginBottom:6, textTransform:"uppercase", letterSpacing:"0.06em" }}>{line.slice(4)}</h4>);
+      return;
+    }
+    // Bullet
+    if (line.trim().startsWith("- ") || line.trim().startsWith("* ")) {
+      result.push(
+        <div key={i} style={{ display:"flex", gap:10, marginBottom:6, alignItems:"flex-start", paddingLeft:4 }}>
+          <span style={{ color:"#58CC02", fontWeight:900, fontSize:16, lineHeight:1.5, flexShrink:0 }}>•</span>
+          <span style={{ fontSize:15, color:"#444", lineHeight:1.7 }}>{inlineFormat(line.trim().slice(2))}</span>
+        </div>
+      );
+      return;
+    }
+    // Numbered
+    if (/^\d+\.\s/.test(line.trim())) {
+      const num = line.trim().match(/^(\d+)\.\s(.*)$/);
+      if (num) {
+        result.push(
+          <div key={i} style={{ display:"flex", gap:10, marginBottom:8, alignItems:"flex-start" }}>
+            <span style={{ background:"#58CC02", color:"#fff", fontWeight:900, fontSize:12, width:22, height:22, borderRadius:"50%", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, marginTop:2 }}>{num[1]}</span>
+            <span style={{ fontSize:15, color:"#444", lineHeight:1.7 }}>{inlineFormat(num[2])}</span>
+          </div>
+        );
+        return;
+      }
+    }
+    // Divider
+    if (line.includes("━") || line.match(/^---+$/)) {
+      result.push(<div key={i} style={{ height:2, background:"#f0f0f0", margin:"12px 0" }}/>);
+      return;
+    }
+    // Bold-only line (section label)
+    if (line.trim().startsWith("**") && line.trim().endsWith("**") && !line.includes(" ")) {
+      result.push(<p key={i} style={{ fontSize:11, fontWeight:800, letterSpacing:"0.1em", textTransform:"uppercase", color:"#aaa", marginTop:20, marginBottom:6 }}>{line.trim().replace(/\*\*/g,"")}</p>);
+      return;
+    }
+    // Empty line
+    if (!line.trim()) {
+      result.push(<div key={i} style={{ height:10 }}/>);
+      return;
+    }
+    // Normal paragraph
+    result.push(<p key={i} style={{ fontSize:15, color:"#444", lineHeight:1.85, marginBottom:4 }}>{inlineFormat(line)}</p>);
+  });
+
+  if (inTable) flushTable("tbl-end");
+  return result;
+}
+
 function renderMD(text, isKey = false) {
   return text.trim().split("\n").map((line, i) => {
     if (line.startsWith("**") && line.endsWith("**"))
-      return <p key={i} style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase",
-        color: isKey ? "#2d9c2d" : "#aaa", marginTop: 20, marginBottom: 6 }}>{line.replace(/\*\*/g, "")}</p>;
-    if (line.includes("━")) return <div key={i} style={{ height: 2, background: "#f0f0f0", margin: "10px 0" }} />;
-    if (!line.trim()) return <div key={i} style={{ height: 8 }} />;
+      return <p key={i} style={{ fontSize:11, fontWeight:800, letterSpacing:"0.08em", textTransform:"uppercase",
+        color: isKey ? "#2d9c2d" : "#aaa", marginTop:20, marginBottom:6 }}>{line.replace(/\*\*/g,"")}</p>;
+    if (line.includes("━")) return <div key={i} style={{ height:2, background:"#f0f0f0", margin:"10px 0" }}/>;
+    if (!line.trim()) return <div key={i} style={{ height:8 }}/>;
     const parts = line.split(/(\*\*[^*]+\*\*)/g);
-    return <p key={i} style={{ fontSize: 15, lineHeight: 1.8, color: isKey ? "#1a5c1a" : "#555" }}>
-      {parts.map((p, j) => p.startsWith("**")
-        ? <strong key={j} style={{ color: isKey ? "#2d7a2d" : "#3C3C3C", fontWeight: 700 }}>{p.replace(/\*\*/g, "")}</strong>
+    return <p key={i} style={{ fontSize:15, lineHeight:1.85, color: isKey ? "#1a5c1a" : "#555" }}>
+      {parts.map((p,j) => p.startsWith("**")
+        ? <strong key={j} style={{ color: isKey ? "#2d7a2d" : "#3C3C3C", fontWeight:700 }}>{p.replace(/\*\*/g,"")}</strong>
         : p)}
     </p>;
   });
@@ -465,14 +577,25 @@ export default function PMApp() {
         <div style={{ width: "100%", maxWidth: 440 }}>
 
           {/* Hero */}
-          <div className="fade-up" style={{ textAlign: "center", marginBottom: 40 }}>
-            <div style={{ fontSize: 56, marginBottom: 16 }}>🎯</div>
-            <h1 style={{ fontSize: 28, fontWeight: 900, color: "#3C3C3C", marginBottom: 10, lineHeight: 1.2 }}>
+          <div className="fade-up" style={{ textAlign: "center", marginBottom: 36 }}>
+            <div style={{ width: 72, height: 72, borderRadius: 22, background: "linear-gradient(135deg,#58CC02,#89E219)",
+              display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px",
+              boxShadow: "0 8px 24px rgba(88,204,2,0.3)", fontSize: 34 }}>
+              📈
+            </div>
+            <h1 style={{ fontSize: 26, fontWeight: 900, color: "#3C3C3C", marginBottom: 10, lineHeight: 1.25 }}>
               Product Management<br/>Learning Challenges
             </h1>
-            <p style={{ fontSize: 16, color: "#777", lineHeight: 1.6 }}>
-              Real PM scenarios. AI coaching. Level up your skills.
+            <p style={{ fontSize: 15, color: "#888", lineHeight: 1.65, maxWidth: 320, margin: "0 auto" }}>
+              Real PM scenarios. AI coach scores your answers. Level up daily.
             </p>
+            <div style={{ display: "flex", justifyContent: "center", gap: 16, marginTop: 16 }}>
+              {[["🎯","10 challenges"],["🤖","AI scoring"],["📊","Instant feedback"]].map(([icon,label]) => (
+                <div key={label} style={{ fontSize: 12, color: "#888", fontWeight: 700, display: "flex", alignItems: "center", gap: 4 }}>
+                  <span>{icon}</span><span>{label}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Full access */}
@@ -719,16 +842,27 @@ export default function PMApp() {
         {challengeText && (
           <>
             {/* Challenge card */}
-            <div className="card fade-up" style={{ marginBottom: 16, borderColor: pick?.color + "40",
-              background: "linear-gradient(135deg, #fff, #fafffe)" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
-                <div style={{ width: 10, height: 10, borderRadius: "50%", background: pick?.color,
-                  boxShadow: `0 0 8px ${pick?.color}` }} />
-                <span style={{ fontSize: 11, fontWeight: 800, color: pick?.color, letterSpacing: "0.08em" }}>
-                  YOUR CHALLENGE
-                </span>
+            <div className="card fade-up" style={{ marginBottom: 16, borderColor: pick?.color + "30",
+              background: "#fff", padding: "28px 28px" }}>
+              {/* Challenge header */}
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20,
+                paddingBottom: 16, borderBottom: `2px solid ${pick?.color}20` }}>
+                <div style={{ width: 36, height: 36, borderRadius: 10, background: pick?.color + "18",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>
+                  {pick?.icon}
+                </div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 800, color: pick?.color, letterSpacing: "0.1em",
+                    textTransform: "uppercase", marginBottom: 2 }}>Your Challenge</div>
+                  <div style={{ fontSize: 16, fontWeight: 900, color: "#3C3C3C" }}>{pick?.tag}</div>
+                </div>
+                <div style={{ marginLeft: "auto", background: pick?.color + "12", borderRadius: 99,
+                  padding: "4px 12px", fontSize: 12, fontWeight: 700, color: pick?.color }}>
+                  {track}
+                </div>
               </div>
-              <p style={{ fontSize: 15, color: "#444", lineHeight: 1.9, whiteSpace: "pre-wrap" }}>{challengeText}</p>
+              {/* Challenge body — fully formatted */}
+              <div style={{ fontSize: 15, lineHeight: 1.85, color: "#444" }}>{renderChallenge(challengeText)}</div>
             </div>
 
             {/* Hint */}
