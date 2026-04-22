@@ -165,19 +165,19 @@ async function callClaude(system, userMsg) {
   return d.text || "";
 }
 
-// ── Global CSS — Apple-inspired clean design ─────────────────────────────
+// ── Global CSS — Modern Professional Design ─────────────────────────────
 const CSS = `
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
-    background: #F5F5F7;
+    background: linear-gradient(135deg, #F8FAFC 0%, #F5F8FB 100%);
     font-family: 'Inter', sans-serif;
     -webkit-font-smoothing: antialiased;
-    color: #1D1D1F;
+    color: #1F2937;
     letter-spacing: -0.01em;
     line-height: 1.5;
   }
-  ::selection { background: rgba(0, 113, 227, 0.2); }
+  ::selection { background: rgba(59, 130, 246, 0.2); }
   input, textarea, button, select { font-family: 'Inter', sans-serif; letter-spacing: -0.01em; }
   textarea { outline: none; resize: vertical; }
   input { outline: none; }
@@ -186,118 +186,114 @@ const CSS = `
   @keyframes fadeUp  { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
   @keyframes spin    { to{transform:rotate(360deg)} }
   @keyframes popIn   { 0%{transform:scale(0.95);opacity:0} 100%{transform:scale(1);opacity:1} }
-  @keyframes pulse   { 0%,100%{opacity:1} 50%{opacity:0.6} }
+  @keyframes shimmer { 0%{opacity:0.5} 50%{opacity:1} 100%{opacity:0.5} }
 
-  .fade-up   { animation: fadeUp 0.35s cubic-bezier(0.16,1,0.3,1) both; }
-  .fade-up-1 { animation: fadeUp 0.35s 0.05s cubic-bezier(0.16,1,0.3,1) both; }
-  .fade-up-2 { animation: fadeUp 0.35s 0.10s cubic-bezier(0.16,1,0.3,1) both; }
-  .fade-up-3 { animation: fadeUp 0.35s 0.15s cubic-bezier(0.16,1,0.3,1) both; }
-  .fade-up-4 { animation: fadeUp 0.35s 0.20s cubic-bezier(0.16,1,0.3,1) both; }
-  .pop-in    { animation: popIn 0.30s cubic-bezier(0.16,1,0.3,1) both; }
+  .fade-up   { animation: fadeUp 0.4s cubic-bezier(0.16,1,0.3,1) both; }
+  .fade-up-1 { animation: fadeUp 0.4s 0.05s cubic-bezier(0.16,1,0.3,1) both; }
+  .fade-up-2 { animation: fadeUp 0.4s 0.10s cubic-bezier(0.16,1,0.3,1) both; }
+  .fade-up-3 { animation: fadeUp 0.4s 0.15s cubic-bezier(0.16,1,0.3,1) both; }
+  .fade-up-4 { animation: fadeUp 0.4s 0.20s cubic-bezier(0.16,1,0.3,1) both; }
+  .pop-in    { animation: popIn 0.35s cubic-bezier(0.16,1,0.3,1) both; }
   .spinner   { animation: spin 0.75s linear infinite; }
 
-  /* ── Buttons — Apple style ── */
+  /* ── Buttons ── */
   .btn-green {
-    background: #0071E3; color: #fff;
-    border-radius: 12px; padding: 12px 26px;
+    background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+    color: #fff;
+    border-radius: 10px; padding: 12px 24px;
     font-size: 15px; font-weight: 600; border: none; cursor: pointer;
-    transition: all 0.15s; letter-spacing: -0.01em;
+    transition: all 0.2s; letter-spacing: -0.01em;
     display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
   }
-  .btn-green:hover  { background: #0066DC; }
-  .btn-green:active { opacity: 0.9; }
+  .btn-green:hover  { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(59, 130, 246, 0.35); }
+  .btn-green:active { opacity: 0.95; }
 
   .btn-outline {
-    background: #fff; color: #0071E3;
-    border-radius: 12px; padding: 12px 26px;
-    font-size: 15px; font-weight: 600; border: 1px solid #D2D2D7; cursor: pointer;
-    transition: all 0.15s;
+    background: #fff; color: #3B82F6;
+    border-radius: 10px; padding: 12px 24px;
+    font-size: 15px; font-weight: 600; border: 1.5px solid #E5E7EB; cursor: pointer;
+    transition: all 0.2s;
     display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   }
-  .btn-outline:hover  { background: #F9F9FB; border-color: #0071E3; }
-  .btn-outline:active { opacity: 0.8; }
+  .btn-outline:hover  { background: #F9FAFB; border-color: #3B82F6; }
+  .btn-outline:active { opacity: 0.9; }
 
   .btn-ghost {
-    background: transparent; color: #0071E3;
-    border-radius: 10px; padding: 10px 16px;
-    font-size: 14px; font-weight: 500; border: none; cursor: pointer;
-    transition: all 0.15s;
+    background: transparent; color: #6B7280;
+    border-radius: 8px; padding: 10px 16px;
+    font-size: 14px; font-weight: 500; border: 1px solid transparent; cursor: pointer;
+    transition: all 0.2s;
     display: inline-flex; align-items: center; gap: 6px;
   }
-  .btn-ghost:hover { background: #F5F5F7; }
+  .btn-ghost:hover { background: #F3F4F6; color: #1F2937; }
 
   .btn-disabled {
-    background: #F5F5F7; color: #86868B;
-    border-radius: 12px; padding: 12px 26px;
+    background: #F3F4F6; color: #9CA3AF;
+    border-radius: 10px; padding: 12px 24px;
     font-size: 15px; font-weight: 600; border: none; cursor: not-allowed;
     display: inline-flex; align-items: center; justify-content: center;
   }
 
   .btn-accent {
-    background: #34C759; color: #fff;
-    border-radius: 12px; padding: 12px 26px;
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    color: #fff;
+    border-radius: 10px; padding: 12px 24px;
     font-size: 15px; font-weight: 600; border: none; cursor: pointer;
-    transition: all 0.15s;
+    transition: all 0.2s;
     display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
   }
-  .btn-accent:hover  { background: #30B452; }
-  .btn-accent:active { opacity: 0.9; }
+  .btn-accent:hover  { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35); }
+  .btn-accent:active { opacity: 0.95; }
 
   /* ── Cards ── */
   .card {
     background: #fff;
-    border-radius: 18px;
+    border-radius: 16px;
     padding: 24px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-    border: 1px solid #E5E5E7;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+    border: 1px solid #E5E7EB;
   }
-  .card-hover { transition: all 0.18s; }
-  .card-hover:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); border-color: #D2D2D7; }
+  .card-hover { transition: all 0.2s; }
+  .card-hover:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.12); }
 
-  /* ── Challenge path ── */
-  .path-node { transition: all 0.18s; }
-  .path-node:hover { transform: scale(1.05); }
-  .path-node-active { animation: pulse 2s infinite; }
-
-  /* ── Inputs ── */
-  .input-field {
-    width: 100%; background: #F5F5F7;
-    border: 1px solid #D2D2D7; border-radius: 12px;
-    padding: 12px 14px; font-size: 15px; color: #1D1D1F;
-    font-family: 'Inter', sans-serif; transition: all 0.15s;
+  /* ── Badge ── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: #EFF6FF;
+    border: 1px solid #BFDBFE;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #1E40AF;
   }
-  .input-field:focus  { border-color: #0071E3; box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1); }
-  .input-field::placeholder { color: #86868B; }
-
-  .textarea-field {
-    width: 100%; background: #F5F5F7;
-    border: 1px solid #D2D2D7; border-radius: 12px;
-    padding: 12px 14px; font-size: 15px; color: #1D1D1F;
-    font-family: 'Inter', sans-serif;
-    line-height: 1.5; transition: all 0.15s; min-height: 160px;
-  }
-  .textarea-field:focus { border-color: #0071E3; box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1); }
 
   /* ── Progress bar ── */
-  .xp-bar  { height: 8px; background: #E5E5E7; border-radius: 99px; overflow: hidden; }
-  .xp-fill { height: 100%; background: #0071E3; border-radius: 99px; transition: width 0.8s cubic-bezier(0.4,0,0.2,1); }
+  .xp-bar  { height: 6px; background: #E5E7EB; border-radius: 99px; overflow: hidden; }
+  .xp-fill { height: 100%; background: linear-gradient(90deg, #3B82F6, #2563EB); border-radius: 99px; transition: width 0.8s cubic-bezier(0.4,0,0.2,1); }
 
   /* ── Track tabs ── */
   .track-tab { transition: all 0.15s; cursor: pointer; }
-  .track-tab.active { background: #0071E3 !important; color: #fff !important; border-color: #0071E3 !important; }
+  .track-tab.active { background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%) !important; color: #fff !important; border-color: transparent !important; }
 
   /* ── Answer key reveal ── */
-  .key-section { background: #F0F5FF; border: 1px solid #D2E3FF; border-radius: 12px; }
+  .key-section { background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%); border: 1px solid #A7F3D0; border-radius: 12px; }
 
   /* ── Tables ── */
   table { border-radius: 12px; overflow: hidden; }
+  th { background: #F3F4F6; font-weight: 700; color: #374151; }
   th:first-child { border-radius: 12px 0 0 0; }
   th:last-child  { border-radius: 0 12px 0 0; }
+  td { border-bottom: 1px solid #E5E7EB; padding: 12px; }
 
   /* ── Scrollbar ── */
   ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: #F5F5F7; }
-  ::-webkit-scrollbar-thumb { background: #D2D2D7; border-radius: 99px; }
+  ::-webkit-scrollbar-track { background: #F3F4F6; }
+  ::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 99px; }
 
   /* ── Responsive ── */
   @media (max-width: 640px) {
@@ -728,20 +724,27 @@ Challenge: ${text}`
   // SCREEN: GUEST PROFILE FORM
   // ─────────────────────────────────────────────────────────────────────
   if (showGuestForm) return (
-    <div style={{ minHeight:"100vh", background:"#fff", display:"flex", flexDirection:"column" }}>
+    <div style={{ minHeight: "100vh", background: "#fff", display: "flex", flexDirection: "column" }}>
       <style>{CSS}</style>
-      <div style={{ background:"#142F32", padding:"14px 24px", display:"flex", alignItems:"center", gap:10 }}>
-        <span style={{ fontSize:22 }}>📈</span>
-        <span style={{ fontSize:18, fontWeight:900, color:"#fff" }}>PM Training</span>
+      <div style={{ background: "linear-gradient(135deg, #3B82F6 0%, #2563EB 100%)", padding: "16px 24px", display: "flex", alignItems: "center", gap: 10 }}>
+        <div style={{ width: 28, height: 28, borderRadius: 6, background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "#3B82F6", fontSize: 16 }}>P</div>
+        <span style={{ fontSize: 16, fontWeight: 700, color: "#fff" }}>PM Learning</span>
       </div>
-      <div style={{ flex:1, display:"flex", alignItems:"center", justifyContent:"center", padding:"32px 20px" }}>
-        <div style={{ width:"100%", maxWidth:440 }}>
-          <div className="fade-up" style={{ textAlign:"center", marginBottom:28 }}>
-            <div style={{ fontSize:36, marginBottom:12 }}>👋</div>
-            <h2 style={{ fontSize:22, fontWeight:900, color:"#282950", marginBottom:8 }}>Quick Intro</h2>
-            <p style={{ fontSize:14, color:"#777C90", lineHeight:1.6 }}>
-              Help us personalise your experience before your free challenge.
-            </p>
+      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 20px" }}>
+        <div style={{ width: "100%", maxWidth: 440 }}>
+          {/* Hero */}
+          <div className="fade-up" style={{ textAlign: "center", marginBottom: 40 }}>
+            <div style={{ width: 80, height: 80, borderRadius: 20, background: "linear-gradient(135deg, #3B82F6, #10B981)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px", boxShadow: "0 12px 24px rgba(59, 130, 246, 0.2)", fontSize: 40, fontWeight: 700, color: "#fff" }}>P</div>
+            <h1 style={{ fontSize: 28, fontWeight: 800, color: "#1F2937", marginBottom: 12, lineHeight: 1.2 }}>PM Learning</h1>
+            <p style={{ fontSize: 15, color: "#6B7280", lineHeight: 1.6, maxWidth: 320, margin: "0 auto" }}>Real scenarios. Structured feedback. Improve your decision-making.</p>
+            <div style={{ display: "flex", justifyContent: "center", gap: 20, marginTop: 24 }}>
+              {[["Real scenarios"],["Detailed feedback"],["Track progress"]].map(([label]) => (
+                <div key={label} style={{ fontSize: 13, color: "#6B7280", fontWeight: 600 }}>
+                  <span style={{ display: "inline-block", width: 6, height: 6, borderRadius: 3, background: "#3B82F6", marginRight: 6 }}></span>
+                  {label}
+                </div>
+              ))}
+            </div>
           </div>
           <div className="card fade-up-1" style={{ marginBottom:16 }}>
             <div style={{ display:"flex", flexDirection:"column", gap:14 }}>
@@ -867,20 +870,17 @@ Challenge: ${text}`
       <style>{CSS}</style>
 
       {/* Header */}
-      <div style={{ background: "#142F32", padding: "0 20px" }}>
-        <div style={{ maxWidth: 680, margin: "0 auto", padding: "14px 0",
-          display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <span style={{ fontSize: 20 }}>📈</span>
-            <span style={{ fontSize: 17, fontWeight: 900, color: "#fff" }}>PM Training</span>
+      <div style={{ background: "linear-gradient(135deg, #3B82F6 0%, #2563EB 100%)", padding: "0 20px" }}>
+        <div style={{ maxWidth: 680, margin: "0 auto", padding: "16px 0", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <div style={{ width: 32, height: 32, borderRadius: 8, background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, color: "#3B82F6", fontSize: 18 }}>P</div>
+            <span style={{ fontSize: 18, fontWeight: 700, color: "#fff" }}>PM Learning</span>
             {isGuest && (
-              <span style={{ fontSize: 11, fontWeight: 700, color: "#fff", background: "rgba(255,255,255,0.25)",
-                padding: "3px 10px", borderRadius: 99 }}>GUEST</span>
+              <span style={{ fontSize: 11, fontWeight: 600, color: "#fff", background: "rgba(255,255,255,0.3)", padding: "4px 10px", borderRadius: 6 }}>GUEST</span>
             )}
           </div>
           <button className="btn-ghost" onClick={() => { storageSet("pm_auth","false"); setScreen("login"); }}
-            style={{ fontSize: 12, padding: "6px 14px", borderColor: "rgba(255,255,255,0.4)", color: "#fff",
-              background: "rgba(255,255,255,0.15)" }}>
+            style={{ fontSize: 13, padding: "8px 14px", borderColor: "rgba(255,255,255,0.3)", color: "#fff", background: "rgba(255,255,255,0.15)" }}>
             {isGuest ? "Exit" : "Sign Out"}
           </button>
         </div>
