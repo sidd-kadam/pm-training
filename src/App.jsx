@@ -165,141 +165,139 @@ async function callClaude(system, userMsg) {
   return d.text || "";
 }
 
-// ── Global CSS — Prodmast brand theme ────────────────────────────────────
+// ── Global CSS — Apple-inspired clean design ─────────────────────────────
 const CSS = `
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
-    background: #F0F2F5;
+    background: #F5F5F7;
     font-family: 'Inter', sans-serif;
     -webkit-font-smoothing: antialiased;
-    color: #282950;
+    color: #1D1D1F;
     letter-spacing: -0.01em;
     line-height: 1.5;
   }
-  ::selection { background: rgba(20,47,50,0.15); }
+  ::selection { background: rgba(0, 113, 227, 0.2); }
   input, textarea, button, select { font-family: 'Inter', sans-serif; letter-spacing: -0.01em; }
   textarea { outline: none; resize: vertical; }
   input { outline: none; }
   button { cursor: pointer; border: none; }
 
-  @keyframes fadeUp  { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes fadeUp  { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
   @keyframes spin    { to{transform:rotate(360deg)} }
-  @keyframes popIn   { 0%{transform:scale(0.88);opacity:0} 70%{transform:scale(1.03)} 100%{transform:scale(1);opacity:1} }
-  @keyframes pulse   { 0%,100%{box-shadow:0 0 0 0 rgba(20,47,50,0.3)} 50%{box-shadow:0 0 0 10px rgba(20,47,50,0)} }
+  @keyframes popIn   { 0%{transform:scale(0.95);opacity:0} 100%{transform:scale(1);opacity:1} }
+  @keyframes pulse   { 0%,100%{opacity:1} 50%{opacity:0.6} }
 
-  .fade-up   { animation: fadeUp 0.38s cubic-bezier(0.16,1,0.3,1) both; }
-  .fade-up-1 { animation: fadeUp 0.38s 0.06s cubic-bezier(0.16,1,0.3,1) both; }
-  .fade-up-2 { animation: fadeUp 0.38s 0.12s cubic-bezier(0.16,1,0.3,1) both; }
-  .fade-up-3 { animation: fadeUp 0.38s 0.18s cubic-bezier(0.16,1,0.3,1) both; }
-  .fade-up-4 { animation: fadeUp 0.38s 0.24s cubic-bezier(0.16,1,0.3,1) both; }
-  .pop-in    { animation: popIn 0.32s cubic-bezier(0.16,1,0.3,1) both; }
+  .fade-up   { animation: fadeUp 0.35s cubic-bezier(0.16,1,0.3,1) both; }
+  .fade-up-1 { animation: fadeUp 0.35s 0.05s cubic-bezier(0.16,1,0.3,1) both; }
+  .fade-up-2 { animation: fadeUp 0.35s 0.10s cubic-bezier(0.16,1,0.3,1) both; }
+  .fade-up-3 { animation: fadeUp 0.35s 0.15s cubic-bezier(0.16,1,0.3,1) both; }
+  .fade-up-4 { animation: fadeUp 0.35s 0.20s cubic-bezier(0.16,1,0.3,1) both; }
+  .pop-in    { animation: popIn 0.30s cubic-bezier(0.16,1,0.3,1) both; }
   .spinner   { animation: spin 0.75s linear infinite; }
 
-  /* ── Buttons ── */
+  /* ── Buttons — Apple style ── */
   .btn-green {
-    background: #142F32; color: #E3FFCC;
-    border-radius: 10px; padding: 13px 28px;
-    font-size: 15px; font-weight: 700; border: none; cursor: pointer;
-    box-shadow: 0 3px 0 #0a1a1c;
-    transition: all 0.12s; letter-spacing: -0.01em;
+    background: #0071E3; color: #fff;
+    border-radius: 12px; padding: 12px 26px;
+    font-size: 15px; font-weight: 600; border: none; cursor: pointer;
+    transition: all 0.15s; letter-spacing: -0.01em;
     display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   }
-  .btn-green:hover  { background: #1a3d41; transform: translateY(-1px); box-shadow: 0 4px 0 #0a1a1c; }
-  .btn-green:active { transform: translateY(2px); box-shadow: 0 1px 0 #0a1a1c; }
+  .btn-green:hover  { background: #0066DC; }
+  .btn-green:active { opacity: 0.9; }
 
   .btn-outline {
-    background: #fff; color: #142F32;
-    border-radius: 10px; padding: 13px 28px;
-    font-size: 15px; font-weight: 700; border: 1.5px solid #142F32; cursor: pointer;
-    transition: all 0.12s;
+    background: #fff; color: #0071E3;
+    border-radius: 12px; padding: 12px 26px;
+    font-size: 15px; font-weight: 600; border: 1px solid #D2D2D7; cursor: pointer;
+    transition: all 0.15s;
     display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   }
-  .btn-outline:hover  { background: #F0F9F0; }
-  .btn-outline:active { transform: translateY(1px); }
+  .btn-outline:hover  { background: #F9F9FB; border-color: #0071E3; }
+  .btn-outline:active { opacity: 0.8; }
 
   .btn-ghost {
-    background: transparent; color: #777C90;
-    border-radius: 8px; padding: 9px 18px;
-    font-size: 14px; font-weight: 600; border: 1.5px solid #D8DDE6; cursor: pointer;
-    transition: all 0.12s;
+    background: transparent; color: #0071E3;
+    border-radius: 10px; padding: 10px 16px;
+    font-size: 14px; font-weight: 500; border: none; cursor: pointer;
+    transition: all 0.15s;
     display: inline-flex; align-items: center; gap: 6px;
   }
-  .btn-ghost:hover { border-color: #999; color: #282950; background: #fff; }
+  .btn-ghost:hover { background: #F5F5F7; }
 
   .btn-disabled {
-    background: #E8EAED; color: #B0B5C0;
-    border-radius: 10px; padding: 13px 28px;
-    font-size: 15px; font-weight: 700; border: none; cursor: not-allowed;
+    background: #F5F5F7; color: #86868B;
+    border-radius: 12px; padding: 12px 26px;
+    font-size: 15px; font-weight: 600; border: none; cursor: not-allowed;
     display: inline-flex; align-items: center; justify-content: center;
   }
 
   .btn-accent {
-    background: #E3FFCC; color: #142F32;
-    border-radius: 10px; padding: 13px 28px;
-    font-size: 15px; font-weight: 700; border: 1.5px solid #b8e898; cursor: pointer;
-    box-shadow: 0 3px 0 #a0d070;
-    transition: all 0.12s;
+    background: #34C759; color: #fff;
+    border-radius: 12px; padding: 12px 26px;
+    font-size: 15px; font-weight: 600; border: none; cursor: pointer;
+    transition: all 0.15s;
     display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   }
-  .btn-accent:hover  { background: #d4f7b0; transform: translateY(-1px); }
-  .btn-accent:active { transform: translateY(2px); box-shadow: 0 1px 0 #a0d070; }
+  .btn-accent:hover  { background: #30B452; }
+  .btn-accent:active { opacity: 0.9; }
 
   /* ── Cards ── */
   .card {
     background: #fff;
-    border-radius: 14px;
+    border-radius: 18px;
     padding: 24px;
-    box-shadow: 0 1px 4px rgba(40,41,80,0.07), 0 4px 16px rgba(40,41,80,0.04);
-    border: 1px solid #E8EAED;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    border: 1px solid #E5E5E7;
   }
   .card-hover { transition: all 0.18s; }
-  .card-hover:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(40,41,80,0.1); border-color: #ccc; }
+  .card-hover:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); border-color: #D2D2D7; }
 
   /* ── Challenge path ── */
   .path-node { transition: all 0.18s; }
-  .path-node:hover { transform: scale(1.04); }
+  .path-node:hover { transform: scale(1.05); }
   .path-node-active { animation: pulse 2s infinite; }
 
   /* ── Inputs ── */
   .input-field {
-    width: 100%; background: #FAFAFA;
-    border: 1.5px solid #D8DDE6; border-radius: 10px;
-    padding: 12px 16px; font-size: 15px; color: #282950;
-    font-family: 'Inter', sans-serif; transition: border 0.15s;
+    width: 100%; background: #F5F5F7;
+    border: 1px solid #D2D2D7; border-radius: 12px;
+    padding: 12px 14px; font-size: 15px; color: #1D1D1F;
+    font-family: 'Inter', sans-serif; transition: all 0.15s;
   }
-  .input-field:focus  { border-color: #142F32; box-shadow: 0 0 0 3px rgba(20,47,50,0.1); }
-  .input-field::placeholder { color: #B0B5C0; }
+  .input-field:focus  { border-color: #0071E3; box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1); }
+  .input-field::placeholder { color: #86868B; }
 
   .textarea-field {
-    width: 100%; background: #FAFAFA;
-    border: 1.5px solid #D8DDE6; border-radius: 10px;
-    padding: 13px 16px; font-size: 15px; color: #282950;
+    width: 100%; background: #F5F5F7;
+    border: 1px solid #D2D2D7; border-radius: 12px;
+    padding: 12px 14px; font-size: 15px; color: #1D1D1F;
     font-family: 'Inter', sans-serif;
-    line-height: 1.5; transition: border 0.15s; min-height: 160px;
+    line-height: 1.5; transition: all 0.15s; min-height: 160px;
   }
-  .textarea-field:focus { border-color: #142F32; box-shadow: 0 0 0 3px rgba(20,47,50,0.1); }
+  .textarea-field:focus { border-color: #0071E3; box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1); }
 
   /* ── Progress bar ── */
-  .xp-bar  { height: 10px; background: #E8EAED; border-radius: 99px; overflow: hidden; }
-  .xp-fill { height: 100%; background: linear-gradient(90deg,#142F32,#2D6B52); border-radius: 99px; transition: width 1s cubic-bezier(0.4,0,0.2,1); }
+  .xp-bar  { height: 8px; background: #E5E5E7; border-radius: 99px; overflow: hidden; }
+  .xp-fill { height: 100%; background: #0071E3; border-radius: 99px; transition: width 0.8s cubic-bezier(0.4,0,0.2,1); }
 
   /* ── Track tabs ── */
   .track-tab { transition: all 0.15s; cursor: pointer; }
-  .track-tab.active { background: #142F32 !important; color: #E3FFCC !important; border-color: #142F32 !important; }
+  .track-tab.active { background: #0071E3 !important; color: #fff !important; border-color: #0071E3 !important; }
 
   /* ── Answer key reveal ── */
-  .key-section { background: linear-gradient(135deg,#F0FFF0,#E3FFCC); border: 1.5px solid #b8e898; border-radius: 12px; }
+  .key-section { background: #F0F5FF; border: 1px solid #D2E3FF; border-radius: 12px; }
 
   /* ── Tables ── */
-  table { border-radius: 10px; overflow: hidden; }
-  th:first-child { border-radius: 10px 0 0 0; }
-  th:last-child  { border-radius: 0 10px 0 0; }
+  table { border-radius: 12px; overflow: hidden; }
+  th:first-child { border-radius: 12px 0 0 0; }
+  th:last-child  { border-radius: 0 12px 0 0; }
 
   /* ── Scrollbar ── */
-  ::-webkit-scrollbar { width: 5px; }
-  ::-webkit-scrollbar-track { background: #F0F2F5; }
-  ::-webkit-scrollbar-thumb { background: #D8DDE6; border-radius: 99px; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #F5F5F7; }
+  ::-webkit-scrollbar-thumb { background: #D2D2D7; border-radius: 99px; }
 
   /* ── Responsive ── */
   @media (max-width: 640px) {
@@ -803,14 +801,14 @@ Challenge: ${text}`
               boxShadow: "0 8px 24px rgba(88,204,2,0.3)", fontSize: 34 }}>
               📈
             </div>
-            <h1 style={{ fontSize: 26, fontWeight: 900, color: "#282950", marginBottom: 10, lineHeight: 1.25 }}>
-              Product Management<br/>Learning Challenges
+            <h1 style={{ fontSize: 28, fontWeight: 800, color: "#1D1D1F", marginBottom: 12, lineHeight: 1.2 }}>
+              PM Learning
             </h1>
-            <p style={{ fontSize: 15, color: "#777C90", lineHeight: 1.65, maxWidth: 320, margin: "0 auto" }}>
-              Real PM scenarios. AI coach scores your answers. Level up daily.
+            <p style={{ fontSize: 15, color: "#555555", lineHeight: 1.6, maxWidth: 340, margin: "0 auto" }}>
+              Real scenarios. Structured feedback. Improve your decision-making.
             </p>
-            <div style={{ display: "flex", justifyContent: "center", gap: 16, marginTop: 16 }}>
-              {[["🎯","10 challenges"],["🤖","AI scoring"],["📊","Instant feedback"]].map(([icon,label]) => (
+            <div style={{ display: "flex", justifyContent: "center", gap: 20, marginTop: 20 }}>
+              {[["📋","Real scenarios"],["✓","Detailed feedback"],["📈","Track progress"]].map(([icon,label]) => (
                 <div key={label} style={{ fontSize: 12, color: "#777C90", fontWeight: 700, display: "flex", alignItems: "center", gap: 4 }}>
                   <span>{icon}</span><span>{label}</span>
                 </div>
@@ -822,7 +820,7 @@ Challenge: ${text}`
           <div className="card fade-up-1" style={{ marginBottom: 16, padding: "24px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 18 }}>
               <span style={{ fontSize: 20 }}>🔐</span>
-              <span style={{ fontSize: 16, fontWeight: 800, color: "#282950" }}>Full Access</span>
+              <span style={{ fontSize: 16, fontWeight: 700, color: "#1D1D1F" }}>Access Code</span>
             </div>
             <input className="input-field" type="password" value={pwInput}
               onChange={e => { setPwInput(e.target.value); setPwError(false); }}
@@ -841,10 +839,10 @@ Challenge: ${text}`
           </div>
 
           {/* Divider */}
-          <div className="fade-up-2" style={{ display: "flex", alignItems: "center", gap: 12, margin: "20px 0" }}>
-            <div style={{ flex: 1, height: 1, background: "#E8EAED" }} />
-            <span style={{ fontSize: 13, color: "#B0B5C0", fontWeight: 700 }}>OR</span>
-            <div style={{ flex: 1, height: 1, background: "#E8EAED" }} />
+          <div className="fade-up-2" style={{ display: "flex", alignItems: "center", gap: 12, margin: "28px 0" }}>
+            <div style={{ flex: 1, height: 1, background: "#E5E5E7" }} />
+            <span style={{ fontSize: 13, color: "#86868B", fontWeight: 600 }}>or</span>
+            <div style={{ flex: 1, height: 1, background: "#E5E5E7" }} />
           </div>
 
           {/* Guest */}
@@ -852,8 +850,8 @@ Challenge: ${text}`
             <button className="btn-outline full-sm" onClick={loginGuest} style={{ width: "100%" }}>
               👋 Continue as Guest
             </button>
-            <p style={{ fontSize: 13, color: "#B0B5C0", marginTop: 12, fontWeight: 600, lineHeight: 1.5 }}>
-              Try 1 free challenge · No sign-up required · Quick profile form
+            <p style={{ fontSize: 13, color: "#86868B", marginTop: 14, fontWeight: 500, lineHeight: 1.5 }}>
+              Try 1 free challenge — no sign-up required
             </p>
           </div>
         </div>
@@ -896,7 +894,7 @@ Challenge: ${text}`
             {isGuest ? "Welcome, Guest! 👋" : "Good day, Siddhant! 👋"}
           </h1>
           {isGuest ? (
-            <p style={{ fontSize: 15, color: "#777C90" }}>Try 1 free challenge to see how it works.</p>
+            <p style={{ fontSize: 15, color: "#555555" }}>Complete 1 free challenge.</p>
           ) : (
             <XPBar value={totalXP} max={Math.max(totalXP + 50, 100)} />
           )}
@@ -1141,8 +1139,8 @@ Challenge: ${text}`
                     textTransform: "uppercase", marginBottom: 2 }}>Your Challenge</div>
                   <div style={{ fontSize: 16, fontWeight: 900, color: "#282950" }}>{pick?.tag}</div>
                 </div>
-                <div style={{ marginLeft: "auto", background: pick?.color + "12", borderRadius: 99,
-                  padding: "4px 12px", fontSize: 12, fontWeight: 700, color: pick?.color }}>
+                <div style={{ marginLeft: "auto", background: "#F5F5F7", borderRadius: 8,
+                  padding: "6px 12px", fontSize: 12, fontWeight: 600, color: "#555555" }}>
                   {track}
                 </div>
               </div>
@@ -1185,11 +1183,11 @@ Challenge: ${text}`
 
             {/* MCQ Answer */}
             <div className="card fade-up-2" style={{ marginBottom: 20 }}>
-              <h3 style={{ fontSize: 15, fontWeight: 800, color: "#282950", marginBottom: 6 }}>
-                🧠 Choose the Best Answer
+              <h3 style={{ fontSize: 15, fontWeight: 700, color: "#1D1D1F", marginBottom: 8 }}>
+                Multiple choice
               </h3>
-              <p style={{ fontSize: 13, color: "#9DA3AE", marginBottom: 16, fontWeight: 600 }}>
-                Select the option that best reflects strong PM thinking.
+              <p style={{ fontSize: 13, color: "#555555", marginBottom: 16, fontWeight: 500 }}>
+                Pick the best answer.
               </p>
 
               {mcqOptions.length === 0 && loading && (
