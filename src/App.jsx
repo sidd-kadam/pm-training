@@ -1,31 +1,31 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 // ── Storage ───────────────────────────────────────────────────────────────
 function storageGet(key) { try { const v = localStorage.getItem(key); return v ? { value: v } : null; } catch { return null; } }
 function storageSet(key, value) { try { localStorage.setItem(key, value); } catch {} }
 function storageList(prefix) { try { return { keys: Object.keys(localStorage).filter(k => k.startsWith(prefix)) }; } catch { return { keys: [] }; } }
 
-// ── Challenge data (logic untouched) ─────────────────────────────────────
+// ── Challenge data ─────────────────────────────────────────────────────────
 const CHALLENGES = {
   B2B: [
-    { tag: "Prioritization", color: "#8B7CF6", icon: "⚖️",
+    { tag: "Prioritization", color: "#6366F1", icon: "⚖️",
       hint: { framework: "RICE or MoSCoW", steps: ["Name your framework and justify the choice","Score each backlog item — don't just list them","Address the compliance deadline and churn risk explicitly","End with a ranked list and what gets cut if capacity runs out"], watch: "Describing features ≠ prioritizing them. Defend every trade-off." },
       prompt: `B2B SaaS prioritization challenge for a junior PM. Include: company context (ARR, customer count), 5 backlog items with effort/value estimates, sprint constraint + 1 enterprise churn risk + 1 compliance deadline. Ask: prioritize using a framework. Be specific and concise.` },
-    { tag: "Metrics", color: "#38BDF8", icon: "📊",
+    { tag: "Metrics", color: "#3B82F6", icon: "📊",
       hint: { framework: "Diagnose → Hypothesize → Measure", steps: ["Describe what you observe in the data first","Generate 2-3 root cause hypotheses","Identify what data is missing","Define 2-3 metrics you'd add to the dashboard"], watch: "Never diagnose from a single data point. Ask: what else would I need to know?" },
       prompt: `B2B platform metrics challenge for a junior PM. Show a 4-metric text dashboard with one red herring. Something is wrong (API errors, adoption drop, or ticket spike). Ask: diagnose the root cause and plan next steps. Be concise.` },
-    { tag: "Stakeholder", color: "#34D399", icon: "🤝",
+    { tag: "Stakeholder", color: "#10B981", icon: "🤝",
       hint: { framework: "Understand → Align → Decide", steps: ["Find what each stakeholder truly wants beneath their stated position","Spot any shared goals or constraints","Make a concrete decision — don't sit on the fence","State who gets which message and how"], watch: "PMs decide. They don't just mediate. End with a clear recommendation." },
       prompt: `B2B stakeholder conflict for a junior PM. 2-3 stakeholders with conflicting goals, distinct motivations, 1 hard sprint deadline. Ask: how do you navigate this and what gets built? Be concise.` },
-    { tag: "Strategy", color: "#A78BFA", icon: "🎯",
+    { tag: "Strategy", color: "#8B5CF6", icon: "🎯",
       hint: { framework: "Situation → Options → Recommendation", steps: ["Summarize the core tension in 1-2 sentences","Name 2-3 strategic options","Pick one and defend it with business reasoning","Explicitly state what you would NOT do and why"], watch: "Every strategy needs a trade-off. What are you giving up?" },
       prompt: `B2B product strategy challenge for a junior PM. Company at a crossroads with fake market data and real constraints. Ask: what is your strategy and what would you NOT do? Be concise.` },
-    { tag: "Execution", color: "#FB923C", icon: "⚡",
+    { tag: "Execution", color: "#F59E0B", icon: "⚡",
       hint: { framework: "Triage → Communicate → Adapt", steps: ["What is most critical in the next 2 hours?","Who do you talk to and in what order?","What do you cut or defer?","How do you run the retrospective after?"], watch: "Focus and communicate. Not heroics. A clear mind beats a busy one." },
       prompt: `B2B sprint execution crisis for a junior PM. Mid-sprint blocker, sprint goal at risk, one panicking stakeholder. Ask: walk through your response step by step. Be concise.` },
   ],
   PO: [
-    { tag: "Prioritization", color: "#F472B6", icon: "⚖️",
+    { tag: "Prioritization", color: "#EC4899", icon: "⚖️",
       hint: { framework: "MoSCoW + WSJF", steps: ["List all backlog items and their business value","Apply MoSCoW (Must/Should/Could/Won't) first","Use WSJF — Cost of Delay ÷ Job Size to rank Must-haves","Flag items that block plugin go-lives or host onboarding"], watch: "Don't just rank by effort. A small FHIR compliance fix could unblock 3 hospital plugins. Business value is king." },
       prompt: `You are simulating a day-in-the-life scenario for a Product Owner at CGM ASSIST — a healthcare API integration platform that sits between clinical host systems (EHRs) and external plugins or services (FHIR, third-party medical tools). The PO must manage the plugin registry backlog.
 
@@ -41,7 +41,7 @@ Scenario: Sprint planning is in 2 hours. You have 7 backlog items:
 Sprint capacity: 18 points. Two developers, one QA.
 
 MCQ format: Ask which items the PO should include in the sprint and why. Provide 4 options with different combinations. One option is clearly optimal using WSJF reasoning.` },
-    { tag: "Stakeholder", color: "#34D399", icon: "🤝",
+    { tag: "Stakeholder", color: "#10B981", icon: "🤝",
       hint: { framework: "Understand → Align → Decide", steps: ["Identify each stakeholder's real motivation beneath their stated request","Map who has authority vs who has influence","Find a shared goal — everyone wants the platform to work","Commit to a decision and communicate it clearly with reasoning"], watch: "As a PO you are not a Yes-machine. You own the backlog. Protect the team from conflicting demands by making a clear, defensible call." },
       prompt: `You are a Product Owner at CGM ASSIST. Three stakeholders contact you in the same week:
 
@@ -54,7 +54,7 @@ MCQ format: Ask which items the PO should include in the sprint and why. Provide
 Sprint capacity: 20 points. All three items are estimated at 13, 5, and 21 points respectively.
 
 MCQ format: How does the PO respond? Provide 4 options showing different prioritisation and stakeholder communication approaches. One option correctly balances urgency, feasibility, and relationship management.` },
-    { tag: "Metrics", color: "#38BDF8", icon: "📊",
+    { tag: "Metrics", color: "#3B82F6", icon: "📊",
       hint: { framework: "Diagnose → Hypothesize → Measure", steps: ["Start with what the data is telling you — don't jump to conclusions","Generate 2-3 distinct root cause hypotheses","Identify what additional data you need before acting","Define the one metric that, if fixed, would have the most downstream impact"], watch: "API platforms have layered failure modes — host errors, routing errors, plugin errors. A spike in failed calls could originate at any layer. Don't assume the cause — diagnose it." },
       prompt: `You are the PO for CGM ASSIST. Your weekly metrics dashboard shows:
 
@@ -69,7 +69,7 @@ MCQ format: How does the PO respond? Provide 4 options showing different priorit
 The customer success team has received 3 support tickets from hospital clients this morning.
 
 MCQ format: What is the most likely root cause and what is your immediate next action? Provide 4 diagnostic options. One correctly identifies the cascading failure pattern (FHIR service degradation → plugin timeouts → success rate drop) and the right escalation path.` },
-    { tag: "Execution", color: "#FB923C", icon: "⚡",
+    { tag: "Execution", color: "#F59E0B", icon: "⚡",
       hint: { framework: "Triage → Communicate → Adapt", steps: ["Assess impact severity — how many clients and plugins are affected?","Communicate immediately to affected parties with what you know now","Decide: hotfix now or roll back? Don't sit on the fence.","Schedule a post-incident review and capture action items"], watch: "In healthcare integrations, downtime is not just a SLA issue — it can affect patient data flow. Own the incident clearly, communicate proactively, and never over-promise on timelines." },
       prompt: `You are the PO for CGM ASSIST. It is 9:15am on a Tuesday.
 
@@ -83,7 +83,7 @@ Your dev lead tells you: a config change was deployed at 8:50am this morning for
 A hospital client emails you: "Our clinical dashboard is showing stale data. Is there an outage?"
 
 MCQ format: What do you do in the next 15 minutes? Provide 4 options with different actions. One option correctly triages, initiates rollback, and communicates to the client without over-promising.` },
-    { tag: "Strategy", color: "#A78BFA", icon: "🎯",
+    { tag: "Strategy", color: "#8B5CF6", icon: "🎯",
       hint: { framework: "Situation → Options → Recommendation", steps: ["Summarise the strategic context in one sentence","Generate 2-3 distinct options — including the uncomfortable ones","Pick one and defend it with clear business and technical reasoning","State explicitly what you would NOT do and why"], watch: "Strategy for a platform product means thinking about ecosystem effects — every decision affects both host systems and plugin partners. Optimising for one side at the expense of the other kills the network." },
       prompt: `You are the PO for CGM ASSIST. The platform currently has 12 certified plugins and 9 live hospital integrations.
 
@@ -96,8 +96,8 @@ The Head of Product presents three strategic options for the next 6 months:
 3. Compliance & Platform Stability: Pause new features. Focus on HL7 FHIR R4 full compliance, SOC 2 certification, audit trail improvements, and performance. Goal: unlock NHS and US hospital markets.
 
 MCQ format: Which strategy should ASSIST prioritise and why? Provide 4 options with different strategic stances. One option correctly identifies that compliance unlocks the largest market opportunity and is the prerequisite for the other two strategies.` },
-    { tag: "Interview", color: "#FBBF24", icon: "🎤",
-      hint: { framework: "STAR + Product Thinking", steps: ["Situation — set the context briefly (2-3 sentences)","Task — what was your specific responsibility as PO?","Action — what decisions did you make and why?","Result — what was the measurable outcome?","Add Product Insight — what would you do differently now?"], watch: "Interviewers are testing your decision-making process, not just the outcome. Always explain the why behind your prioritisation. Generic answers fail — make it specific to API/healthcare products." },
+    { tag: "Interview", color: "#F59E0B", icon: "🎤",
+      hint: { framework: "STAR + Product Thinking", steps: ["Situation — set the context briefly (2-3 sentences)","Task — what was your specific responsibility as PO?","Action — what decisions did you make and why?","Result — what was the measurable outcome?","Add Product Insight — what would you do differently?"], watch: "Interviewers want to see how you think, not just what happened. Show your reasoning, not just your actions." },
       prompt: `You are preparing for a Product Owner interview. The interviewer asks:
 
 "Tell me about a time you had to manage a difficult stakeholder who wanted a feature that you believed was wrong for the product. How did you handle it, and what was the outcome?"
@@ -107,19 +107,19 @@ Context: You work on CGM ASSIST, a healthcare API integration platform. A key ho
 MCQ format: Which response best demonstrates senior PO competency? Provide 4 answer options. One option correctly shows stakeholder empathy, product principle defence, and a creative alternative solution that preserves the platform model while addressing the client's underlying need.` },
   ],
   B2C: [
-    { tag: "Prioritization", color: "#8B7CF6", icon: "⚖️",
+    { tag: "Prioritization", color: "#6366F1", icon: "⚖️",
       hint: { framework: "RICE or Impact vs Effort", steps: ["State your framework and why it fits B2C","Consider user volume, engagement, and retention for each item","Factor in competitor timing and seasonal context","Give a final ranked order and what gets cut"], watch: "B2C is about user love at scale. Delight is a valid business metric." },
       prompt: `B2C mobile app prioritization challenge for a junior PM. Consumer app with 5 backlog items, a competitor just launched a similar feature. Ask: prioritize using a framework. Be concise.` },
-    { tag: "Metrics", color: "#38BDF8", icon: "📊",
+    { tag: "Metrics", color: "#3B82F6", icon: "📊",
       hint: { framework: "AARRR Funnel", steps: ["Map each metric to its funnel stage","Identify the biggest drop-off point","Form 2-3 hypotheses for the drop-off","Pick one metric to fix first and defend the choice"], watch: "Find the leak in the funnel. One metric in isolation tells you nothing." },
       prompt: `B2C consumer app metrics challenge for a junior PM. Funnel problem with 5 fake metrics, one red herring. Ask: diagnose the funnel and recommend one focus area. Be concise.` },
-    { tag: "Growth", color: "#34D399", icon: "🚀",
+    { tag: "Growth", color: "#10B981", icon: "🚀",
       hint: { framework: "Growth Loops", steps: ["Identify which growth loop is broken or missing","Pick ONE lever to pull — don't try to fix everything","Define how you'd measure if your fix worked","Estimate the impact in user numbers or revenue"], watch: "Growth is a system. Fix the loop. Don't just add features." },
       prompt: `B2C growth challenge for a junior PM. Consumer app growth has plateaued with fake metrics showing the problem and limited engineering capacity. Ask: what single growth lever would you pull and why? Be concise.` },
-    { tag: "User Research", color: "#A78BFA", icon: "🔍",
+    { tag: "User Research", color: "#8B5CF6", icon: "🔍",
       hint: { framework: "Jobs To Be Done", steps: ["Identify the job each user hires the product to do","Find the gap between expectation and experience","Separate genuine pain points from nice-to-haves","Recommend what to build and what to ignore"], watch: "Focus on what users DO, not what they SAY. Behaviour beats words." },
       prompt: `B2C user research challenge for a junior PM. 3 user types giving conflicting qualitative feedback on the same feature area. Ask: synthesize the feedback and decide what to build. Be concise.` },
-    { tag: "Execution", color: "#FB923C", icon: "⚡",
+    { tag: "Execution", color: "#F59E0B", icon: "⚡",
       hint: { framework: "Triage → Communicate → Ship", steps: ["What is breaking user experience RIGHT NOW?","Hotfix immediately or wait for proper fix — pick one and justify","Communicate to users if the issue is visible to them","Define what resolved looks like and how you'll confirm it"], watch: "B2C crises are public. Users tweet. Think about user communication, not just internal teams." },
       prompt: `B2C app execution crisis for a junior PM. Consumer-facing incident with public user impact and social media pressure, engineering says 4 hours to fix. Ask: how does the PM handle this step by step? Be concise.` },
   ]
@@ -165,150 +165,655 @@ async function callClaude(system, userMsg) {
   return d.text || "";
 }
 
-// ── Global CSS — Modern Professional Design ─────────────────────────────
+// ── Design System CSS ──────────────────────────────────────────────────────
 const CSS = `
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&display=swap');
+
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body {
-    background: linear-gradient(135deg, #F8FAFC 0%, #F5F8FB 100%);
-    font-family: 'Inter', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    color: #1F2937;
-    letter-spacing: -0.01em;
-    line-height: 1.5;
+
+  :root {
+    /* Colors */
+    --color-bg: #F9FAFB;
+    --color-surface: #FFFFFF;
+    --color-border: #E5E7EB;
+    --color-border-strong: #D1D5DB;
+
+    --color-text-primary: #111827;
+    --color-text-secondary: #4B5563;
+    --color-text-tertiary: #9CA3AF;
+    --color-text-inverse: #FFFFFF;
+
+    --color-accent: #6366F1;
+    --color-accent-hover: #4F46E5;
+    --color-accent-light: #EEF2FF;
+    --color-accent-border: #C7D2FE;
+
+    --color-success: #10B981;
+    --color-success-light: #ECFDF5;
+    --color-success-border: #A7F3D0;
+
+    --color-warning: #F59E0B;
+    --color-warning-light: #FFFBEB;
+    --color-warning-border: #FDE68A;
+
+    --color-error: #EF4444;
+    --color-error-light: #FEF2F2;
+    --color-error-border: #FECACA;
+
+    /* Spacing */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-10: 40px;
+    --space-12: 48px;
+    --space-16: 64px;
+
+    /* Typography */
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-size-xs: 11px;
+    --font-size-sm: 13px;
+    --font-size-base: 15px;
+    --font-size-md: 16px;
+    --font-size-lg: 18px;
+    --font-size-xl: 22px;
+    --font-size-2xl: 28px;
+    --font-size-3xl: 36px;
+
+    /* Radius */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --radius-xl: 20px;
+    --radius-full: 9999px;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -1px rgba(0,0,0,0.04);
+    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -2px rgba(0,0,0,0.04);
+    --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+
+    /* Transitions */
+    --transition-fast: 100ms ease;
+    --transition-base: 150ms ease;
+    --transition-slow: 250ms ease;
   }
-  ::selection { background: rgba(59, 130, 246, 0.2); }
-  input, textarea, button, select { font-family: 'Inter', sans-serif; letter-spacing: -0.01em; }
+
+  html, body {
+    background: var(--color-bg);
+    font-family: var(--font-family);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-base);
+    line-height: 1.6;
+    letter-spacing: -0.011em;
+  }
+
+  ::selection { background: var(--color-accent-light); color: var(--color-accent); }
+  input, textarea, button, select { font-family: var(--font-family); }
   textarea { outline: none; resize: vertical; }
   input { outline: none; }
   button { cursor: pointer; border: none; }
 
-  @keyframes fadeUp  { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
-  @keyframes spin    { to{transform:rotate(360deg)} }
-  @keyframes popIn   { 0%{transform:scale(0.95);opacity:0} 100%{transform:scale(1);opacity:1} }
-  @keyframes shimmer { 0%{opacity:0.5} 50%{opacity:1} 100%{opacity:0.5} }
-
-  .fade-up   { animation: fadeUp 0.4s cubic-bezier(0.16,1,0.3,1) both; }
-  .fade-up-1 { animation: fadeUp 0.4s 0.05s cubic-bezier(0.16,1,0.3,1) both; }
-  .fade-up-2 { animation: fadeUp 0.4s 0.10s cubic-bezier(0.16,1,0.3,1) both; }
-  .fade-up-3 { animation: fadeUp 0.4s 0.15s cubic-bezier(0.16,1,0.3,1) both; }
-  .fade-up-4 { animation: fadeUp 0.4s 0.20s cubic-bezier(0.16,1,0.3,1) both; }
-  .pop-in    { animation: popIn 0.35s cubic-bezier(0.16,1,0.3,1) both; }
-  .spinner   { animation: spin 0.75s linear infinite; }
-
-  /* ── Buttons ── */
-  .btn-green {
-    background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
-    color: #fff;
-    border-radius: 10px; padding: 12px 24px;
-    font-size: 15px; font-weight: 600; border: none; cursor: pointer;
-    transition: all 0.2s; letter-spacing: -0.01em;
-    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+  /* ── Animations ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
-  .btn-green:hover  { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(59, 130, 246, 0.35); }
-  .btn-green:active { opacity: 0.95; }
-
-  .btn-outline {
-    background: #fff; color: #3B82F6;
-    border-radius: 10px; padding: 12px 24px;
-    font-size: 15px; font-weight: 600; border: 1.5px solid #E5E7EB; cursor: pointer;
-    transition: all 0.2s;
-    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
   }
-  .btn-outline:hover  { background: #F9FAFB; border-color: #3B82F6; }
-  .btn-outline:active { opacity: 0.9; }
-
-  .btn-ghost {
-    background: transparent; color: #6B7280;
-    border-radius: 8px; padding: 10px 16px;
-    font-size: 14px; font-weight: 500; border: 1px solid transparent; cursor: pointer;
-    transition: all 0.2s;
-    display: inline-flex; align-items: center; gap: 6px;
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes popIn {
+    0%   { transform: scale(0.96); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
   }
-  .btn-ghost:hover { background: #F3F4F6; color: #1F2937; }
-
-  .btn-disabled {
-    background: #F3F4F6; color: #9CA3AF;
-    border-radius: 10px; padding: 12px 24px;
-    font-size: 15px; font-weight: 600; border: none; cursor: not-allowed;
-    display: inline-flex; align-items: center; justify-content: center;
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.5; }
+  }
+  @keyframes shimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  @keyframes toastIn {
+    from { opacity: 0; transform: translateY(16px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes progressFill {
+    from { width: 0%; }
+    to   { width: var(--target-width); }
   }
 
-  .btn-accent {
-    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
-    color: #fff;
-    border-radius: 10px; padding: 12px 24px;
-    font-size: 15px; font-weight: 600; border: none; cursor: pointer;
-    transition: all 0.2s;
-    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+  .anim-fade-up   { animation: fadeUp 0.45s cubic-bezier(0.16,1,0.3,1) both; }
+  .anim-fade-up-1 { animation: fadeUp 0.45s 0.06s cubic-bezier(0.16,1,0.3,1) both; }
+  .anim-fade-up-2 { animation: fadeUp 0.45s 0.12s cubic-bezier(0.16,1,0.3,1) both; }
+  .anim-fade-up-3 { animation: fadeUp 0.45s 0.18s cubic-bezier(0.16,1,0.3,1) both; }
+  .anim-fade-up-4 { animation: fadeUp 0.45s 0.24s cubic-bezier(0.16,1,0.3,1) both; }
+  .anim-pop-in    { animation: popIn 0.35s cubic-bezier(0.16,1,0.3,1) both; }
+  .anim-slide-down { animation: slideDown 0.3s cubic-bezier(0.16,1,0.3,1) both; }
+  .spinner        { animation: spin 0.7s linear infinite; }
+
+  /* ── Layout ── */
+  .page-container {
+    min-height: 100vh;
+    background: var(--color-bg);
+    display: flex;
+    flex-direction: column;
   }
-  .btn-accent:hover  { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35); }
-  .btn-accent:active { opacity: 0.95; }
+  .content-container {
+    max-width: 720px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 var(--space-5);
+  }
+  .content-container-sm {
+    max-width: 480px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 var(--space-5);
+  }
+
+  /* ── Topbar ── */
+  .topbar {
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(8px);
+    background: rgba(255,255,255,0.92);
+  }
+  .topbar-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: var(--space-3) var(--space-5);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    height: 56px;
+  }
+  .logo-mark {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-md);
+    background: var(--color-text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .logo-text {
+    font-size: var(--font-size-base);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    letter-spacing: -0.02em;
+  }
 
   /* ── Cards ── */
   .card {
-    background: #fff;
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
-    border: 1px solid #E5E7EB;
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-sm);
+    padding: var(--space-6);
+    transition: box-shadow var(--transition-base);
   }
-  .card-hover { transition: all 0.2s; }
-  .card-hover:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.12); }
+  .card-hover:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-border-strong);
+  }
+  .card-accent {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-accent-border);
+    box-shadow: 0 0 0 3px var(--color-accent-light);
+    padding: var(--space-6);
+  }
 
-  /* ── Badge ── */
+  /* ── Buttons ── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    font-family: var(--font-family);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    border: none;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    white-space: nowrap;
+    border-radius: var(--radius-md);
+    padding: 10px var(--space-4);
+    line-height: 1;
+    text-decoration: none;
+  }
+  .btn:disabled { cursor: not-allowed; opacity: 0.5; }
+  .btn:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .btn-primary {
+    background: var(--color-text-primary);
+    color: var(--color-text-inverse);
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: #1F2937;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+  .btn-primary:active:not(:disabled) { transform: translateY(0); }
+
+  .btn-secondary {
+    background: var(--color-surface);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-sm);
+  }
+  .btn-secondary:hover:not(:disabled) {
+    background: var(--color-bg);
+    border-color: var(--color-border-strong);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--color-text-secondary);
+    border: 1px solid transparent;
+  }
+  .btn-ghost:hover:not(:disabled) {
+    background: var(--color-bg);
+    color: var(--color-text-primary);
+    border-color: var(--color-border);
+  }
+
+  .btn-accent {
+    background: var(--color-accent);
+    color: var(--color-text-inverse);
+    box-shadow: 0 1px 2px rgba(99,102,241,0.2);
+  }
+  .btn-accent:hover:not(:disabled) {
+    background: var(--color-accent-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(99,102,241,0.3);
+  }
+  .btn-accent:active:not(:disabled) { transform: translateY(0); }
+
+  .btn-success {
+    background: var(--color-success);
+    color: var(--color-text-inverse);
+  }
+  .btn-success:hover:not(:disabled) {
+    background: #059669;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16,185,129,0.3);
+  }
+
+  .btn-lg {
+    font-size: var(--font-size-base);
+    padding: 13px var(--space-6);
+    border-radius: var(--radius-md);
+  }
+  .btn-sm {
+    font-size: 12px;
+    padding: 7px var(--space-3);
+    border-radius: var(--radius-sm);
+  }
+  .btn-full { width: 100%; }
+  .btn-icon {
+    padding: 9px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* ── Inputs ── */
+  .input {
+    width: 100%;
+    padding: 10px var(--space-3);
+    font-family: var(--font-family);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-primary);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+    line-height: 1.5;
+  }
+  .input::placeholder { color: var(--color-text-tertiary); }
+  .input:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent-light);
+    outline: none;
+  }
+  .input-error {
+    border-color: var(--color-error);
+    box-shadow: 0 0 0 3px var(--color-error-light);
+  }
+  .input-error:focus {
+    border-color: var(--color-error);
+    box-shadow: 0 0 0 3px var(--color-error-light);
+  }
+
+  .label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-1);
+    letter-spacing: 0.01em;
+  }
+  .field-error {
+    font-size: 12px;
+    color: var(--color-error);
+    margin-top: var(--space-1);
+    font-weight: 500;
+  }
+
+  /* ── Badges ── */
   .badge {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    background: #EFF6FF;
-    border: 1px solid #BFDBFE;
-    border-radius: 8px;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
     font-size: 12px;
     font-weight: 600;
-    color: #1E40AF;
+    letter-spacing: 0.01em;
+    line-height: 1.5;
+  }
+  .badge-neutral {
+    background: var(--color-bg);
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
+  }
+  .badge-accent {
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    border: 1px solid var(--color-accent-border);
+  }
+  .badge-success {
+    background: var(--color-success-light);
+    color: var(--color-success);
+    border: 1px solid var(--color-success-border);
+  }
+  .badge-warning {
+    background: var(--color-warning-light);
+    color: #92400E;
+    border: 1px solid var(--color-warning-border);
+  }
+  .badge-error {
+    background: var(--color-error-light);
+    color: var(--color-error);
+    border: 1px solid var(--color-error-border);
   }
 
-  /* ── Progress bar ── */
-  .xp-bar  { height: 6px; background: #E5E7EB; border-radius: 99px; overflow: hidden; }
-  .xp-fill { height: 100%; background: linear-gradient(90deg, #3B82F6, #2563EB); border-radius: 99px; transition: width 0.8s cubic-bezier(0.4,0,0.2,1); }
+  /* ── Progress ── */
+  .progress-track {
+    height: 6px;
+    background: var(--color-border);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: var(--radius-full);
+    background: var(--color-accent);
+    transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+  }
+  .progress-fill-success { background: var(--color-success); }
 
-  /* ── Track tabs ── */
-  .track-tab { transition: all 0.15s; cursor: pointer; }
-  .track-tab.active { background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%) !important; color: #fff !important; border-color: transparent !important; }
+  /* ── Divider ── */
+  .divider {
+    height: 1px;
+    background: var(--color-border);
+    margin: var(--space-6) 0;
+  }
+  .divider-sm { margin: var(--space-4) 0; }
 
-  /* ── Answer key reveal ── */
-  .key-section { background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%); border: 1px solid #A7F3D0; border-radius: 12px; }
+  /* ── Skeleton ── */
+  .skeleton {
+    background: linear-gradient(90deg, #F3F4F6 25%, #E9EAEC 50%, #F3F4F6 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: var(--radius-sm);
+  }
 
   /* ── Tables ── */
-  table { border-radius: 12px; overflow: hidden; }
-  th { background: #F3F4F6; font-weight: 700; color: #374151; }
-  th:first-child { border-radius: 12px 0 0 0; }
-  th:last-child  { border-radius: 0 12px 0 0; }
-  td { border-bottom: 1px solid #E5E7EB; padding: 12px; }
+  table { width: 100%; border-collapse: collapse; font-size: var(--font-size-sm); }
+  th {
+    background: var(--color-bg);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    text-align: left;
+    padding: 10px var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+  td {
+    padding: 11px var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--color-bg); }
 
   /* ── Scrollbar ── */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: #F3F4F6; }
-  ::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 99px; }
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--color-border-strong); border-radius: var(--radius-full); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-text-tertiary); }
+
+  /* ── Toast ── */
+  .toast {
+    position: fixed;
+    bottom: var(--space-6);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-text-primary);
+    color: var(--color-text-inverse);
+    padding: 12px var(--space-5);
+    border-radius: var(--radius-lg);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    box-shadow: var(--shadow-xl);
+    z-index: 9999;
+    animation: toastIn 0.3s cubic-bezier(0.16,1,0.3,1) both;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    white-space: nowrap;
+  }
+
+  /* ── Track tabs ── */
+  .track-tab {
+    padding: 8px var(--space-4);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    border: 1px solid transparent;
+    color: var(--color-text-secondary);
+    background: transparent;
+  }
+  .track-tab:hover {
+    background: var(--color-bg);
+    color: var(--color-text-primary);
+    border-color: var(--color-border);
+  }
+  .track-tab.active {
+    background: var(--color-text-primary);
+    color: var(--color-text-inverse);
+    border-color: transparent;
+  }
+
+  /* ── Challenge node ── */
+  .challenge-node {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-4);
+    padding: var(--space-4);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    text-align: left;
+    width: 100%;
+  }
+  .challenge-node:hover:not(.node-locked) {
+    border-color: var(--color-border-strong);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+  .challenge-node.node-active {
+    border-color: var(--color-accent-border);
+    background: var(--color-accent-light);
+  }
+  .challenge-node.node-active:hover {
+    border-color: var(--color-accent);
+    box-shadow: 0 4px 12px rgba(99,102,241,0.15);
+  }
+  .challenge-node.node-done {
+    border-color: var(--color-success-border);
+    background: var(--color-success-light);
+  }
+  .challenge-node.node-locked {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: var(--color-bg);
+  }
+
+  /* ── MCQ Options ── */
+  .mcq-option {
+    width: 100%;
+    text-align: left;
+    padding: var(--space-4) var(--space-5);
+    border-radius: var(--radius-md);
+    border: 1.5px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-sm);
+    font-weight: 400;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    font-family: var(--font-family);
+    letter-spacing: -0.01em;
+    line-height: 1.55;
+  }
+  .mcq-option:hover:not(.mcq-revealed) {
+    border-color: var(--color-accent);
+    background: var(--color-accent-light);
+  }
+  .mcq-option.mcq-selected {
+    border-color: var(--color-accent);
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    font-weight: 500;
+  }
+  .mcq-option.mcq-correct {
+    border-color: var(--color-success);
+    background: var(--color-success-light);
+    color: #065F46;
+  }
+  .mcq-option.mcq-wrong {
+    border-color: var(--color-error);
+    background: var(--color-error-light);
+    color: #991B1B;
+  }
+  .mcq-option.mcq-show-correct {
+    border-color: var(--color-success);
+    background: var(--color-success-light);
+    color: #065F46;
+  }
+  .mcq-option.mcq-revealed { cursor: default; }
+
+  /* ── Score bars ── */
+  .score-bar-fill {
+    height: 100%;
+    border-radius: var(--radius-full);
+    transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  /* ── Hint accordion ── */
+  .hint-step {
+    display: flex;
+    gap: var(--space-3);
+    padding: var(--space-2) 0;
+    align-items: flex-start;
+  }
+  .hint-step-num {
+    width: 22px;
+    height: 22px;
+    border-radius: var(--radius-full);
+    background: var(--color-warning-light);
+    border: 1px solid var(--color-warning-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #92400E;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* ── Feedback stars ── */
+  .star-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    border: 1.5px solid var(--color-border);
+    background: var(--color-surface);
+    font-size: 18px;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .star-btn:hover { border-color: var(--color-warning); background: var(--color-warning-light); }
+  .star-btn.active { border-color: var(--color-warning); background: var(--color-warning-light); }
 
   /* ── Responsive ── */
   @media (max-width: 640px) {
-    .hide-sm  { display: none !important; }
-    .full-sm  { width: 100% !important; }
-    .stack-sm { flex-direction: column !important; }
-    .px-sm    { padding-left: 16px !important; padding-right: 16px !important; }
+    .hide-mobile { display: none !important; }
+    .stack-mobile { flex-direction: column !important; }
+    .full-mobile { width: 100% !important; }
+    .content-container, .content-container-sm {
+      padding: 0 var(--space-4);
+    }
+    .topbar-inner {
+      padding: var(--space-3) var(--space-4);
+    }
   }
 `;
 
-// ── Markdown renderer ─────────────────────────────────────────────────────
+// ── Markdown renderer ──────────────────────────────────────────────────────
 function inlineFormat(text) {
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
   return parts.map((p, i) =>
-    p.startsWith("**") ? <strong key={i} style={{ fontWeight: 700, color: "#2d2d2d" }}>{p.replace(/\*\*/g,"")}</strong> : p
+    p.startsWith("**") ? (
+      <strong key={i} style={{ fontWeight: 700, color: "var(--color-text-primary)" }}>
+        {p.replace(/\*\*/g, "")}
+      </strong>
+    ) : p
   );
 }
 
@@ -321,203 +826,218 @@ function renderChallenge(text) {
   const flushTable = (key) => {
     if (tableBuffer.length === 0) return;
     const rows = tableBuffer.filter(r => !r.match(/^\s*\|[-|\s]+\|\s*$/));
-    const parsed = rows.map(r => r.split("|").filter((c,i) => i>0 && i<r.split("|").length-1).map(c=>c.trim()));
-    if (parsed.length === 0) { tableBuffer=[]; inTable=false; return; }
+    const parsed = rows.map(r => r.split("|").map(c => c.trim()).filter(Boolean));
+    if (parsed.length === 0) { tableBuffer = []; inTable = false; return; }
     const [head, ...body] = parsed;
     result.push(
-      <div key={key} style={{ overflowX:"auto", margin:"16px 0" }}>
-        <table style={{ width:"100%", borderCollapse:"collapse", fontSize:14, fontFamily:"'Inter',sans-serif" }}>
+      <div key={key} style={{ overflowX: "auto", margin: "var(--space-4) 0", borderRadius: "var(--radius-md)", border: "1px solid var(--color-border)" }}>
+        <table>
           <thead>
-            <tr>{head.map((h,i)=><th key={i} style={{ background:"#142F32", color:"#fff", padding:"10px 14px", textAlign:"left", fontWeight:800, fontSize:13, whiteSpace:"nowrap" }}>{h}</th>)}</tr>
+            <tr>{head.map((h, i) => <th key={i}>{h}</th>)}</tr>
           </thead>
           <tbody>
-            {body.map((row,ri)=>(
-              <tr key={ri} style={{ background: ri%2===0?"#fff":"#f8fdf5" }}>
-                {row.map((cell,ci)=><td key={ci} style={{ padding:"10px 14px", borderBottom:"1px solid #eee", fontSize:14, color:"#282950", verticalAlign:"top" }}>{inlineFormat(cell)}</td>)}
-              </tr>
+            {body.map((row, ri) => (
+              <tr key={ri}>{row.map((cell, ci) => <td key={ci}>{inlineFormat(cell)}</td>)}</tr>
             ))}
           </tbody>
         </table>
       </div>
     );
-    tableBuffer=[]; inTable=false;
+    tableBuffer = []; inTable = false;
   };
 
   lines.forEach((line, i) => {
     if (line.trim().startsWith("|")) {
       inTable = true;
-      tableBuffer.push(line.trim());
+      tableBuffer.push(line);
       return;
     }
-    if (inTable) flushTable(`tbl-${i}`);
+    if (inTable) flushTable(`t${i}`);
 
-    // H1
-    if (line.startsWith("# ")) {
-      result.push(<h2 key={i} style={{ fontSize:20, fontWeight:900, color:"#282950", marginTop:32, marginBottom:16, lineHeight:1.3 }}>{line.slice(2)}</h2>);
-      return;
-    }
-    // H2
-    if (line.startsWith("## ")) {
-      result.push(<h3 key={i} style={{ fontSize:16, fontWeight:800, color:"#282950", marginTop:24, marginBottom:12, paddingBottom:6, borderBottom:"2px solid #f0f0f0" }}>{line.slice(3)}</h3>);
-      return;
-    }
-    // H3
-    if (line.startsWith("### ")) {
-      result.push(<h4 key={i} style={{ fontSize:14, fontWeight:800, color:"#3D4A5C", marginTop:20, marginBottom:8, textTransform:"uppercase", letterSpacing:"0.06em" }}>{line.slice(4)}</h4>);
-      return;
-    }
-    // Bullet
-    if (line.trim().startsWith("- ") || line.trim().startsWith("* ")) {
+    if (!line.trim()) {
+      result.push(<div key={i} style={{ height: "var(--space-3)" }} />);
+    } else if (line.startsWith("### ")) {
+      result.push(<h3 key={i} style={{ fontSize: "var(--font-size-base)", fontWeight: 700, color: "var(--color-text-primary)", margin: "var(--space-5) 0 var(--space-2)" }}>{inlineFormat(line.slice(4))}</h3>);
+    } else if (line.startsWith("## ")) {
+      result.push(<h2 key={i} style={{ fontSize: "var(--font-size-lg)", fontWeight: 700, color: "var(--color-text-primary)", margin: "var(--space-6) 0 var(--space-3)" }}>{inlineFormat(line.slice(3))}</h2>);
+    } else if (line.startsWith("# ")) {
+      result.push(<h1 key={i} style={{ fontSize: "var(--font-size-xl)", fontWeight: 800, color: "var(--color-text-primary)", margin: "var(--space-6) 0 var(--space-3)" }}>{inlineFormat(line.slice(2))}</h1>);
+    } else if (line.match(/^[-*] /)) {
       result.push(
-        <div key={i} style={{ display:"flex", gap:10, marginBottom:8, alignItems:"flex-start", paddingLeft:4 }}>
-          <span style={{ color:"#142F32", fontWeight:900, fontSize:16, lineHeight:1.5, flexShrink:0 }}>•</span>
-          <span style={{ fontSize:15, color:"#444", lineHeight:1.5 }}>{inlineFormat(line.trim().slice(2))}</span>
+        <div key={i} style={{ display: "flex", gap: "var(--space-3)", margin: "var(--space-1) 0", alignItems: "flex-start" }}>
+          <span style={{ color: "var(--color-accent)", fontWeight: 700, marginTop: 2, flexShrink: 0 }}>·</span>
+          <span style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-secondary)", lineHeight: 1.65 }}>{inlineFormat(line.slice(2))}</span>
         </div>
       );
-      return;
+    } else if (line.match(/^\d+\. /)) {
+      const num = line.match(/^(\d+)\./)[1];
+      result.push(
+        <div key={i} style={{ display: "flex", gap: "var(--space-3)", margin: "var(--space-1) 0", alignItems: "flex-start" }}>
+          <span style={{ color: "var(--color-accent)", fontWeight: 700, minWidth: 20, fontSize: "var(--font-size-sm)", marginTop: 2, flexShrink: 0 }}>{num}.</span>
+          <span style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-secondary)", lineHeight: 1.65 }}>{inlineFormat(line.replace(/^\d+\.\s*/, ""))}</span>
+        </div>
+      );
+    } else {
+      result.push(<p key={i} style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-secondary)", lineHeight: 1.7, margin: "var(--space-1) 0" }}>{inlineFormat(line)}</p>);
     }
-    // Numbered
-    if (/^\d+\.\s/.test(line.trim())) {
-      const num = line.trim().match(/^(\d+)\.\s(.*)$/);
-      if (num) {
-        result.push(
-          <div key={i} style={{ display:"flex", gap:10, marginBottom:12, alignItems:"flex-start" }}>
-            <span style={{ background:"#142F32", color:"#fff", fontWeight:900, fontSize:12, width:22, height:22, borderRadius:"50%", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, marginTop:2 }}>{num[1]}</span>
-            <span style={{ fontSize:15, color:"#444", lineHeight:1.5 }}>{inlineFormat(num[2])}</span>
-          </div>
-        );
-        return;
-      }
-    }
-    // Divider
-    if (line.includes("━") || line.match(/^---+$/)) {
-      result.push(<div key={i} style={{ height:2, background:"#f0f0f0", margin:"12px 0" }}/>);
-      return;
-    }
-    // Bold-only line (section label)
-    if (line.trim().startsWith("**") && line.trim().endsWith("**") && !line.includes(" ")) {
-      result.push(<p key={i} style={{ fontSize:11, fontWeight:800, letterSpacing:"0.1em", textTransform:"uppercase", color:"#B0B5C0", marginTop:24, marginBottom:8 }}>{line.trim().replace(/\*\*/g,"")}</p>);
-      return;
-    }
-    // Empty line
-    if (!line.trim()) {
-      result.push(<div key={i} style={{ height:10 }}/>);
-      return;
-    }
-    // Normal paragraph
-    result.push(<p key={i} style={{ fontSize:15, color:"#444", lineHeight:1.5, marginBottom:12 }}>{inlineFormat(line)}</p>);
   });
 
-  if (inTable) flushTable("tbl-end");
+  if (inTable) flushTable("t-final");
   return result;
 }
 
 function renderMD(text, isKey = false) {
-  return text.trim().split("\n").map((line, i) => {
-    if (line.startsWith("**") && line.endsWith("**"))
-      return <p key={i} style={{ fontSize:11, fontWeight:800, letterSpacing:"0.08em", textTransform:"uppercase",
-        color: isKey ? "#2d9c2d" : "#B0B5C0", marginTop:24, marginBottom:8 }}>{line.replace(/\*\*/g,"")}</p>;
-    if (line.includes("━")) return <div key={i} style={{ height:2, background:"#f0f0f0", margin:"10px 0" }}/>;
-    if (!line.trim()) return <div key={i} style={{ height:8 }}/>;
-    const parts = line.split(/(\*\*[^*]+\*\*)/g);
-    return <p key={i} style={{ fontSize:15, lineHeight:1.5, color: isKey ? "#1a5c2a" : "#3D4A5C" }}>
-      {parts.map((p,j) => p.startsWith("**")
-        ? <strong key={j} style={{ color: isKey ? "#2d7a2d" : "#282950", fontWeight:700 }}>{p.replace(/\*\*/g,"")}</strong>
-        : p)}
-    </p>;
+  if (!text) return null;
+  const lines = text.split("\n");
+  return lines.map((line, i) => {
+    if (!line.trim()) return <div key={i} style={{ height: "var(--space-2)" }} />;
+    if (line.startsWith("**") && line.endsWith("**") && line.length > 4) {
+      return (
+        <p key={i} style={{ fontSize: "var(--font-size-sm)", fontWeight: 700, color: "var(--color-text-primary)", margin: "var(--space-4) 0 var(--space-2)", textTransform: "uppercase", letterSpacing: "0.05em", fontSize: "11px" }}>
+          {line.replace(/\*\*/g, "")}
+        </p>
+      );
+    }
+    if (line.startsWith("━")) {
+      return <div key={i} style={{ height: 1, background: "var(--color-border)", margin: "var(--space-2) 0" }} />;
+    }
+    if (line.match(/^[-*] /)) {
+      return (
+        <div key={i} style={{ display: "flex", gap: "var(--space-2)", margin: "3px 0", alignItems: "flex-start" }}>
+          <span style={{ color: "var(--color-accent)", fontWeight: 700, marginTop: 3, flexShrink: 0, fontSize: 10 }}>●</span>
+          <span style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-secondary)", lineHeight: 1.65 }}>{inlineFormat(line.slice(2))}</span>
+        </div>
+      );
+    }
+    return (
+      <p key={i} style={{ fontSize: "var(--font-size-sm)", color: isKey ? "var(--color-text-primary)" : "var(--color-text-secondary)", lineHeight: 1.7, margin: "2px 0" }}>
+        {inlineFormat(line)}
+      </p>
+    );
   });
 }
 
-// ── Score bar ─────────────────────────────────────────────────────────────
+// ── Score bar component ────────────────────────────────────────────────────
 function ScoreBar({ label, score, delay = 0 }) {
-  const [w, setW] = useState(0);
-  useEffect(() => { const t = setTimeout(() => setW(score * 10), 300 + delay); return () => clearTimeout(t); }, [score]);
-  const color = score >= 7 ? "#142F32" : score >= 5 ? "#FFC800" : "#C0392B";
-  const bg    = score >= 7 ? "#E3FFCC" : score >= 5 ? "#fff3cc" : "#ffe0e0";
+  const [width, setWidth] = useState(0);
+  useEffect(() => {
+    const t = setTimeout(() => setWidth(score * 10), delay + 100);
+    return () => clearTimeout(t);
+  }, [score, delay]);
+
+  const color = score >= 7 ? "var(--color-success)" : score >= 5 ? "var(--color-warning)" : "var(--color-error)";
+
   return (
-    <div style={{ padding: "10px 0", borderBottom: "1px solid #f0f0f0" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
-        <span style={{ fontSize: 14, color: "#3D4A5C", fontWeight: 600 }}>{label}</span>
-        <span style={{ fontSize: 13, fontWeight: 800, color, background: bg, padding: "2px 10px", borderRadius: 99 }}>{score}/10</span>
+    <div style={{ marginBottom: "var(--space-4)" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--space-2)" }}>
+        <span style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-secondary)", fontWeight: 500 }}>{label}</span>
+        <span style={{ fontSize: "var(--font-size-sm)", fontWeight: 700, color }}>{score}<span style={{ color: "var(--color-text-tertiary)", fontWeight: 400 }}>/10</span></span>
       </div>
-      <div className="xp-bar">
-        <div style={{ width: `${w}%`, height: "100%", background: color, borderRadius: 99, transition: "width 0.9s cubic-bezier(.4,0,.2,1)" }} />
+      <div className="progress-track">
+        <div
+          className="score-bar-fill"
+          style={{ width: `${width}%`, background: color, transition: `width 0.8s ${delay}ms cubic-bezier(0.4,0,0.2,1)` }}
+        />
       </div>
     </div>
   );
 }
 
-// ── XP / Progress helpers ─────────────────────────────────────────────────
-function XPBar({ value, max }) {
-  const pct = Math.min(100, Math.round((value / max) * 100));
+// ── Toast component ────────────────────────────────────────────────────────
+function Toast({ message, type = "default" }) {
+  const icons = { success: "✓", error: "✕", default: "·" };
+  const colors = { success: "var(--color-success)", error: "var(--color-error)", default: "var(--color-text-tertiary)" };
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-      <span style={{ fontSize: 12, fontWeight: 700, color: "#142F32", whiteSpace: "nowrap" }}>⭐ {value} XP</span>
-      <div className="xp-bar" style={{ flex: 1 }}>
-        <div className="xp-fill" style={{ width: `${pct}%` }} />
-      </div>
-      <span style={{ fontSize: 12, color: "#B0B5C0", fontWeight: 600 }}>{max}</span>
+    <div className="toast">
+      <span style={{ color: colors[type], fontWeight: 700 }}>{icons[type]}</span>
+      {message}
     </div>
   );
 }
 
-// ── Challenge path node ───────────────────────────────────────────────────
+// ── Skeleton loader ────────────────────────────────────────────────────────
+function SkeletonChallenge() {
+  return (
+    <div style={{ padding: "var(--space-6)" }}>
+      <div className="skeleton" style={{ height: 20, width: "40%", marginBottom: "var(--space-4)" }} />
+      <div className="skeleton" style={{ height: 14, width: "100%", marginBottom: "var(--space-2)" }} />
+      <div className="skeleton" style={{ height: 14, width: "95%", marginBottom: "var(--space-2)" }} />
+      <div className="skeleton" style={{ height: 14, width: "88%", marginBottom: "var(--space-5)" }} />
+      <div className="skeleton" style={{ height: 14, width: "100%", marginBottom: "var(--space-2)" }} />
+      <div className="skeleton" style={{ height: 14, width: "92%", marginBottom: "var(--space-2)" }} />
+      <div className="skeleton" style={{ height: 14, width: "75%", marginBottom: "var(--space-6)" }} />
+      <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)" }}>
+        {[1,2,3,4].map(i => (
+          <div key={i} className="skeleton" style={{ height: 52, borderRadius: "var(--radius-md)" }} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── Path node component ────────────────────────────────────────────────────
 function PathNode({ challenge, idx, status, onClick }) {
-  // status: 'done' | 'active' | 'locked'
-  const isDone   = status === "done";
-  const isActive = status === "active";
-  const isLocked = status === "locked";
-
-  const bg     = isDone ? "#142F32" : isActive ? "#fff" : "#e8e8e8";
-  const border = isDone ? "#0a1a1c" : isActive ? "#142F32" : "#d0d0d0";
-  const shadow = isActive ? "0 0 0 4px rgba(88,204,2,0.2), 0 4px 16px rgba(88,204,2,0.25)" : isDone ? "0 4px 12px rgba(88,204,2,0.3)" : "none";
+  const statusConfig = {
+    active: { icon: null, label: "Start", badgeClass: "badge-accent" },
+    done:   { icon: "✓",  label: "Done",  badgeClass: "badge-success" },
+    locked: { icon: "🔒", label: "Locked", badgeClass: "badge-neutral" },
+  };
+  const cfg = statusConfig[status];
 
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 16, opacity: isLocked ? 0.55 : 1 }}>
-      {/* Node circle */}
-      <button
-        className={`path-node ${isActive ? "path-node-active" : ""}`}
-        onClick={isLocked ? undefined : onClick}
-        style={{ width: 64, height: 64, borderRadius: "50%", background: bg,
-          border: `3px solid ${border}`, cursor: isLocked ? "default" : "pointer",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          fontSize: 26, flexShrink: 0, boxShadow: shadow, transition: "all 0.2s" }}>
-        {isDone ? "✅" : isLocked ? "🔒" : challenge.icon}
-      </button>
-
-      {/* Label */}
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontSize: 11, fontWeight: 700, color: isActive ? "#142F32" : "#B0B5C0",
-          letterSpacing: "0.06em", marginBottom: 3 }}>
-          {isActive ? "CURRENT" : isDone ? "COMPLETED" : "LOCKED"}
-        </div>
-        <div style={{ fontSize: 16, fontWeight: 800, color: isLocked ? "#B0B5C0" : "#282950",
-          whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-          {challenge.tag}
-        </div>
-        {isDone && <div style={{ fontSize: 12, color: "#142F32", fontWeight: 700, marginTop: 2 }}>Done ✓</div>}
-        {isActive && (
-          <button className="btn-green" onClick={onClick}
-            style={{ marginTop: 8, padding: "8px 18px", fontSize: 13, borderRadius: 10, boxShadow: "0 3px 0 #4aab00" }}>
-            Start →
-          </button>
-        )}
+    <button
+      className={`challenge-node node-${status}`}
+      onClick={status !== "locked" ? onClick : undefined}
+      style={{ cursor: status === "locked" ? "not-allowed" : "pointer" }}
+    >
+      {/* Icon */}
+      <div style={{
+        width: 44,
+        height: 44,
+        borderRadius: "var(--radius-md)",
+        background: status === "done" ? "var(--color-success-light)" : status === "active" ? "var(--color-accent-light)" : "var(--color-bg)",
+        border: `1px solid ${status === "done" ? "var(--color-success-border)" : status === "active" ? "var(--color-accent-border)" : "var(--color-border)"}`,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontSize: status === "done" ? 18 : 20,
+        flexShrink: 0,
+        color: status === "done" ? "var(--color-success)" : "inherit",
+        fontWeight: 700,
+      }}>
+        {status === "done" ? "✓" : challenge.icon}
       </div>
-    </div>
+
+      {/* Content */}
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", marginBottom: 4 }}>
+          <span style={{ fontSize: "var(--font-size-base)", fontWeight: 600, color: "var(--color-text-primary)" }}>
+            {challenge.tag}
+          </span>
+          <span className={`badge ${cfg.badgeClass}`}>{cfg.label}</span>
+        </div>
+        <p style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-tertiary)", lineHeight: 1.4 }}>
+          {status === "locked" ? "Complete the previous challenge to unlock" : `${challenge.hint?.framework || "Framework-based"} challenge`}
+        </p>
+      </div>
+
+      {/* Arrow */}
+      {status !== "locked" && (
+        <div style={{ color: "var(--color-text-tertiary)", fontSize: 16, flexShrink: 0 }}>→</div>
+      )}
+    </button>
   );
 }
 
-// ── Main component ────────────────────────────────────────────────────────
+// ── Main component ─────────────────────────────────────────────────────────
 export default function PMApp() {
-  // ── Auth state ──
-  const [screen, setScreen] = useState("login"); // login | home | challenge | result | feedback | thanks
+  const [screen, setScreen] = useState("login");
   const [isGuest, setIsGuest] = useState(false);
   const [pwInput, setPwInput] = useState("");
   const [pwError, setPwError] = useState(false);
+  const [pwLoading, setPwLoading] = useState(false);
 
-  // ── Track & challenge state ──
   const [track, setTrack] = useState("B2B");
-  // PO track type selector — user picks which challenge types to include
   const PO_ALL_TYPES = ["Prioritization","Stakeholder","Metrics","Execution","Strategy","Interview"];
   const [poSelectedTypes, setPoSelectedTypes] = useState(() => {
     const s = storageGet("pm_po_types");
@@ -531,16 +1051,15 @@ export default function PMApp() {
   const [answer, setAnswer] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // ── Result state ──
   const [assessment, setAssessment] = useState("");
   const [answerKey, setAnswerKey] = useState("");
   const [showKey, setShowKey] = useState(false);
   const [scores, setScores] = useState(null);
 
-  // ── Progress state ──
   const [completedIdxs, setCompletedIdxs] = useState(() => {
     const s = storageGet("pm_completed");
-    const parsed = s ? JSON.parse(s.value) : {}; return { B2B: parsed.B2B||[], B2C: parsed.B2C||[], PO: parsed.PO||[] };
+    const parsed = s ? JSON.parse(s.value) : {};
+    return { B2B: parsed.B2B||[], B2C: parsed.B2C||[], PO: parsed.PO||[] };
   });
   const [totalXP, setTotalXP] = useState(() => {
     const s = storageGet("pm_xp");
@@ -549,7 +1068,6 @@ export default function PMApp() {
   const [history, setHistory] = useState([]);
   const [error, setError] = useState("");
 
-  // ── Guest profile state ──
   const [guestName, setGuestName] = useState("");
   const [guestAge, setGuestAge] = useState("");
   const [guestIndustry, setGuestIndustry] = useState("");
@@ -557,13 +1075,11 @@ export default function PMApp() {
   const [showGuestForm, setShowGuestForm] = useState(false);
   const [guestFormErr, setGuestFormErr] = useState("");
 
-  // ── MCQ state ──
   const [mcqOptions, setMcqOptions] = useState([]);
   const [mcqSelected, setMcqSelected] = useState(null);
   const [mcqCorrect, setMcqCorrect] = useState(null);
   const [mcqRevealed, setMcqRevealed] = useState(false);
 
-  // ── Guest feedback state ──
   const [fbName, setFbName] = useState("");
   const [fbAge, setFbAge] = useState("");
   const [fbIndustry, setFbIndustry] = useState("");
@@ -574,7 +1090,14 @@ export default function PMApp() {
   const [fbImprove, setFbImprove] = useState("");
   const [fbSending, setFbSending] = useState(false);
 
+  const [toast, setToast] = useState(null);
+
   const today = new Date().toISOString().slice(0, 10);
+
+  function showToast(msg, type = "default") {
+    setToast({ msg, type });
+    setTimeout(() => setToast(null), 3000);
+  }
 
   useEffect(() => {
     const hR = storageList("pm_session:");
@@ -585,46 +1108,50 @@ export default function PMApp() {
   }, []);
 
   // ── Auth ──
-  function loginFull() {
+  async function loginFull() {
+    setPwLoading(true);
+    await new Promise(r => setTimeout(r, 400));
     if (pwInput.trim() === "Siddhant0809") {
       storageSet("pm_auth", "true");
       setIsGuest(false);
       setScreen("home");
+      showToast("Welcome back!", "success");
     } else {
       setPwError(true);
       setPwInput("");
     }
+    setPwLoading(false);
   }
 
   function loginGuest() {
     setIsGuest(true);
-    setShowGuestForm(true);  // show profile form first
+    setShowGuestForm(true);
   }
 
   function submitGuestProfile() {
     if (!guestName.trim() || !guestAge.trim() || !guestIndustry.trim() || !guestExp.trim()) {
-      setGuestFormErr("Please fill in all fields.");
+      setGuestFormErr("Please fill in all fields to continue.");
       return;
     }
     setGuestFormErr("");
     setShowGuestForm(false);
     setFbName(guestName); setFbAge(guestAge); setFbIndustry(guestIndustry); setFbYears(guestExp);
     setScreen("home");
+    showToast("Welcome! Your free challenge is ready.", "success");
   }
 
   // ── Challenge flow ──
   async function openChallenge(idx) {
-    if (isGuest && idx > 0) return; // guests only get first challenge
+    if (isGuest && idx > 0) return;
     const chosen = CHALLENGES[track][idx];
     setPick(chosen); setCurrentIdx(idx); setHintOpen(false);
     setLoading(true); setError("");
     setChallengeText(""); setAnswer("");
+    setMcqOptions([]); setMcqSelected(null); setMcqRevealed(false); setMcqCorrect(null);
     setScreen("challenge");
     try {
       const text = await callClaude(`You are a ${track} PM coach. Generate a concise, realistic, specific challenge.`, chosen.prompt);
       setChallengeText(text);
-      // Generate MCQ options alongside challenge
-      setMcqSelected(null); setMcqRevealed(false); setMcqCorrect(null);
       try {
         const mcqRaw = await callClaude(
           "You are a PM quiz generator. Reply with valid JSON only, no markdown, no extra text.",
@@ -637,14 +1164,17 @@ The correct answer must appear exactly as written in the options array.
 
 Challenge: ${text}`
         );
-        const clean = mcqRaw.replace(/\`\`\`json|\`\`\`/g,"").trim();
+        const clean = mcqRaw.replace(/```json|```/g, "").trim();
         const parsed = JSON.parse(clean);
         setMcqOptions(parsed.options);
         setMcqCorrect(parsed.correct);
-      } catch(_) {
+      } catch (_) {
         setMcqOptions([]); setMcqCorrect(null);
       }
-    } catch (e) { setError(e.message); }
+    } catch (e) {
+      setError(e.message);
+      showToast("Failed to load challenge. Please try again.", "error");
+    }
     setLoading(false);
   }
 
@@ -652,6 +1182,7 @@ Challenge: ${text}`
     const answerText = chosenOption || answer;
     if (!answerText.trim()) return;
     setLoading(true);
+    setError("");
     try {
       const result = await callClaude(ASSESS_SYSTEM,
         `TRACK: ${track}\nTYPE: ${pick?.tag}\n\nCHALLENGE:\n${challengeText}\n\nSELECTED ANSWER:\n${answerText}\n\nCORRECT ANSWER:\n${mcqCorrect || "N/A"}`);
@@ -664,20 +1195,21 @@ Challenge: ${text}`
       setScores(s);
       saveProgress(s);
       setScreen("result");
-    } catch (e) { setError(e.message); }
+      showToast("Assessment complete!", "success");
+    } catch (e) {
+      setError(e.message);
+      showToast("Assessment failed. Please try again.", "error");
+    }
     setLoading(false);
   }
 
   function saveProgress(s) {
-    // Save session
     storageSet("pm_last_tag", pick?.tag);
     storageSet(`pm_session:${Date.now()}`, JSON.stringify({ date: today, tag: pick?.tag, track, scores: s }));
-    // Mark completed
     if (!isGuest) {
       const updated = { ...completedIdxs, [track]: [...new Set([...completedIdxs[track], currentIdx])] };
       setCompletedIdxs(updated);
       storageSet("pm_completed", JSON.stringify(updated));
-      // XP
       const gained = 10 + (s.overall * 5);
       const newXP = totalXP + gained;
       setTotalXP(newXP);
@@ -701,7 +1233,6 @@ Challenge: ${text}`
     setScreen("thanks");
   }
 
-  // ── Status helper ──
   function getStatus(idx) {
     if (isGuest) return idx === 0 ? "active" : "locked";
     const done = completedIdxs[track] || [];
@@ -710,798 +1241,916 @@ Challenge: ${text}`
     return idx === firstIncomplete ? "active" : idx < firstIncomplete ? "done" : "locked";
   }
 
-  // For PO track, filter by selected types
   const challenges = track === "PO"
     ? CHALLENGES.PO.filter(c => poSelectedTypes.includes(c.tag))
     : CHALLENGES[track];
-  const doneCount  = completedIdxs[track]?.length || 0;
-  const pct        = challenges.length > 0 ? Math.round((doneCount / challenges.length) * 100) : 0;
+  const doneCount = completedIdxs[track]?.length || 0;
+  const pct = challenges.length > 0 ? Math.round((doneCount / challenges.length) * 100) : 0;
 
-  // ─────────────────────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────────────────
   // SCREEN: LOGIN
-  // ─────────────────────────────────────────────────────────────────────
-  // ─────────────────────────────────────────────────────────────────────
-  // SCREEN: GUEST PROFILE FORM
-  // ─────────────────────────────────────────────────────────────────────
-  if (showGuestForm) return (
-    <div style={{ minHeight: "100vh", background: "#fff", display: "flex", flexDirection: "column" }}>
+  // ─────────────────────────────────────────────────────────────────────────
+  if (screen === "login" && !showGuestForm) return (
+    <div className="page-container" style={{ background: "var(--color-bg)" }}>
       <style>{CSS}</style>
-      <div style={{ background: "linear-gradient(135deg, #3B82F6 0%, #2563EB 100%)", padding: "16px 24px", display: "flex", alignItems: "center", gap: 10 }}>
-        <div style={{ width: 28, height: 28, borderRadius: 6, background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "#3B82F6", fontSize: 16 }}>P</div>
-        <span style={{ fontSize: 16, fontWeight: 700, color: "#fff" }}>PM Learning</span>
+      {toast && <Toast message={toast.msg} type={toast.type} />}
+
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "var(--space-8) var(--space-5)" }}>
+
+        {/* Hero */}
+        <div className="anim-fade-up" style={{ textAlign: "center", marginBottom: "var(--space-10)", maxWidth: 440 }}>
+          <div style={{
+            width: 56,
+            height: 56,
+            borderRadius: "var(--radius-lg)",
+            background: "var(--color-text-primary)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            margin: "0 auto var(--space-6)",
+            boxShadow: "var(--shadow-lg)",
+          }}>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <h1 style={{ fontSize: "var(--font-size-2xl)", fontWeight: 800, color: "var(--color-text-primary)", marginBottom: "var(--space-3)", letterSpacing: "-0.03em", lineHeight: 1.2 }}>
+            PM Training
+          </h1>
+          <p style={{ fontSize: "var(--font-size-base)", color: "var(--color-text-secondary)", lineHeight: 1.6, maxWidth: 320, margin: "0 auto" }}>
+            Real-world scenarios. AI-powered feedback. Build the instincts of a senior PM.
+          </p>
+        </div>
+
+        {/* Login card */}
+        <div className="card anim-fade-up-1" style={{ width: "100%", maxWidth: 400 }}>
+          <div style={{ marginBottom: "var(--space-6)" }}>
+            <h2 style={{ fontSize: "var(--font-size-lg)", fontWeight: 700, color: "var(--color-text-primary)", marginBottom: "var(--space-1)" }}>Sign in</h2>
+            <p style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-tertiary)" }}>Enter your access code to continue</p>
+          </div>
+
+          <div style={{ marginBottom: "var(--space-4)" }}>
+            <label className="label">Access code</label>
+            <input
+              className={`input ${pwError ? "input-error" : ""}`}
+              type="password"
+              placeholder="Enter your code"
+              value={pwInput}
+              onChange={e => { setPwInput(e.target.value); setPwError(false); }}
+              onKeyDown={e => e.key === "Enter" && loginFull()}
+              autoFocus
+            />
+            {pwError && <p className="field-error">Incorrect code. Please try again.</p>}
+          </div>
+
+          <button
+            className="btn btn-primary btn-lg btn-full"
+            onClick={loginFull}
+            disabled={!pwInput.trim() || pwLoading}
+            style={{ marginBottom: "var(--space-3)" }}
+          >
+            {pwLoading ? (
+              <span style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
+                <span className="spinner" style={{ width: 16, height: 16, border: "2px solid rgba(255,255,255,0.3)", borderTopColor: "#fff", borderRadius: "50%", display: "inline-block" }} />
+                Signing in…
+              </span>
+            ) : "Sign in →"}
+          </button>
+
+          <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", margin: "var(--space-4) 0" }}>
+            <div className="divider" style={{ flex: 1, margin: 0 }} />
+            <span style={{ fontSize: 12, color: "var(--color-text-tertiary)", fontWeight: 500 }}>or</span>
+            <div className="divider" style={{ flex: 1, margin: 0 }} />
+          </div>
+
+          <button
+            className="btn btn-secondary btn-lg btn-full"
+            onClick={loginGuest}
+          >
+            Try a free challenge
+          </button>
+        </div>
+
+        {/* Social proof */}
+        <div className="anim-fade-up-2" style={{ marginTop: "var(--space-8)", display: "flex", gap: "var(--space-8)", textAlign: "center" }}>
+          {[
+            { value: "15+", label: "Challenges" },
+            { value: "3", label: "Tracks" },
+            { value: "AI", label: "Scoring" },
+          ].map((s, i) => (
+            <div key={i}>
+              <div style={{ fontSize: "var(--font-size-xl)", fontWeight: 800, color: "var(--color-text-primary)", letterSpacing: "-0.03em" }}>{s.value}</div>
+              <div style={{ fontSize: 12, color: "var(--color-text-tertiary)", fontWeight: 500, marginTop: 2 }}>{s.label}</div>
+            </div>
+          ))}
+        </div>
       </div>
-      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 20px" }}>
+    </div>
+  );
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // SCREEN: GUEST PROFILE FORM
+  // ─────────────────────────────────────────────────────────────────────────
+  if (showGuestForm) return (
+    <div className="page-container">
+      <style>{CSS}</style>
+      {toast && <Toast message={toast.msg} type={toast.type} />}
+
+      {/* Topbar */}
+      <div className="topbar">
+        <div className="topbar-inner">
+          <div className="logo-mark">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <span className="logo-text">PM Training</span>
+          <button className="btn btn-ghost btn-sm" style={{ marginLeft: "auto" }} onClick={() => { setShowGuestForm(false); setIsGuest(false); }}>
+            ← Back
+          </button>
+        </div>
+      </div>
+
+      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "var(--space-8) var(--space-5)" }}>
         <div style={{ width: "100%", maxWidth: 440 }}>
-          {/* Hero */}
-          <div className="fade-up" style={{ textAlign: "center", marginBottom: 40 }}>
-            <div style={{ width: 80, height: 80, borderRadius: 20, background: "linear-gradient(135deg, #3B82F6, #10B981)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px", boxShadow: "0 12px 24px rgba(59, 130, 246, 0.2)", fontSize: 40, fontWeight: 700, color: "#fff" }}>P</div>
-            <h1 style={{ fontSize: 28, fontWeight: 800, color: "#1F2937", marginBottom: 12, lineHeight: 1.2 }}>PM Learning</h1>
-            <p style={{ fontSize: 15, color: "#6B7280", lineHeight: 1.6, maxWidth: 320, margin: "0 auto" }}>Real scenarios. Structured feedback. Improve your decision-making.</p>
-            <div style={{ display: "flex", justifyContent: "center", gap: 20, marginTop: 24 }}>
-              {[["Real scenarios"],["Detailed feedback"],["Track progress"]].map(([label]) => (
-                <div key={label} style={{ fontSize: 13, color: "#6B7280", fontWeight: 600 }}>
-                  <span style={{ display: "inline-block", width: 6, height: 6, borderRadius: 3, background: "#3B82F6", marginRight: 6 }}></span>
-                  {label}
-                </div>
-              ))}
-            </div>
+
+          <div className="anim-fade-up" style={{ marginBottom: "var(--space-8)" }}>
+            <h1 style={{ fontSize: "var(--font-size-2xl)", fontWeight: 800, color: "var(--color-text-primary)", marginBottom: "var(--space-2)", letterSpacing: "-0.03em" }}>
+              Quick intro
+            </h1>
+            <p style={{ fontSize: "var(--font-size-base)", color: "var(--color-text-secondary)" }}>
+              This helps us tailor the challenge and feedback to you.
+            </p>
           </div>
-          <div className="card fade-up-1" style={{ marginBottom:16 }}>
-            <div style={{ display:"flex", flexDirection:"column", gap:14 }}>
-              {[
-                { label:"Your Name", val:guestName, set:setGuestName, placeholder:"e.g. Alex", type:"text" },
-                { label:"Age", val:guestAge, set:setGuestAge, placeholder:"e.g. 26", type:"number" },
-                { label:"Industry", val:guestIndustry, set:setGuestIndustry, placeholder:"e.g. FinTech, SaaS, Healthcare", type:"text" },
-                { label:"Years of Experience", val:guestExp, set:setGuestExp, placeholder:"e.g. 2 years", type:"text" },
-              ].map(({label,val,set,placeholder,type}) => (
-                <div key={label}>
-                  <label style={{ fontSize:13, fontWeight:700, color:"#3D4A5C", display:"block", marginBottom:6 }}>
-                    {label} <span style={{ color:"#C0392B" }}>*</span>
-                  </label>
-                  <input className="input-field" type={type} value={val}
-                    onChange={e => { set(e.target.value); setGuestFormErr(""); }}
-                    placeholder={placeholder} />
+
+          <div className="card anim-fade-up-1">
+            <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }}>
+              <div>
+                <label className="label">Full name <span style={{ color: "var(--color-error)" }}>*</span></label>
+                <input className="input" placeholder="e.g. Alex Johnson" value={guestName} onChange={e => { setGuestName(e.target.value); setGuestFormErr(""); }} />
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-3)" }}>
+                <div>
+                  <label className="label">Age <span style={{ color: "var(--color-error)" }}>*</span></label>
+                  <input className="input" placeholder="e.g. 28" value={guestAge} onChange={e => { setGuestAge(e.target.value); setGuestFormErr(""); }} />
                 </div>
-              ))}
+                <div>
+                  <label className="label">Experience <span style={{ color: "var(--color-error)" }}>*</span></label>
+                  <input className="input" placeholder="e.g. 2 years" value={guestExp} onChange={e => { setGuestExp(e.target.value); setGuestFormErr(""); }} />
+                </div>
+              </div>
+              <div>
+                <label className="label">Industry <span style={{ color: "var(--color-error)" }}>*</span></label>
+                <input className="input" placeholder="e.g. SaaS, FinTech, Healthcare" value={guestIndustry} onChange={e => { setGuestIndustry(e.target.value); setGuestFormErr(""); }} />
+              </div>
             </div>
+
             {guestFormErr && (
-              <p style={{ fontSize:13, color:"#C0392B", fontWeight:700, marginTop:12, textAlign:"center" }}>
-                ❌ {guestFormErr}
-              </p>
+              <div style={{ marginTop: "var(--space-4)", padding: "10px var(--space-3)", background: "var(--color-error-light)", border: "1px solid var(--color-error-border)", borderRadius: "var(--radius-sm)", fontSize: "var(--font-size-sm)", color: "var(--color-error)" }}>
+                {guestFormErr}
+              </div>
             )}
-          </div>
-          <div className="fade-up-2" style={{ display:"flex", gap:10 }}>
-            <button className="btn-ghost" onClick={() => { setShowGuestForm(false); setIsGuest(false); }}>← Back</button>
-            <button className="btn-green" style={{ flex:1 }} onClick={submitGuestProfile}>
-              Start My Challenge →
+
+            <button
+              className="btn btn-primary btn-lg btn-full"
+              style={{ marginTop: "var(--space-5)" }}
+              onClick={submitGuestProfile}
+            >
+              Start my free challenge →
             </button>
           </div>
-          <p style={{ fontSize:12, color:"#B0B5C0", textAlign:"center", marginTop:12, fontWeight:600 }}>
-            1 free challenge · Your info helps us improve
+
+          <p className="anim-fade-up-2" style={{ marginTop: "var(--space-4)", textAlign: "center", fontSize: 12, color: "var(--color-text-tertiary)" }}>
+            Your information is only used to personalise your experience.
           </p>
         </div>
       </div>
     </div>
   );
 
-  if (screen === "login") return (
-    <div style={{ minHeight: "100vh", background: "#fff", display: "flex", flexDirection: "column" }}>
+  // ─────────────────────────────────────────────────────────────────────────
+  // SCREEN: HOME
+  // ─────────────────────────────────────────────────────────────────────────
+  if (screen === "home") return (
+    <div className="page-container">
       <style>{CSS}</style>
+      {toast && <Toast message={toast.msg} type={toast.type} />}
 
-      {/* Top bar */}
-      <div style={{ background: "#142F32", padding: "14px 24px", display: "flex", alignItems: "center", gap: 10 }}>
-        <span style={{ fontSize: 22 }}>📈</span>
-        <span style={{ fontSize: 18, fontWeight: 900, color: "#fff", letterSpacing: "-0.01em" }}>PM Training</span>
+      {/* Topbar */}
+      <div className="topbar">
+        <div className="topbar-inner">
+          <div className="logo-mark">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <span className="logo-text">PM Training</span>
+          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
+            {!isGuest && (
+              <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
+                <span style={{ fontSize: 12, color: "var(--color-text-tertiary)", fontWeight: 500 }}>{totalXP} XP</span>
+              </div>
+            )}
+            {isGuest && (
+              <span className="badge badge-neutral">Guest</span>
+            )}
+          </div>
+        </div>
       </div>
 
-      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 24px" }}>
-        <div style={{ width: "100%", maxWidth: 440 }}>
+      <div style={{ flex: 1, paddingBottom: "var(--space-16)" }}>
+        <div className="content-container" style={{ paddingTop: "var(--space-8)" }}>
 
-          {/* Hero */}
-          <div className="fade-up" style={{ textAlign: "center", marginBottom: 40 }}>
-            <div style={{ width: 72, height: 72, borderRadius: 22, background: "linear-gradient(135deg,#142F32,#2D6B52)",
-              display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px",
-              boxShadow: "0 8px 24px rgba(88,204,2,0.3)", fontSize: 34 }}>
-              📈
-            </div>
-            <h1 style={{ fontSize: 28, fontWeight: 800, color: "#1D1D1F", marginBottom: 12, lineHeight: 1.2 }}>
-              PM Learning
+          {/* Header */}
+          <div className="anim-fade-up" style={{ marginBottom: "var(--space-8)" }}>
+            <h1 style={{ fontSize: "var(--font-size-2xl)", fontWeight: 800, color: "var(--color-text-primary)", marginBottom: "var(--space-2)", letterSpacing: "-0.03em" }}>
+              {isGuest ? `Welcome, ${guestName}` : "Your training path"}
             </h1>
-            <p style={{ fontSize: 15, color: "#555555", lineHeight: 1.6, maxWidth: 340, margin: "0 auto" }}>
-              Real scenarios. Structured feedback. Improve your decision-making.
+            <p style={{ fontSize: "var(--font-size-base)", color: "var(--color-text-secondary)" }}>
+              {isGuest
+                ? "Try a free challenge to see how AI-powered PM coaching works."
+                : "Practice real scenarios. Get structured feedback. Build PM instincts."}
             </p>
-            <div style={{ display: "flex", justifyContent: "center", gap: 20, marginTop: 20 }}>
-              {[["📋","Real scenarios"],["✓","Detailed feedback"],["📈","Track progress"]].map(([icon,label]) => (
-                <div key={label} style={{ fontSize: 12, color: "#777C90", fontWeight: 700, display: "flex", alignItems: "center", gap: 4 }}>
-                  <span>{icon}</span><span>{label}</span>
+          </div>
+
+          {/* Track selector */}
+          {!isGuest && (
+            <div className="anim-fade-up-1" style={{ marginBottom: "var(--space-6)" }}>
+              <div style={{ display: "flex", gap: "var(--space-2)", padding: "var(--space-1)", background: "var(--color-bg)", border: "1px solid var(--color-border)", borderRadius: "var(--radius-md)", width: "fit-content" }}>
+                {["B2B", "B2C", "PO"].map(t => (
+                  <button
+                    key={t}
+                    className={`track-tab ${track === t ? "active" : ""}`}
+                    onClick={() => setTrack(t)}
+                  >
+                    {t === "PO" ? "Product Owner" : t === "B2B" ? "B2B SaaS" : "B2C Consumer"}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Progress bar (full users) */}
+          {!isGuest && (
+            <div className="card anim-fade-up-2" style={{ marginBottom: "var(--space-5)" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--space-4)" }}>
+                <div>
+                  <div style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color: "var(--color-text-primary)", marginBottom: 2 }}>
+                    {track === "PO" ? "CGM ASSIST · Product Owner" : track === "B2B" ? "B2B SaaS Track" : "B2C Consumer Track"}
+                  </div>
+                  <div style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-tertiary)" }}>
+                    {doneCount} of {challenges.length} challenges complete
+                  </div>
+                </div>
+                <div style={{ textAlign: "right" }}>
+                  <div style={{ fontSize: "var(--font-size-xl)", fontWeight: 800, color: "var(--color-text-primary)", letterSpacing: "-0.03em" }}>{pct}%</div>
+                  <div style={{ fontSize: 12, color: "var(--color-text-tertiary)" }}>complete</div>
+                </div>
+              </div>
+              <div className="progress-track">
+                <div className="progress-fill" style={{ width: `${pct}%` }} />
+              </div>
+
+              {/* Stats row */}
+              <div style={{ display: "flex", gap: "var(--space-6)", marginTop: "var(--space-5)", paddingTop: "var(--space-5)", borderTop: "1px solid var(--color-border)" }}>
+                {[
+                  { value: totalXP, label: "Total XP" },
+                  { value: history.length, label: "Sessions" },
+                  { value: history.length > 0 ? `${history[0]?.scores?.overall ?? "—"}/10` : "—", label: "Last score" },
+                ].map((s, i) => (
+                  <div key={i}>
+                    <div style={{ fontSize: "var(--font-size-lg)", fontWeight: 800, color: "var(--color-text-primary)", letterSpacing: "-0.02em" }}>{s.value}</div>
+                    <div style={{ fontSize: 12, color: "var(--color-text-tertiary)", fontWeight: 500, marginTop: 1 }}>{s.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* PO type filter */}
+          {track === "PO" && !isGuest && (
+            <div className="anim-fade-up-2" style={{ marginBottom: "var(--space-4)" }}>
+              <button
+                className="btn btn-secondary btn-sm"
+                onClick={() => setShowPoTypePicker(o => !o)}
+              >
+                Filter challenges {showPoTypePicker ? "▲" : "▼"}
+              </button>
+              {showPoTypePicker && (
+                <div className="anim-slide-down" style={{ marginTop: "var(--space-3)", padding: "var(--space-4)", background: "var(--color-surface)", border: "1px solid var(--color-border)", borderRadius: "var(--radius-md)", display: "flex", flexWrap: "wrap", gap: "var(--space-2)" }}>
+                  {PO_ALL_TYPES.map(type => (
+                    <button
+                      key={type}
+                      onClick={() => {
+                        const updated = poSelectedTypes.includes(type)
+                          ? poSelectedTypes.filter(t => t !== type)
+                          : [...poSelectedTypes, type];
+                        if (updated.length > 0) {
+                          setPoSelectedTypes(updated);
+                          storageSet("pm_po_types", JSON.stringify(updated));
+                        }
+                      }}
+                      className={`badge ${poSelectedTypes.includes(type) ? "badge-accent" : "badge-neutral"}`}
+                      style={{ cursor: "pointer", border: "1px solid", padding: "6px 12px", fontSize: 13, fontWeight: 600 }}
+                    >
+                      {type}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Challenge path */}
+          <div className="anim-fade-up-3">
+            <div style={{ marginBottom: "var(--space-4)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <h2 style={{ fontSize: "var(--font-size-base)", fontWeight: 700, color: "var(--color-text-primary)" }}>
+                {isGuest ? "Free challenge" : "Challenge path"}
+              </h2>
+              {track === "PO" && !isGuest && (
+                <span className="badge badge-neutral">CGM ASSIST scenarios</span>
+              )}
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)" }}>
+              {(isGuest ? challenges.slice(0, 1) : challenges).map((ch, idx) => (
+                <div key={idx} className="anim-fade-up" style={{ animationDelay: `${idx * 0.04}s` }}>
+                  <PathNode challenge={ch} idx={idx} status={getStatus(idx)} onClick={() => openChallenge(idx)} />
                 </div>
               ))}
             </div>
-          </div>
 
-          {/* Full access */}
-          <div className="card fade-up-1" style={{ marginBottom: 16, padding: "24px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 18 }}>
-              <span style={{ fontSize: 20 }}>🔐</span>
-              <span style={{ fontSize: 16, fontWeight: 700, color: "#1D1D1F" }}>Access Code</span>
-            </div>
-            <input className="input-field" type="password" value={pwInput}
-              onChange={e => { setPwInput(e.target.value); setPwError(false); }}
-              onKeyDown={e => e.key === "Enter" && loginFull()}
-              placeholder="Enter access code"
-              style={{ marginBottom: 10 }}
-            />
-            {pwError && (
-              <p style={{ fontSize: 13, color: "#C0392B", fontWeight: 700, marginBottom: 10, textAlign: "center" }}>
-                ❌ Incorrect code — try again
-              </p>
-            )}
-            <button className="btn-green full-sm" onClick={loginFull} style={{ width: "100%" }}>
-              Start Learning →
-            </button>
-          </div>
-
-          {/* Divider */}
-          <div className="fade-up-2" style={{ display: "flex", alignItems: "center", gap: 12, margin: "28px 0" }}>
-            <div style={{ flex: 1, height: 1, background: "#E5E5E7" }} />
-            <span style={{ fontSize: 13, color: "#86868B", fontWeight: 600 }}>or</span>
-            <div style={{ flex: 1, height: 1, background: "#E5E5E7" }} />
-          </div>
-
-          {/* Guest */}
-          <div className="fade-up-2" style={{ textAlign: "center" }}>
-            <button className="btn-outline full-sm" onClick={loginGuest} style={{ width: "100%" }}>
-              👋 Continue as Guest
-            </button>
-            <p style={{ fontSize: 13, color: "#86868B", marginTop: 14, fontWeight: 500, lineHeight: 1.5 }}>
-              Try 1 free challenge — no sign-up required
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  // ─────────────────────────────────────────────────────────────────────
-  // SCREEN: HOME
-  // ─────────────────────────────────────────────────────────────────────
-  if (screen === "home") return (
-    <div style={{ minHeight: "100vh", background: "#F0F2F5" }}>
-      <style>{CSS}</style>
-
-      {/* Header */}
-      <div style={{ background: "linear-gradient(135deg, #3B82F6 0%, #2563EB 100%)", padding: "0 20px" }}>
-        <div style={{ maxWidth: 680, margin: "0 auto", padding: "16px 0", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <div style={{ width: 32, height: 32, borderRadius: 8, background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, color: "#3B82F6", fontSize: 18 }}>P</div>
-            <span style={{ fontSize: 18, fontWeight: 700, color: "#fff" }}>PM Learning</span>
+            {/* Guest upsell */}
             {isGuest && (
-              <span style={{ fontSize: 11, fontWeight: 600, color: "#fff", background: "rgba(255,255,255,0.3)", padding: "4px 10px", borderRadius: 6 }}>GUEST</span>
+              <div style={{ marginTop: "var(--space-5)", padding: "var(--space-5)", background: "var(--color-accent-light)", border: "1px solid var(--color-accent-border)", borderRadius: "var(--radius-lg)", textAlign: "center" }}>
+                <p style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color: "var(--color-accent)", marginBottom: "var(--space-1)" }}>
+                  Unlock all 15 challenges
+                </p>
+                <p style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-secondary)" }}>
+                  Get full access to B2B, B2C, and Product Owner tracks with AI-powered scoring.
+                </p>
+              </div>
             )}
           </div>
-          <button className="btn-ghost" onClick={() => { storageSet("pm_auth","false"); setScreen("login"); }}
-            style={{ fontSize: 13, padding: "8px 14px", borderColor: "rgba(255,255,255,0.3)", color: "#fff", background: "rgba(255,255,255,0.15)" }}>
-            {isGuest ? "Exit" : "Sign Out"}
-          </button>
-        </div>
-      </div>
 
-      <div style={{ maxWidth: 680, margin: "0 auto", padding: "24px 20px 80px" }}>
-
-        {/* Greeting */}
-        <div className="fade-up" style={{ marginBottom: 24 }}>
-          <h1 style={{ fontSize: 26, fontWeight: 900, color: "#282950", marginBottom: 6 }}>
-            {isGuest ? "Welcome, Guest! 👋" : "Good day, Siddhant! 👋"}
-          </h1>
-          {isGuest ? (
-            <p style={{ fontSize: 15, color: "#555555" }}>Complete 1 free challenge.</p>
-          ) : (
-            <XPBar value={totalXP} max={Math.max(totalXP + 50, 100)} />
-          )}
-        </div>
-
-        {/* Error */}
-        {error && (
-          <div style={{ background: "#fff0f0", border: "2px solid #ffcaca", borderRadius: 14,
-            padding: "12px 16px", marginBottom: 16, fontSize: 14, color: "#c00", fontWeight: 600 }}>
-            ⚠ {error}
-          </div>
-        )}
-
-        {/* Track tabs */}
-        {!isGuest && (
-          <div className="fade-up-1" style={{ display: "flex", gap: 10, marginBottom: 20 }}>
-            {[
-              { id:"B2B", label:"🏢 B2B" },
-              { id:"B2C", label:"📱 B2C" },
-              { id:"PO",  label:"🏥 PO"  },
-            ].map(({ id, label }) => (
-              <button key={id} className={`track-tab btn-ghost ${track === id ? "active" : ""}`}
-                onClick={() => setTrack(id)}
-                style={{ flex: 1, justifyContent: "center", borderRadius: 12, fontSize: 14, fontWeight: 800,
-                  background: track === id ? (id === "PO" ? "#142F32" : "#142F32") : "#fff",
-                  color: track === id ? (id === "PO" ? "#E3FFCC" : "#E3FFCC") : "#777C90",
-                  borderColor: track === id ? "#142F32" : "#D8DDE6",
-                  boxShadow: track === id && id === "PO" ? "0 4px 0 #d6308e" : undefined }}>
-                {label}
-              </button>
-            ))}
-          </div>
-        )}
-
-        {/* PO Type Picker */}
-        {!isGuest && track === "PO" && (
-          <div className="card fade-up-2" style={{ marginBottom: 14, padding: "16px 20px",
-            borderColor: "#F472B6", background: "linear-gradient(135deg,#fff0f6,#fff)" }}>
-            <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom: showPoTypePicker ? 14 : 0 }}>
-              <div style={{ display:"flex", alignItems:"center", gap: 8 }}>
-                <span style={{ fontSize: 16 }}>🎛️</span>
-                <span style={{ fontSize: 14, fontWeight: 800, color: "#be185d" }}>
-                  Challenge Types
-                </span>
-                <span style={{ fontSize: 12, color: "#B0B5C0", background: "#F0F2F5",
-                  padding: "2px 8px", borderRadius: 99, fontWeight: 600 }}>
-                  {poSelectedTypes.length}/{PO_ALL_TYPES.length} selected
-                </span>
-              </div>
-              <button onClick={() => setShowPoTypePicker(v => !v)}
-                style={{ background: "none", fontSize: 12, fontWeight: 700, color: "#F472B6",
-                  padding: "4px 10px", border: "2px solid #F472B6", borderRadius: 8, cursor: "pointer" }}>
-                {showPoTypePicker ? "Done ✓" : "Customise"}
-              </button>
-            </div>
-            {showPoTypePicker && (
-              <div style={{ display:"flex", flexWrap:"wrap", gap: 8 }}>
-                {PO_ALL_TYPES.map(type => {
-                  const ch = CHALLENGES.PO.find(c => c.tag === type);
-                  const selected = poSelectedTypes.includes(type);
+          {/* Recent history */}
+          {!isGuest && history.length > 0 && (
+            <div className="card anim-fade-up-4" style={{ marginTop: "var(--space-6)" }}>
+              <h3 style={{ fontSize: "var(--font-size-base)", fontWeight: 700, color: "var(--color-text-primary)", marginBottom: "var(--space-4)" }}>Recent sessions</h3>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                {history.slice(0, 5).map((s, i) => {
+                  const sc = s.scores?.overall;
+                  const scColor = sc >= 7 ? "var(--color-success)" : sc >= 5 ? "var(--color-warning)" : "var(--color-error)";
+                  const allChallenges = CHALLENGES.B2B.concat(CHALLENGES.B2C).concat(CHALLENGES.PO);
+                  const ch = allChallenges.find(x => x.tag === s.tag);
                   return (
-                    <button key={type} onClick={() => {
-                      const next = selected && poSelectedTypes.length > 1
-                        ? poSelectedTypes.filter(t => t !== type)
-                        : selected ? poSelectedTypes : [...poSelectedTypes, type];
-                      setPoSelectedTypes(next);
-                      storageSet("pm_po_types", JSON.stringify(next));
-                    }}
-                    style={{ display:"flex", alignItems:"center", gap: 6, padding: "8px 14px",
-                      borderRadius: 10, border: `2px solid ${selected ? ch?.color || "#F472B6" : "#D8DDE6"}`,
-                      background: selected ? (ch?.color || "#F472B6") + "15" : "#fff",
-                      color: selected ? ch?.color || "#be185d" : "#B0B5C0",
-                      fontSize: 13, fontWeight: 700, cursor: "pointer", transition: "all 0.12s" }}>
-                      <span>{ch?.icon}</span>
-                      <span>{type}</span>
-                      {selected && <span style={{ fontSize: 10 }}>✓</span>}
-                    </button>
+                    <div key={i} style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", padding: "var(--space-3) 0", borderBottom: i < Math.min(history.length - 1, 4) ? "1px solid var(--color-border)" : "none" }}>
+                      <div style={{
+                        width: 36, height: 36, borderRadius: "var(--radius-sm)",
+                        background: "var(--color-bg)", border: "1px solid var(--color-border)",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        fontSize: 16, flexShrink: 0,
+                      }}>
+                        {ch?.icon || "📋"}
+                      </div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color: "var(--color-text-primary)" }}>{s.tag}</div>
+                        <div style={{ fontSize: 12, color: "var(--color-text-tertiary)" }}>{s.track} · {s.date}</div>
+                      </div>
+                      {sc != null && (
+                        <div style={{ textAlign: "right", flexShrink: 0 }}>
+                          <span style={{ fontSize: "var(--font-size-base)", fontWeight: 800, color: scColor }}>{sc}</span>
+                          <span style={{ fontSize: 12, color: "var(--color-text-tertiary)" }}>/10</span>
+                        </div>
+                      )}
+                    </div>
                   );
                 })}
               </div>
-            )}
-          </div>
-        )}
-
-        {/* Progress card */}
-        {!isGuest && (
-          <div className="card fade-up-1" style={{ marginBottom: 20, padding: "18px 20px" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
-              <span style={{ fontSize: 14, fontWeight: 800, color: "#282950" }}>
-                {track} Progress
-              </span>
-              <span style={{ fontSize: 13, fontWeight: 700, color: "#142F32" }}>
-                {doneCount}/{challenges.length} done
-              </span>
-            </div>
-            <div className="xp-bar">
-              <div className="xp-fill" style={{ width: `${pct}%` }} />
-            </div>
-            <div style={{ display: "flex", gap: 16, marginTop: 12 }}>
-              {[
-                { label: "Completed", value: doneCount, icon: "✅" },
-                { label: "Remaining", value: challenges.length - doneCount, icon: "🎯" },
-                { label: "Total XP", value: totalXP, icon: "⭐" },
-              ].map((s, i) => (
-                <div key={i} style={{ textAlign: "center", flex: 1 }}>
-                  <div style={{ fontSize: 18 }}>{s.icon}</div>
-                  <div style={{ fontSize: 18, fontWeight: 900, color: "#282950" }}>{s.value}</div>
-                  <div style={{ fontSize: 11, color: "#B0B5C0", fontWeight: 600 }}>{s.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Challenge path */}
-        <div className="card fade-up-2" style={{ marginBottom: 20 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
-            <span style={{ fontSize: 18 }}>{track === "PO" ? "🏥" : "🗺️"}</span>
-            <h2 style={{ fontSize: 18, fontWeight: 900, color: "#282950" }}>
-              {isGuest ? "Your Free Challenge"
-                : track === "PO" ? "CGM ASSIST · PO Challenge Path"
-                : `${track} Learning Path`}
-            </h2>
-          </div>
-          {track === "PO" && !isGuest && (
-            <div style={{ background: "#fff0f6", border: "1px solid #F472B6", borderRadius: 10,
-              padding: "10px 14px", marginBottom: 16, fontSize: 13, color: "#be185d", fontWeight: 600,
-              display: "flex", alignItems: "flex-start", gap: 8 }}>
-              <span style={{ flexShrink: 0 }}>💡</span>
-              <span>Real-world scenarios from the CGM ASSIST API integration platform — where clinical host systems connect to plugins and FHIR services.</span>
             </div>
           )}
 
-          <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-            {(isGuest ? challenges.slice(0, 1) : challenges).map((ch, idx) => (
-              <div key={idx}>
-                {idx > 0 && (
-                  <div style={{ display: "flex", justifyContent: "center", margin: "-10px 0 -10px 30px" }}>
-                    <div style={{ width: 2, height: 20, background: getStatus(idx) === "locked" ? "#D8DDE6" : "#142F32" }} />
-                  </div>
-                )}
-                <PathNode challenge={ch} idx={idx} status={getStatus(idx)} onClick={() => openChallenge(idx)} />
-              </div>
-            ))}
-          </div>
-
-          {isGuest && (
-            <div style={{ marginTop: 24, padding: "16px", background: "#F0FFF4",
-              border: "2px dashed #142F32", borderRadius: 14, textAlign: "center" }}>
-              <p style={{ fontSize: 14, fontWeight: 700, color: "#2d7a2d" }}>
-                🔓 Full access unlocks all 10 challenges + AI scoring
-              </p>
+          {/* Empty state for history */}
+          {!isGuest && history.length === 0 && (
+            <div style={{ marginTop: "var(--space-6)", padding: "var(--space-8)", textAlign: "center", border: "1px dashed var(--color-border)", borderRadius: "var(--radius-lg)" }}>
+              <div style={{ fontSize: 32, marginBottom: "var(--space-3)" }}>📋</div>
+              <p style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color: "var(--color-text-primary)", marginBottom: "var(--space-1)" }}>No sessions yet</p>
+              <p style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-tertiary)" }}>Complete your first challenge to see your history here.</p>
             </div>
           )}
         </div>
-
-        {/* Recent history */}
-        {!isGuest && history.length > 0 && (
-          <div className="card fade-up-3">
-            <h3 style={{ fontSize: 16, fontWeight: 800, color: "#282950", marginBottom: 14 }}>📋 Recent Sessions</h3>
-            {history.slice(0, 5).map((s, i) => {
-              const c = CHALLENGES.B2B.concat(CHALLENGES.B2C).concat(CHALLENGES.PO).find(x => x.tag === s.tag && (x.tag !== 'Interview' || s.track === 'PO'))?.color || "#777C90";
-              const sc = s.scores?.overall;
-              const scColor = sc >= 7 ? "#142F32" : sc >= 5 ? "#FFC800" : "#C0392B";
-              return (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 0",
-                  borderBottom: i < Math.min(history.length - 1, 4) ? "1px solid #f5f5f5" : "none" }}>
-                  <div style={{ width: 38, height: 38, borderRadius: 12, background: c + "18",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: 16, flexShrink: 0 }}>
-                    {CHALLENGES.B2B.concat(CHALLENGES.B2C).concat(CHALLENGES.PO).find(x => x.tag === s.tag)?.icon || "📋"}
-                  </div>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 14, fontWeight: 700, color: "#282950" }}>{s.tag}</div>
-                    <div style={{ fontSize: 12, color: "#B0B5C0" }}>{s.track} · {s.date}</div>
-                  </div>
-                  {sc != null && (
-                    <div style={{ textAlign: "right" }}>
-                      <span style={{ fontSize: 16, fontWeight: 900, color: scColor }}>{sc}</span>
-                      <span style={{ fontSize: 12, color: "#ccc" }}>/10</span>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        )}
       </div>
     </div>
   );
 
-  // ─────────────────────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────────────────
   // SCREEN: CHALLENGE
-  // ─────────────────────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────────────────
   if (screen === "challenge") return (
-    <div style={{ minHeight: "100vh", background: "#F0F2F5" }}>
+    <div className="page-container">
       <style>{CSS}</style>
+      {toast && <Toast message={toast.msg} type={toast.type} />}
 
-      {/* Header */}
-      <div style={{ background: "#fff", borderBottom: "2px solid #f0f0f0", padding: "0 20px", position: "sticky", top: 0, zIndex: 10 }}>
-        <div style={{ maxWidth: 680, margin: "0 auto", padding: "12px 0",
-          display: "flex", alignItems: "center", gap: 12 }}>
-          <button className="btn-ghost" onClick={() => setScreen("home")}
-            style={{ padding: "8px 14px", fontSize: 13 }}>
+      {/* Topbar */}
+      <div className="topbar">
+        <div className="topbar-inner">
+          <button className="btn btn-ghost btn-sm" onClick={() => setScreen("home")}>
             ← Back
           </button>
-          <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: "#B0B5C0", letterSpacing: "0.06em" }}>CHALLENGE</div>
-            <div style={{ fontSize: 15, fontWeight: 800, color: "#282950" }}>
+          <div style={{ flex: 1, display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
+            <span style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color: "var(--color-text-primary)" }}>
               {pick?.icon} {pick?.tag}
-            </div>
+            </span>
           </div>
-          <span style={{ fontSize: 12, color: "#B0B5C0", fontWeight: 600 }}>{track}</span>
+          <span className="badge badge-neutral hide-mobile">{track}</span>
         </div>
       </div>
 
-      <div style={{ maxWidth: 680, margin: "0 auto", padding: "24px 20px 80px" }}>
+      <div style={{ flex: 1, paddingBottom: "var(--space-16)" }}>
+        <div className="content-container" style={{ paddingTop: "var(--space-6)" }}>
 
-        {/* Loading */}
-        {loading && !challengeText && (
-          <div style={{ textAlign: "center", padding: "60px 20px" }}>
-            <div className="spinner" style={{ width: 40, height: 40, border: "3px solid #e8e8e8",
-              borderTopColor: "#142F32", borderRadius: "50%", margin: "0 auto 16px" }} />
-            <p style={{ fontSize: 15, color: "#B0B5C0", fontWeight: 600 }}>Generating your challenge…</p>
-          </div>
-        )}
-
-        {challengeText && (
-          <>
-            {/* Challenge card */}
-            <div className="card fade-up" style={{ marginBottom: 16, borderColor: pick?.color + "30",
-              background: "#fff", padding: "24px" }}>
-              {/* Challenge header */}
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20,
-                paddingBottom: 16, borderBottom: `2px solid ${pick?.color}20` }}>
-                <div style={{ width: 36, height: 36, borderRadius: 10, background: pick?.color + "18",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>
-                  {pick?.icon}
-                </div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 800, color: pick?.color, letterSpacing: "0.1em",
-                    textTransform: "uppercase", marginBottom: 2 }}>Your Challenge</div>
-                  <div style={{ fontSize: 16, fontWeight: 900, color: "#282950" }}>{pick?.tag}</div>
-                </div>
-                <div style={{ marginLeft: "auto", background: "#F5F5F7", borderRadius: 8,
-                  padding: "6px 12px", fontSize: 12, fontWeight: 600, color: "#555555" }}>
-                  {track}
-                </div>
-              </div>
-              {/* Challenge body — fully formatted */}
-              <div style={{ fontSize: 15, lineHeight: 1.5, color: "#444" }}>{renderChallenge(challengeText)}</div>
+          {/* Loading skeleton */}
+          {loading && !challengeText && (
+            <div className="card anim-fade-up">
+              <SkeletonChallenge />
             </div>
+          )}
 
-            {/* Hint */}
-            {pick?.hint && (
-              <div className="card fade-up-1" style={{ marginBottom: 16, borderColor: "#FFC800", background: "#fffef5" }}>
-                <button onClick={() => setHintOpen(o => !o)}
-                  style={{ background: "none", width: "100%", display: "flex",
-                    alignItems: "center", justifyContent: "space-between", padding: 0, cursor: "pointer" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    <span style={{ fontSize: 18 }}>💡</span>
-                    <span style={{ fontSize: 14, fontWeight: 800, color: "#B8860B" }}>Framework Hint</span>
-                    <span style={{ fontSize: 12, color: "#9DA3AE", background: "#fff5cc",
-                      padding: "2px 10px", borderRadius: 99, fontWeight: 600 }}>{pick.hint.framework}</span>
+          {challengeText && (
+            <>
+              {/* Challenge card */}
+              <div className="card anim-fade-up" style={{ marginBottom: "var(--space-4)" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", marginBottom: "var(--space-5)", paddingBottom: "var(--space-5)", borderBottom: "1px solid var(--color-border)" }}>
+                  <div style={{
+                    width: 40, height: 40, borderRadius: "var(--radius-md)",
+                    background: "var(--color-bg)", border: "1px solid var(--color-border)",
+                    display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, flexShrink: 0,
+                  }}>
+                    {pick?.icon}
                   </div>
-                  <span style={{ fontSize: 12, color: "#B0B5C0", fontWeight: 700 }}>{hintOpen ? "▲" : "▼"}</span>
-                </button>
-                {hintOpen && (
-                  <div style={{ marginTop: 16, paddingTop: 16, borderTop: "1px solid #ffe88a" }}>
-                    {pick.hint.steps.map((s, i) => (
-                      <div key={i} style={{ display: "flex", gap: 10, marginBottom: 10, padding: "4px 0" }}>
-                        <span style={{ fontSize: 13, fontWeight: 900, color: "#FFC800",
-                          background: "#fffae0", width: 24, height: 24, borderRadius: "50%",
-                          display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{i+1}</span>
-                        <span style={{ fontSize: 14, color: "#3D4A5C", lineHeight: 1.65 }}>{s}</span>
-                      </div>
-                    ))}
-                    <div style={{ marginTop: 12, padding: "10px 14px", background: "#fff3cc",
-                      borderRadius: 10, borderLeft: "3px solid #FFC800", fontSize: 13, color: "#7a5c00", fontWeight: 600 }}>
-                      ⚠ {pick.hint.watch}
-                    </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: "var(--color-text-tertiary)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 2 }}>Challenge</div>
+                    <div style={{ fontSize: "var(--font-size-base)", fontWeight: 700, color: "var(--color-text-primary)" }}>{pick?.tag}</div>
                   </div>
-                )}
+                  <span className="badge badge-neutral">{track}</span>
+                </div>
+                <div style={{ fontSize: "var(--font-size-sm)", lineHeight: 1.7, color: "var(--color-text-secondary)" }}>
+                  {renderChallenge(challengeText)}
+                </div>
               </div>
-            )}
 
-            {/* MCQ Answer */}
-            <div className="card fade-up-2" style={{ marginBottom: 20 }}>
-              <h3 style={{ fontSize: 15, fontWeight: 700, color: "#1D1D1F", marginBottom: 8 }}>
-                Multiple choice
-              </h3>
-              <p style={{ fontSize: 13, color: "#555555", marginBottom: 16, fontWeight: 500 }}>
-                Pick the best answer.
-              </p>
+              {/* Hint accordion */}
+              {pick?.hint && (
+                <div className="card anim-fade-up-1" style={{ marginBottom: "var(--space-4)", borderColor: hintOpen ? "var(--color-warning-border)" : "var(--color-border)", background: hintOpen ? "var(--color-warning-light)" : "var(--color-surface)" }}>
+                  <button
+                    onClick={() => setHintOpen(o => !o)}
+                    style={{ background: "none", width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: 0, cursor: "pointer", border: "none" }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
+                      <span style={{ fontSize: 16 }}>💡</span>
+                      <span style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color: "var(--color-text-primary)" }}>Framework hint</span>
+                      <span className="badge badge-warning">{pick.hint.framework}</span>
+                    </div>
+                    <span style={{ fontSize: 12, color: "var(--color-text-tertiary)", fontWeight: 600 }}>{hintOpen ? "Hide ▲" : "Show ▼"}</span>
+                  </button>
 
-              {mcqOptions.length === 0 && loading && (
-                <div style={{ textAlign: "center", padding: "20px 0" }}>
-                  <div className="spinner" style={{ width: 28, height: 28, border: "3px solid #eee",
-                    borderTopColor: "#142F32", borderRadius: "50%", margin: "0 auto 10px" }} />
-                  <p style={{ fontSize: 13, color: "#B0B5C0", fontWeight: 600 }}>Loading options…</p>
-                </div>
-              )}
-
-              {mcqOptions.length > 0 && (
-                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                  {mcqOptions.map((opt, i) => {
-                    const isSelected = mcqSelected === opt;
-                    const isCorrect  = opt === mcqCorrect;
-                    // Bug fix: only colour an option if it was selected OR
-                    // if it was the correct one AND user got it wrong (so they see the right answer)
-                    let bg = "#FAFAFA", border = "#D8DDE6", color = "#282950", icon = null;
-                    const userGotItWrong = mcqRevealed && mcqSelected && mcqSelected !== mcqCorrect;
-                    if (mcqRevealed) {
-                      if (isSelected && isCorrect)  { bg="#E8F9E0"; border="#2D8A4E"; color="#1a5c2a"; icon="✓"; }
-                      else if (isSelected)           { bg="#FDECEA"; border="#C0392B"; color="#922B21"; icon="✗"; }
-                      else if (isCorrect && userGotItWrong) { bg="#E8F9E0"; border="#2D8A4E"; color="#1a5c2a"; icon="✓"; }
-                    } else if (isSelected)           { bg="#EAF0FB"; border="#142F32"; color="#142F32"; }
-                    const labelBg = mcqRevealed && (isSelected || (isCorrect && userGotItWrong)) ? border + "25" : "#EEEFF2";
-                    return (
-                      <button key={i} onClick={() => !mcqRevealed && setMcqSelected(opt)}
-                        style={{ width: "100%", textAlign: "left", padding: "16px 20px", borderRadius: 10,
-                          border: `1.5px solid ${border}`, background: bg, color, fontSize: 15, fontWeight: 500,
-                          cursor: mcqRevealed ? "default" : "pointer", transition: "all 0.15s",
-                          display: "flex", alignItems: "center", gap: 12, fontFamily: "'Inter',sans-serif",
-                          letterSpacing: "-0.01em", lineHeight: 1.5 }}>
-                        <span style={{ width: 30, height: 30, borderRadius: 6, background: labelBg,
-                          display:"flex", alignItems:"center", justifyContent:"center", fontSize: 13, fontWeight: 700,
-                          color: isSelected || (mcqRevealed && isCorrect && userGotItWrong) ? color : "#777C90",
-                          flexShrink: 0, fontFamily: "'Inter',sans-serif" }}>
-                          {icon || String.fromCharCode(65+i)}
-                        </span>
-                        <span style={{ flex: 1, lineHeight: 1.55 }}>{opt}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-
-              {/* Reveal / Submit */}
-              {mcqOptions.length > 0 && (
-                <div style={{ marginTop: 16, display: "flex", gap: 10 }} className="stack-sm">
-                  <button className="btn-ghost full-sm" onClick={() => setScreen("home")}>Cancel</button>
-                  {!mcqRevealed ? (
-                    <button className={mcqSelected ? "btn-green full-sm" : "btn-disabled full-sm"}
-                      style={{ flex: 1 }} disabled={!mcqSelected}
-                      onClick={() => { if(mcqSelected) setMcqRevealed(true); }}>
-                      Check Answer →
-                    </button>
-                  ) : (
-                    loading ? (
-                      <button className="btn-disabled full-sm" style={{ flex: 1 }}>Scoring…</button>
-                    ) : (
-                      <button className="btn-green full-sm" style={{ flex: 1 }}
-                        onClick={() => submitAnswer(mcqSelected)}>
-                        Submit for Full Assessment →
-                      </button>
-                    )
+                  {hintOpen && (
+                    <div className="anim-slide-down" style={{ marginTop: "var(--space-4)", paddingTop: "var(--space-4)", borderTop: "1px solid var(--color-warning-border)" }}>
+                      {pick.hint.steps.map((s, i) => (
+                        <div key={i} className="hint-step">
+                          <span className="hint-step-num">{i + 1}</span>
+                          <span style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-secondary)", lineHeight: 1.65 }}>{s}</span>
+                        </div>
+                      ))}
+                      <div style={{ marginTop: "var(--space-4)", padding: "10px var(--space-3)", background: "rgba(245,158,11,0.08)", borderRadius: "var(--radius-sm)", borderLeft: "3px solid var(--color-warning)", fontSize: "var(--font-size-sm)", color: "#92400E", fontWeight: 500 }}>
+                        Watch out: {pick.hint.watch}
+                      </div>
+                    </div>
                   )}
                 </div>
               )}
 
-              {error && <div style={{ fontSize: 13, color: "#C0392B", fontWeight: 700, marginTop: 10 }}>⚠ {error}</div>}
-            </div>
-          </>
-        )}
-      </div>
-    </div>
-  );
-
-  // ─────────────────────────────────────────────────────────────────────
-  // SCREEN: RESULT
-  // ─────────────────────────────────────────────────────────────────────
-  if (screen === "result") return (
-    <div style={{ minHeight: "100vh", background: "#F0F2F5" }}>
-      <style>{CSS}</style>
-
-      {/* Header */}
-      <div style={{ background: "#fff", borderBottom: "2px solid #f0f0f0", padding: "0 20px" }}>
-        <div style={{ maxWidth: 680, margin: "0 auto", padding: "12px 0",
-          display: "flex", alignItems: "center", gap: 12 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <span style={{ fontSize: 18 }}>📊</span>
-            <span style={{ fontSize: 16, fontWeight: 800, color: "#282950" }}>Your Assessment</span>
-          </div>
-          {pick && <span style={{ fontSize: 11, color: "#B0B5C0", marginLeft: "auto", fontWeight: 600 }}>
-            {track} · {pick.tag}
-          </span>}
-        </div>
-      </div>
-
-      <div style={{ maxWidth: 680, margin: "0 auto", padding: "24px 20px 80px" }}>
-
-        {/* Score hero */}
-        {scores && (() => {
-          const sc = scores.overall;
-          const color  = sc >= 7 ? "#142F32" : sc >= 5 ? "#FFC800" : "#C0392B";
-          const bg     = sc >= 7 ? "linear-gradient(135deg,#F0FFF4,#E3FFCC)" : sc >= 5 ? "linear-gradient(135deg,#FFFBF0,#FEF3C7)" : "linear-gradient(135deg,#FDF2F0,#FADBD8)";
-          const label  = sc >= 7 ? "Excellent thinking 🎉" : sc >= 5 ? "Good effort, keep going 📈" : "Keep practising 💪";
-          return (
-            <div className="card pop-in" style={{ marginBottom: 16, background: bg,
-              borderColor: color + "40", textAlign: "center", padding: "32px 24px" }}>
-              <div style={{ fontSize: 72, fontWeight: 900, color, letterSpacing: "-0.04em",
-                lineHeight: 1, marginBottom: 6 }}>{sc}</div>
-              <div style={{ fontSize: 15, color: "#9DA3AE", marginBottom: 14 }}>out of 10</div>
-              <div style={{ display: "inline-block", background: color + "18",
-                borderRadius: 99, padding: "8px 20px" }}>
-                <span style={{ fontSize: 15, fontWeight: 700, color, letterSpacing: "-0.01em" }}>{label}</span>
-              </div>
-              {!isGuest && (
-                <div style={{ marginTop: 12, fontSize: 13, color: "#777C90", fontWeight: 600 }}>
-                  +{10 + (sc * 5)} XP earned 🌟
+              {/* MCQ section */}
+              <div className="card anim-fade-up-2" style={{ marginBottom: "var(--space-5)" }}>
+                <div style={{ marginBottom: "var(--space-5)" }}>
+                  <h3 style={{ fontSize: "var(--font-size-base)", fontWeight: 700, color: "var(--color-text-primary)", marginBottom: "var(--space-1)" }}>
+                    Select your answer
+                  </h3>
+                  <p style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-tertiary)" }}>
+                    Choose the best response to this scenario.
+                  </p>
                 </div>
-              )}
-            </div>
-          );
-        })()}
 
-        {/* Score breakdown */}
-        {scores && (
-          <div className="card fade-up-1" style={{ marginBottom: 16 }}>
-            <h3 style={{ fontSize: 15, fontWeight: 800, color: "#282950", marginBottom: 14 }}>📉 Score Breakdown</h3>
-            <ScoreBar label="Structured Thinking" score={scores.structured} delay={0} />
-            <ScoreBar label="Business Acumen"     score={scores.business}   delay={80} />
-            <ScoreBar label="Specificity & Depth"  score={scores.depth}      delay={160} />
-            <ScoreBar label="PM Maturity"          score={scores.maturity}   delay={240} />
-          </div>
-        )}
+                {/* MCQ loading skeleton */}
+                {mcqOptions.length === 0 && loading && (
+                  <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)" }}>
+                    {[1,2,3,4].map(i => (
+                      <div key={i} className="skeleton" style={{ height: 52, borderRadius: "var(--radius-md)" }} />
+                    ))}
+                  </div>
+                )}
 
-        {/* Assessment */}
-        <div className="card fade-up-2" style={{ marginBottom: 16 }}>
-          <h3 style={{ fontSize: 15, fontWeight: 800, color: "#282950", marginBottom: 14 }}>🧠 Coach Feedback</h3>
-          {renderMD(assessment)}
-        </div>
+                {mcqOptions.length > 0 && (
+                  <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)" }}>
+                    {mcqOptions.map((opt, i) => {
+                      const isSelected = mcqSelected === opt;
+                      const isCorrect = opt === mcqCorrect;
+                      const userGotItWrong = mcqRevealed && mcqSelected && mcqSelected !== mcqCorrect;
 
-        {/* Answer key */}
-        {answerKey && (
-          <div className="fade-up-3" style={{ marginBottom: 24 }}>
-            <button onClick={() => setShowKey(o => !o)}
-              style={{ width: "100%", background: showKey ? "#E3FFCC" : "#F0F2F5",
-                border: `2px solid ${showKey ? "#142F32" : "#ddd"}`, borderRadius: 16,
-                padding: "14px 20px", cursor: "pointer", display: "flex",
-                alignItems: "center", justifyContent: "space-between",
-                transition: "all 0.2s", fontFamily: "'Inter', sans-serif" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <span style={{ fontSize: 18 }}>🔑</span>
-                <span style={{ fontSize: 15, fontWeight: 800, color: showKey ? "#2d7a2d" : "#3D4A5C" }}>
-                  Model Answer
-                </span>
-                <span style={{ fontSize: 12, color: "#B0B5C0", fontWeight: 600 }}>tap to reveal</span>
+                      let className = "mcq-option";
+                      if (mcqRevealed) {
+                        className += " mcq-revealed";
+                        if (isSelected && isCorrect) className += " mcq-correct";
+                        else if (isSelected) className += " mcq-wrong";
+                        else if (isCorrect && userGotItWrong) className += " mcq-show-correct";
+                      } else if (isSelected) {
+                        className += " mcq-selected";
+                      }
+
+                      return (
+                        <button
+                          key={i}
+                          className={className}
+                          onClick={() => !mcqRevealed && setMcqSelected(opt)}
+                        >
+                          <span style={{
+                            width: 28, height: 28, borderRadius: "var(--radius-sm)",
+                            background: "var(--color-bg)", border: "1px solid var(--color-border)",
+                            display: "flex", alignItems: "center", justifyContent: "center",
+                            fontSize: 12, fontWeight: 700, flexShrink: 0,
+                            color: "var(--color-text-secondary)",
+                          }}>
+                            {mcqRevealed && isSelected && isCorrect ? "✓" :
+                             mcqRevealed && isSelected ? "✕" :
+                             mcqRevealed && isCorrect && userGotItWrong ? "✓" :
+                             String.fromCharCode(65 + i)}
+                          </span>
+                          <span style={{ flex: 1, lineHeight: 1.55 }}>{opt}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* Action buttons */}
+                {mcqOptions.length > 0 && (
+                  <div style={{ marginTop: "var(--space-5)", display: "flex", gap: "var(--space-3)" }} className="stack-mobile">
+                    <button className="btn btn-ghost" onClick={() => setScreen("home")}>Cancel</button>
+                    {!mcqRevealed ? (
+                      <button
+                        className={`btn ${mcqSelected ? "btn-primary" : "btn-secondary"} btn-lg`}
+                        style={{ flex: 1 }}
+                        disabled={!mcqSelected}
+                        onClick={() => { if (mcqSelected) setMcqRevealed(true); }}
+                      >
+                        Check answer →
+                      </button>
+                    ) : (
+                      loading ? (
+                        <button className="btn btn-secondary btn-lg" style={{ flex: 1 }} disabled>
+                          <span className="spinner" style={{ width: 16, height: 16, border: "2px solid var(--color-border)", borderTopColor: "var(--color-text-primary)", borderRadius: "50%", display: "inline-block" }} />
+                          Scoring…
+                        </button>
+                      ) : (
+                        <button
+                          className="btn btn-accent btn-lg"
+                          style={{ flex: 1 }}
+                          onClick={() => submitAnswer(mcqSelected)}
+                        >
+                          Get full assessment →
+                        </button>
+                      )
+                    )}
+                  </div>
+                )}
+
+                {error && (
+                  <div style={{ marginTop: "var(--space-4)", padding: "10px var(--space-3)", background: "var(--color-error-light)", border: "1px solid var(--color-error-border)", borderRadius: "var(--radius-sm)", fontSize: "var(--font-size-sm)", color: "var(--color-error)", display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
+                    <span>⚠</span> {error}
+                  </div>
+                )}
               </div>
-              <span style={{ fontSize: 14, fontWeight: 800, color: "#B0B5C0" }}>{showKey ? "▲" : "▼"}</span>
-            </button>
-            {showKey && (
-              <div className="key-section pop-in" style={{ padding: "20px", marginTop: 8 }}>
-                {renderMD(answerKey, true)}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Actions */}
-        <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }} className="stack-sm fade-up-4">
-          <button className="btn-ghost full-sm" onClick={() => setScreen("home")}>← Back to Path</button>
-          {isGuest ? (
-            <button className="btn-green full-sm" style={{ flex: 1 }}
-              onClick={() => setScreen("feedback")}>
-              Give Feedback →
-            </button>
-          ) : (
-            <button className="btn-green full-sm" style={{ flex: 1 }}
-              onClick={() => { setScreen("home"); setTimeout(() => openChallenge(
-                Math.min(currentIdx + 1, challenges.length - 1)
-              ), 50); }}>
-              Next Challenge →
-            </button>
+            </>
           )}
         </div>
       </div>
     </div>
   );
 
-  // ─────────────────────────────────────────────────────────────────────
-  // SCREEN: GUEST FEEDBACK
-  // ─────────────────────────────────────────────────────────────────────
-  if (screen === "feedback") return (
-    <div style={{ minHeight: "100vh", background: "#F0F2F5", display: "flex", alignItems: "center", padding: "32px 20px" }}>
+  // ─────────────────────────────────────────────────────────────────────────
+  // SCREEN: RESULT
+  // ─────────────────────────────────────────────────────────────────────────
+  if (screen === "result") return (
+    <div className="page-container">
       <style>{CSS}</style>
-      <div style={{ maxWidth: 480, margin: "0 auto", width: "100%" }}>
+      {toast && <Toast message={toast.msg} type={toast.type} />}
 
-        <div className="fade-up" style={{ textAlign: "center", marginBottom: 32 }}>
-          <div style={{ fontSize: 40, marginBottom: 10 }}>📝</div>
-          <h2 style={{ fontSize: 24, fontWeight: 900, color: "#282950", marginBottom: 8 }}>Quick Feedback</h2>
-          <p style={{ fontSize: 15, color: "#777C90" }}>Takes 60 seconds. Helps us improve.</p>
+      {/* Topbar */}
+      <div className="topbar">
+        <div className="topbar-inner">
+          <button className="btn btn-ghost btn-sm" onClick={() => setScreen("home")}>
+            ← Back to path
+          </button>
+          <span style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color: "var(--color-text-primary)", marginLeft: "auto" }}>
+            Assessment
+          </span>
         </div>
+      </div>
 
-        <div className="card fade-up-1" style={{ marginBottom: 16 }}>
+      <div style={{ flex: 1, paddingBottom: "var(--space-16)" }}>
+        <div className="content-container" style={{ paddingTop: "var(--space-6)" }}>
 
-          {/* User details (pre-filled from profile) */}
-          <div style={{ marginBottom: 20, paddingBottom: 20, borderBottom: "2px solid #f5f5f5" }}>
-            <p style={{ fontSize: 13, fontWeight: 700, color: "#B0B5C0", letterSpacing: "0.06em",
-              textTransform: "uppercase", marginBottom: 14 }}>Your Details</p>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-              {[
-                { label:"Name", val:fbName, set:setFbName, placeholder:"Your name" },
-                { label:"Age", val:fbAge, set:setFbAge, placeholder:"Your age" },
-                { label:"Industry", val:fbIndustry, set:setFbIndustry, placeholder:"e.g. SaaS, FinTech" },
-                { label:"Years of Experience", val:fbYears, set:setFbYears, placeholder:"e.g. 3 years" },
-              ].map(({label,val,set,placeholder}) => (
-                <div key={label}>
-                  <label style={{ fontSize:12, fontWeight:700, color:"#777C90", display:"block", marginBottom:5 }}>
-                    {label} <span style={{ color:"#C0392B" }}>*</span>
-                  </label>
-                  <input className="input-field" value={val} onChange={e => set(e.target.value)}
-                    placeholder={placeholder} style={{ padding:"10px 12px", fontSize:14 }} />
+          {/* Score hero */}
+          {scores && (() => {
+            const sc = scores.overall;
+            const isHigh = sc >= 7;
+            const isMid = sc >= 5 && sc < 7;
+            const color = isHigh ? "var(--color-success)" : isMid ? "var(--color-warning)" : "var(--color-error)";
+            const bg = isHigh ? "var(--color-success-light)" : isMid ? "var(--color-warning-light)" : "var(--color-error-light)";
+            const borderColor = isHigh ? "var(--color-success-border)" : isMid ? "var(--color-warning-border)" : "var(--color-error-border)";
+            const label = isHigh ? "Excellent thinking" : isMid ? "Good effort — keep going" : "Keep practising";
+            const emoji = isHigh ? "🎉" : isMid ? "📈" : "💪";
+            return (
+              <div className="anim-pop-in" style={{ marginBottom: "var(--space-4)", background: bg, border: `1px solid ${borderColor}`, borderRadius: "var(--radius-lg)", padding: "var(--space-8) var(--space-6)", textAlign: "center" }}>
+                <div style={{ fontSize: 64, fontWeight: 900, color, letterSpacing: "-0.04em", lineHeight: 1, marginBottom: "var(--space-2)" }}>{sc}</div>
+                <div style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-tertiary)", marginBottom: "var(--space-4)" }}>out of 10</div>
+                <div style={{ display: "inline-flex", alignItems: "center", gap: "var(--space-2)", background: "rgba(255,255,255,0.7)", borderRadius: "var(--radius-full)", padding: "6px 16px", border: `1px solid ${borderColor}` }}>
+                  <span>{emoji}</span>
+                  <span style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color }}>{label}</span>
                 </div>
-              ))}
+                {!isGuest && (
+                  <div style={{ marginTop: "var(--space-4)", fontSize: "var(--font-size-sm)", color: "var(--color-text-tertiary)" }}>
+                    +{10 + (sc * 5)} XP earned
+                  </div>
+                )}
+              </div>
+            );
+          })()}
+
+          {/* Score breakdown */}
+          {scores && (
+            <div className="card anim-fade-up-1" style={{ marginBottom: "var(--space-4)" }}>
+              <h3 style={{ fontSize: "var(--font-size-base)", fontWeight: 700, color: "var(--color-text-primary)", marginBottom: "var(--space-5)" }}>Score breakdown</h3>
+              <ScoreBar label="Structured Thinking" score={scores.structured} delay={0} />
+              <ScoreBar label="Business Acumen"     score={scores.business}   delay={80} />
+              <ScoreBar label="Specificity & Depth"  score={scores.depth}      delay={160} />
+              <ScoreBar label="PM Maturity"          score={scores.maturity}   delay={240} />
+            </div>
+          )}
+
+          {/* Coach feedback */}
+          <div className="card anim-fade-up-2" style={{ marginBottom: "var(--space-4)" }}>
+            <h3 style={{ fontSize: "var(--font-size-base)", fontWeight: 700, color: "var(--color-text-primary)", marginBottom: "var(--space-4)" }}>Coach feedback</h3>
+            <div style={{ fontSize: "var(--font-size-sm)", lineHeight: 1.7 }}>
+              {renderMD(assessment)}
             </div>
           </div>
 
-          {/* Q1 — Rating */}
-          <div style={{ marginBottom: 20 }}>
-            <p style={{ fontSize: 15, fontWeight: 700, color: "#282950", marginBottom: 12 }}>
-              1. How useful was this challenge?
-            </p>
-            <div style={{ display: "flex", gap: 8 }}>
-              {[1,2,3,4,5].map(n => (
-                <button key={n} onClick={() => setFbUseful(n)}
-                  style={{ flex: 1, padding: "12px 0", borderRadius: 12,
-                    border: `2px solid ${fbUseful >= n ? "#142F32" : "#D8DDE6"}`,
-                    background: fbUseful >= n ? "#142F32" : "#fff",
-                    color: fbUseful >= n ? "#fff" : "#B0B5C0",
-                    fontSize: 16, fontWeight: 800, cursor: "pointer", transition: "all 0.12s" }}>
-                  {n}
-                </button>
-              ))}
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6 }}>
-              <span style={{ fontSize: 11, color: "#B0B5C0", fontWeight: 600 }}>Not useful</span>
-              <span style={{ fontSize: 11, color: "#B0B5C0", fontWeight: 600 }}>Very useful</span>
-            </div>
-          </div>
+          {/* Model answer */}
+          {answerKey && (
+            <div className="anim-fade-up-3" style={{ marginBottom: "var(--space-6)" }}>
+              <button
+                onClick={() => setShowKey(o => !o)}
+                style={{
+                  width: "100%",
+                  background: showKey ? "var(--color-success-light)" : "var(--color-surface)",
+                  border: `1px solid ${showKey ? "var(--color-success-border)" : "var(--color-border)"}`,
+                  borderRadius: "var(--radius-lg)",
+                  padding: "var(--space-4) var(--space-5)",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  transition: "all var(--transition-base)",
+                  fontFamily: "var(--font-family)",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
+                  <span style={{ fontSize: 18 }}>🔑</span>
+                  <span style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color: showKey ? "#065F46" : "var(--color-text-primary)" }}>
+                    Model answer
+                  </span>
+                  {!showKey && <span style={{ fontSize: 12, color: "var(--color-text-tertiary)" }}>tap to reveal</span>}
+                </div>
+                <span style={{ fontSize: 12, color: "var(--color-text-tertiary)", fontWeight: 600 }}>{showKey ? "Hide ▲" : "Show ▼"}</span>
+              </button>
 
-          {/* Q2 — Easy */}
-          <div style={{ marginBottom: 20 }}>
-            <p style={{ fontSize: 15, fontWeight: 700, color: "#282950", marginBottom: 10 }}>
-              2. Was the interface easy to use?
-            </p>
-            <div style={{ display: "flex", gap: 10 }}>
-              {["Yes", "No"].map(v => (
-                <button key={v} onClick={() => setFbEasy(v)}
-                  style={{ flex: 1, padding: "12px", borderRadius: 12,
-                    border: `2px solid ${fbEasy === v ? "#142F32" : "#D8DDE6"}`,
-                    background: fbEasy === v ? "#F0FFF4" : "#fff",
-                    color: fbEasy === v ? "#2d7a2d" : "#777C90",
-                    fontSize: 15, fontWeight: 800, cursor: "pointer", transition: "all 0.12s" }}>
-                  {v === "Yes" ? "👍 Yes" : "👎 No"}
-                </button>
-              ))}
+              {showKey && (
+                <div className="anim-slide-down" style={{ marginTop: "var(--space-2)", padding: "var(--space-5)", background: "var(--color-success-light)", border: "1px solid var(--color-success-border)", borderRadius: "var(--radius-lg)" }}>
+                  <div style={{ fontSize: "var(--font-size-sm)", lineHeight: 1.7 }}>
+                    {renderMD(answerKey, true)}
+                  </div>
+                </div>
+              )}
             </div>
-          </div>
+          )}
 
-          {/* Q3 — Comments */}
-          <div>
-            <p style={{ fontSize: 15, fontWeight: 700, color: "#282950", marginBottom: 10 }}>
-              3. Feedback & Comments <span style={{ color: "#B0B5C0", fontWeight: 600, fontSize: 13 }}>(required)</span>
-            </p>
-            <textarea className="textarea-field" value={fbComment} onChange={e => setFbComment(e.target.value)}
-              placeholder="What did you think? What would make this more useful for you?"
-              style={{ minHeight: 100 }} />
+          {/* Actions */}
+          <div className="anim-fade-up-4" style={{ display: "flex", gap: "var(--space-3)" }}>
+            <button className="btn btn-ghost" onClick={() => setScreen("home")}>← Back to path</button>
+            {isGuest ? (
+              <button className="btn btn-primary btn-lg" style={{ flex: 1 }} onClick={() => setScreen("feedback")}>
+                Leave feedback →
+              </button>
+            ) : (
+              <button
+                className="btn btn-primary btn-lg"
+                style={{ flex: 1 }}
+                onClick={() => {
+                  setScreen("home");
+                  setTimeout(() => openChallenge(Math.min(currentIdx + 1, challenges.length - 1)), 50);
+                }}
+              >
+                Next challenge →
+              </button>
+            )}
           </div>
         </div>
+      </div>
+    </div>
+  );
 
-        <div style={{ display: "flex", gap: 10 }} className="stack-sm fade-up-2">
-          <button className="btn-ghost full-sm" onClick={() => setScreen("result")}>← Back</button>
+  // ─────────────────────────────────────────────────────────────────────────
+  // SCREEN: GUEST FEEDBACK
+  // ─────────────────────────────────────────────────────────────────────────
+  if (screen === "feedback") return (
+    <div className="page-container">
+      <style>{CSS}</style>
+      {toast && <Toast message={toast.msg} type={toast.type} />}
+
+      {/* Topbar */}
+      <div className="topbar">
+        <div className="topbar-inner">
+          <div className="logo-mark">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <span className="logo-text">PM Training</span>
+        </div>
+      </div>
+
+      <div style={{ flex: 1, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "var(--space-8) var(--space-5)" }}>
+        <div style={{ width: "100%", maxWidth: 480 }}>
+
+          <div className="anim-fade-up" style={{ marginBottom: "var(--space-8)" }}>
+            <h1 style={{ fontSize: "var(--font-size-2xl)", fontWeight: 800, color: "var(--color-text-primary)", marginBottom: "var(--space-2)", letterSpacing: "-0.03em" }}>
+              Quick feedback
+            </h1>
+            <p style={{ fontSize: "var(--font-size-base)", color: "var(--color-text-secondary)" }}>
+              Takes 60 seconds. Helps us improve the product.
+            </p>
+          </div>
+
+          <div className="card anim-fade-up-1" style={{ marginBottom: "var(--space-4)" }}>
+
+            {/* Pre-filled details */}
+            <div style={{ marginBottom: "var(--space-5)", paddingBottom: "var(--space-5)", borderBottom: "1px solid var(--color-border)" }}>
+              <p style={{ fontSize: 11, fontWeight: 700, color: "var(--color-text-tertiary)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "var(--space-3)" }}>Your details</p>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-3)" }}>
+                {[
+                  { label: "Name", val: fbName, set: setFbName, placeholder: "Your name" },
+                  { label: "Age", val: fbAge, set: setFbAge, placeholder: "Your age" },
+                  { label: "Industry", val: fbIndustry, set: setFbIndustry, placeholder: "e.g. SaaS" },
+                  { label: "Experience", val: fbYears, set: setFbYears, placeholder: "e.g. 3 years" },
+                ].map(({ label, val, set, placeholder }) => (
+                  <div key={label}>
+                    <label className="label">{label}</label>
+                    <input className="input" value={val} onChange={e => set(e.target.value)} placeholder={placeholder} />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Rating */}
+            <div style={{ marginBottom: "var(--space-5)" }}>
+              <p style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color: "var(--color-text-primary)", marginBottom: "var(--space-3)" }}>
+                How useful was this challenge? <span style={{ color: "var(--color-error)" }}>*</span>
+              </p>
+              <div style={{ display: "flex", gap: "var(--space-2)" }}>
+                {[1, 2, 3, 4, 5].map(n => (
+                  <button
+                    key={n}
+                    className={`star-btn ${fbUseful >= n ? "active" : ""}`}
+                    onClick={() => setFbUseful(n)}
+                  >
+                    {fbUseful >= n ? "★" : "☆"}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Easy to use */}
+            <div style={{ marginBottom: "var(--space-5)" }}>
+              <p style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color: "var(--color-text-primary)", marginBottom: "var(--space-3)" }}>
+                Was it easy to use?
+              </p>
+              <div style={{ display: "flex", gap: "var(--space-2)" }}>
+                {["Yes", "Somewhat", "No"].map(opt => (
+                  <button
+                    key={opt}
+                    className={`badge ${fbEasy === opt ? "badge-accent" : "badge-neutral"}`}
+                    style={{ cursor: "pointer", padding: "8px 16px", fontSize: 13, fontWeight: 600 }}
+                    onClick={() => setFbEasy(opt)}
+                  >
+                    {opt}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Comment */}
+            <div style={{ marginBottom: "var(--space-5)" }}>
+              <label className="label">What did you think?</label>
+              <textarea
+                className="input"
+                rows={3}
+                placeholder="Any thoughts, suggestions, or reactions…"
+                value={fbComment}
+                onChange={e => setFbComment(e.target.value)}
+                style={{ resize: "vertical" }}
+              />
+            </div>
+
+            {/* Improve */}
+            <div style={{ marginBottom: "var(--space-5)" }}>
+              <label className="label">What would make it better?</label>
+              <textarea
+                className="input"
+                rows={2}
+                placeholder="e.g. More scenarios, better hints…"
+                value={fbImprove}
+                onChange={e => setFbImprove(e.target.value)}
+                style={{ resize: "vertical" }}
+              />
+            </div>
+
+            <button
+              className={`btn ${fbUseful > 0 ? "btn-primary" : "btn-secondary"} btn-lg btn-full`}
+              disabled={fbUseful === 0 || fbSending}
+              onClick={submitGuestFeedback}
+            >
+              {fbSending ? (
+                <span style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
+                  <span className="spinner" style={{ width: 16, height: 16, border: "2px solid rgba(255,255,255,0.3)", borderTopColor: "#fff", borderRadius: "50%", display: "inline-block" }} />
+                  Sending…
+                </span>
+              ) : "Submit feedback →"}
+            </button>
+          </div>
+
           <button
-            className={fbUseful > 0 && fbName && fbComment ? "btn-green full-sm" : "btn-disabled full-sm"}
-            style={{ flex: 1 }}
-            disabled={fbUseful === 0 || !fbName.trim() || !fbComment.trim() || fbSending}
-            onClick={fbUseful > 0 && fbName && fbComment ? submitGuestFeedback : undefined}>
-            {fbSending ? "Sending…" : "Submit Feedback →"}
+            className="btn btn-ghost btn-full"
+            onClick={() => setScreen("thanks")}
+          >
+            Skip for now
           </button>
         </div>
       </div>
     </div>
   );
 
-  // ─────────────────────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────────────────
   // SCREEN: THANKS
-  // ─────────────────────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────────────────
   if (screen === "thanks") return (
-    <div style={{ minHeight: "100vh", background: "#F0F2F5", display: "flex", alignItems: "center",
-      justifyContent: "center", padding: "32px 20px" }}>
+    <div className="page-container" style={{ alignItems: "center", justifyContent: "center" }}>
       <style>{CSS}</style>
-      <div className="card pop-in" style={{ maxWidth: 420, width: "100%", textAlign: "center", padding: "48px 32px" }}>
-        <div style={{ fontSize: 56, marginBottom: 16 }}>🎉</div>
-        <h2 style={{ fontSize: 26, fontWeight: 900, color: "#282950", marginBottom: 12 }}>
-          Thanks for trying it!
-        </h2>
-        <p style={{ fontSize: 15, color: "#777C90", lineHeight: 1.7, marginBottom: 28 }}>
-          Thanks for trying the app.<br/>
-          <strong style={{ color: "#282950" }}>Full access requires an access code.</strong><br/>
-          Contact Siddhant on LinkedIn to get yours.
-        </p>
-        <button className="btn-green" style={{ width: "100%" }} onClick={() => {
-          setScreen("login"); setIsGuest(false); setPwInput(""); setPwError(false);
+
+      <div className="anim-pop-in" style={{ textAlign: "center", maxWidth: 400, padding: "var(--space-8) var(--space-5)" }}>
+        <div style={{
+          width: 72,
+          height: 72,
+          borderRadius: "var(--radius-xl)",
+          background: "var(--color-success-light)",
+          border: "1px solid var(--color-success-border)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          margin: "0 auto var(--space-6)",
+          fontSize: 32,
         }}>
-          Back to Home
+          ✓
+        </div>
+        <h1 style={{ fontSize: "var(--font-size-2xl)", fontWeight: 800, color: "var(--color-text-primary)", marginBottom: "var(--space-3)", letterSpacing: "-0.03em" }}>
+          Thank you
+        </h1>
+        <p style={{ fontSize: "var(--font-size-base)", color: "var(--color-text-secondary)", lineHeight: 1.6, marginBottom: "var(--space-8)" }}>
+          Your feedback helps us build a better product. We read every response.
+        </p>
+        <button
+          className="btn btn-primary btn-lg"
+          onClick={() => { setScreen("login"); setIsGuest(false); }}
+        >
+          Back to start
         </button>
       </div>
     </div>
