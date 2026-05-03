@@ -270,7 +270,7 @@ const CSS = `
     padding: 0 var(--space-6);
   }
   .content-container-sm {
-    max-width: 480px;
+    max-width: 640px;
     margin: 0 auto;
     width: 100%;
     padding: 0 var(--space-6);
@@ -436,31 +436,34 @@ const CSS = `
   }
 
   /* ── Table ── */
-  table { width: 100%; border-collapse: collapse; table-layout: auto; }
+  table { width: 100%; border-collapse: collapse; table-layout: fixed; }
   th {
-    padding: 14px var(--space-4);
+    padding: 16px var(--space-4);
     text-align: left;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
     color: var(--color-text-tertiary);
-    border-bottom: 1px solid var(--color-border);
-    letter-spacing: 0.03em;
+    border-bottom: 2px solid var(--color-border);
+    letter-spacing: 0.05em;
     text-transform: uppercase;
-    word-break: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   td {
-    padding: 14px var(--space-4);
+    padding: 16px var(--space-4);
     border-bottom: 1px solid var(--color-border);
     color: var(--color-text-primary);
     vertical-align: middle;
     font-size: var(--font-size-sm);
-    line-height: 1.6;
-    word-break: break-word;
+    line-height: 1.7;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
   tr:last-child td { border-bottom: none; }
   tr:hover td { background: var(--color-bg); }
   @media (max-width: 768px) {
-    th, td { padding: 12px 10px; font-size: 13px; }
+    th, td { padding: 14px 12px; font-size: 13px; }
     table { font-size: 13px; }
   }
 
@@ -1975,21 +1978,25 @@ Challenge: ${text}`
       </div>
 
       <div style={{ flex: 1, paddingBottom: "var(--space-16)" }}>
-        <div className="content-container-sm" style={{ paddingTop: "var(--space-8)", paddingBottom: "var(--space-8)" }}>
+        <div className="content-container-sm" style={{ paddingTop: "var(--space-10)", paddingBottom: "var(--space-10)" }}>
 
           {/* Challenge header */}
-          <div className="anim-fade-up" style={{ marginBottom: "var(--space-10)" }}>
-            <div style={{ display: "flex", alignItems: "flex-start", gap: "var(--space-4)", marginBottom: "var(--space-5)" }}>
-              <div style={{ width: 56, height: 56, borderRadius: "var(--radius-md)", background: "var(--color-accent-light)", border: "1px solid var(--color-accent-border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, fontWeight: 700, color: "var(--color-accent)", flexShrink: 0 }}>
+          <div className="anim-fade-up" style={{ marginBottom: "var(--space-12)" }}>
+            <div style={{ display: "flex", alignItems: "flex-start", gap: "var(--space-5)" }}>
+              <div style={{ width: 64, height: 64, borderRadius: "var(--radius-lg)", background: "var(--color-accent-light)", border: "1px solid var(--color-accent-border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28, fontWeight: 700, color: "var(--color-accent)", flexShrink: 0 }}>
                 {pick?.icon}
               </div>
-              <div style={{ flex: 1 }}>
-                <h1 style={{ fontSize: "var(--font-size-xl)", fontWeight: 800, color: "var(--color-text-primary)", marginBottom: "var(--space-2)", letterSpacing: "-0.02em" }}>
+              <div style={{ flex: 1, paddingTop: "var(--space-2)" }}>
+                <h1 style={{ fontSize: "var(--font-size-2xl)", fontWeight: 800, color: "var(--color-text-primary)", marginBottom: "var(--space-3)", letterSpacing: "-0.03em", lineHeight: 1.2 }}>
                   {pick?.tag}
                 </h1>
-                <p style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-secondary)", lineHeight: 1.6 }}>
-                  {pick?.difficulty} difficulty · {pick?.time} · {pick?.xp} XP
-                </p>
+                <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", flexWrap: "wrap" }}>
+                  <span style={{ fontSize: "var(--font-size-xs)", fontWeight: 600, color: "var(--color-text-secondary)", textTransform: "uppercase", letterSpacing: "0.05em" }}>{pick?.difficulty}</span>
+                  <span style={{ width: 4, height: 4, borderRadius: "50%", background: "var(--color-text-tertiary)" }} />
+                  <span style={{ fontSize: "var(--font-size-xs)", color: "var(--color-text-tertiary)" }}>{pick?.time}</span>
+                  <span style={{ width: 4, height: 4, borderRadius: "50%", background: "var(--color-text-tertiary)" }} />
+                  <span style={{ fontSize: "var(--font-size-xs)", fontWeight: 600, color: "var(--color-warning)" }}>{pick?.xp} XP</span>
+                </div>
               </div>
             </div>
           </div>
@@ -1998,11 +2005,11 @@ Challenge: ${text}`
           {loading ? (
             <SkeletonChallenge />
           ) : error ? (
-            <div style={{ padding: "var(--space-6)", background: "var(--color-error-light)", border: "1px solid var(--color-error-border)", borderRadius: "var(--radius-lg)", color: "var(--color-error)", lineHeight: 1.7 }}>
+            <div style={{ padding: "var(--space-6)", background: "var(--color-error-light)", border: "1px solid var(--color-error-border)", borderRadius: "var(--radius-lg)", color: "var(--color-error)", lineHeight: 1.8, fontSize: "var(--font-size-sm)" }}>
               {error}
             </div>
           ) : (
-            <div className="card anim-fade-up-1" style={{ marginBottom: "var(--space-8)", lineHeight: 1.8 }}>
+            <div className="card anim-fade-up-1" style={{ marginBottom: "var(--space-10)", lineHeight: 1.9, fontSize: "var(--font-size-base)" }}>
               {renderChallenge(challengeText)}
             </div>
           )}
