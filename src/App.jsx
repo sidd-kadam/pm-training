@@ -24,7 +24,7 @@ const CHALLENGES = {
     { tag: "Prioritization", color: "#6366F1", icon: "P", xp: 50, difficulty: "Medium", time: "10 min", type: "quiz",
       hint: { framework: "RICE or MoSCoW", steps: ["Name your framework and justify the choice","Score each backlog item — don't just list them","Address the compliance deadline and churn risk explicitly","End with a ranked list and what gets cut if capacity runs out"], watch: "Describing features ≠ prioritizing them. Defend every trade-off." },
       prompt: `B2B SaaS prioritization challenge for a junior PM. Include: company context (ARR, customer count), 5 backlog items with effort/value estimates, sprint constraint + 1 enterprise churn risk + 1 compliance deadline. Ask: prioritize using a framework. Be specific and concise.` },
-    { tag: "Metrics", color: "#3B82F6", icon: "M", xp: 50, difficulty: "Medium", time: "10 min", type: "quiz",
+    { tag: "Metrics", color: "#3B82F6", icon: "📊", xp: 50, difficulty: "Medium", time: "10 min", type: "quiz",
       hint: { framework: "Diagnose → Hypothesize → Measure", steps: ["Describe what you observe in the data first","Generate 2-3 root cause hypotheses","Identify what data is missing","Define 2-3 metrics you'd add to the dashboard"], watch: "Never diagnose from a single data point. Ask: what else would I need to know?" },
       prompt: `B2B platform metrics challenge for a junior PM. Show a 4-metric text dashboard with one red herring. Something is wrong (API errors, adoption drop, or ticket spike). Ask: diagnose the root cause and plan next steps. Be concise.` },
     { tag: "Stakeholder", color: "#10B981", icon: "S", xp: 50, difficulty: "Medium", time: "10 min", type: "quiz",
@@ -50,7 +50,7 @@ const CHALLENGES = {
     { tag: "Prioritization", color: "#6366F1", icon: "P", xp: 50, difficulty: "Medium", time: "10 min", type: "quiz",
       hint: { framework: "RICE or Impact vs Effort", steps: ["State your framework and why it fits B2C","Consider user volume, engagement, and retention for each item","Factor in competitor timing and seasonal context","Give a final ranked order and what gets cut"], watch: "B2C is about user love at scale. Delight is a valid business metric." },
       prompt: `B2C mobile app prioritization challenge for a junior PM. Consumer app with 5 backlog items, a competitor just launched a similar feature. Ask: prioritize using a framework. Be concise.` },
-    { tag: "Metrics", color: "#3B82F6", icon: "M", xp: 50, difficulty: "Medium", time: "10 min", type: "quiz",
+    { tag: "Metrics", color: "#3B82F6", icon: "📊", xp: 50, difficulty: "Medium", time: "10 min", type: "quiz",
       hint: { framework: "AARRR Funnel", steps: ["Map each metric to its funnel stage","Identify the biggest drop-off point","Form 2-3 hypotheses for the drop-off","Pick one metric to fix first and defend the choice"], watch: "Find the leak in the funnel. One metric in isolation tells you nothing." },
       prompt: `B2C consumer app metrics challenge for a junior PM. Funnel problem with 5 fake metrics, one red herring. Ask: diagnose the funnel and recommend one focus area. Be concise.` },
     { tag: "Growth", color: "#10B981", icon: "G", xp: 50, difficulty: "Medium", time: "10 min", type: "quiz",
@@ -436,9 +436,9 @@ const CSS = `
   }
 
   /* ── Table ── */
-  table { width: 100%; border-collapse: collapse; }
+  table { width: 100%; border-collapse: collapse; table-layout: auto; }
   th {
-    padding: 12px var(--space-4);
+    padding: 14px var(--space-4);
     text-align: left;
     font-size: 12px;
     font-weight: 700;
@@ -446,16 +446,23 @@ const CSS = `
     border-bottom: 1px solid var(--color-border);
     letter-spacing: 0.03em;
     text-transform: uppercase;
+    word-break: break-word;
   }
   td {
-    padding: 13px var(--space-4);
+    padding: 14px var(--space-4);
     border-bottom: 1px solid var(--color-border);
     color: var(--color-text-primary);
-    vertical-align: top;
+    vertical-align: middle;
     font-size: var(--font-size-sm);
+    line-height: 1.6;
+    word-break: break-word;
   }
   tr:last-child td { border-bottom: none; }
   tr:hover td { background: var(--color-bg); }
+  @media (max-width: 768px) {
+    th, td { padding: 12px 10px; font-size: 13px; }
+    table { font-size: 13px; }
+  }
 
   /* ── Scrollbar ── */
   ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -711,16 +718,44 @@ const CSS = `
   .nav-tab.active { background: var(--color-accent-light); color: var(--color-accent); }
 
   /* ── Responsive ── */
-  @media (max-width: 640px) {
-    .hide-mobile { display: none !important; }
-    .stack-mobile { flex-direction: column !important; }
-    .full-mobile { width: 100% !important; }
+  @media (max-width: 768px) {
     .content-container, .content-container-sm {
       padding: 0 var(--space-5);
     }
     .topbar-inner {
       padding: var(--space-4) var(--space-5);
+      gap: var(--space-2);
     }
+    .card { padding: var(--space-5); }
+    .btn { padding: 10px var(--space-3); font-size: var(--font-size-xs); }
+    .btn-lg { padding: 11px var(--space-4); font-size: var(--font-size-sm); }
+  }
+  @media (max-width: 640px) {
+    .hide-mobile { display: none !important; }
+    .stack-mobile { flex-direction: column !important; }
+    .full-mobile { width: 100% !important; }
+    .content-container, .content-container-sm {
+      padding: 0 var(--space-4);
+    }
+    .topbar-inner {
+      padding: var(--space-3) var(--space-4);
+      gap: var(--space-2);
+      height: auto;
+      flex-wrap: wrap;
+    }
+    .logo-text { font-size: 14px; }
+    .card { padding: var(--space-4); }
+    .btn { padding: 9px var(--space-3); font-size: var(--font-size-xs); }
+    .btn-lg { padding: 10px var(--space-3); font-size: var(--font-size-xs); }
+    .challenge-node { flex-direction: column; gap: var(--space-3); }
+    .mcq-option { padding: var(--space-3) var(--space-4); font-size: var(--font-size-xs); }
+    .badge { font-size: 11px; padding: 4px 10px; }
+    .streak-counter { font-size: 11px; padding: 5px 10px; }
+    table { font-size: 12px; }
+    th, td { padding: 10px 8px; }
+    .lb-row { padding: 10px var(--space-2); gap: var(--space-2); }
+    .lb-rank { width: 28px; height: 28px; font-size: 12px; }
+    .pricing-card { padding: var(--space-4); }
   }
 `;
 
@@ -1940,20 +1975,20 @@ Challenge: ${text}`
       </div>
 
       <div style={{ flex: 1, paddingBottom: "var(--space-16)" }}>
-        <div className="content-container-sm" style={{ paddingTop: "var(--space-10)" }}>
+        <div className="content-container-sm" style={{ paddingTop: "var(--space-8)", paddingBottom: "var(--space-8)" }}>
 
           {/* Challenge header */}
-          <div className="anim-fade-up" style={{ marginBottom: "var(--space-8)" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", marginBottom: "var(--space-4)" }}>
-              <div style={{ width: 48, height: 48, borderRadius: "var(--radius-md)", background: "var(--color-accent-light)", border: "1px solid var(--color-accent-border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, fontWeight: 700, color: "var(--color-accent)" }}>
+          <div className="anim-fade-up" style={{ marginBottom: "var(--space-10)" }}>
+            <div style={{ display: "flex", alignItems: "flex-start", gap: "var(--space-4)", marginBottom: "var(--space-5)" }}>
+              <div style={{ width: 56, height: 56, borderRadius: "var(--radius-md)", background: "var(--color-accent-light)", border: "1px solid var(--color-accent-border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, fontWeight: 700, color: "var(--color-accent)", flexShrink: 0 }}>
                 {pick?.icon}
               </div>
-              <div>
-                <h1 style={{ fontSize: "var(--font-size-lg)", fontWeight: 700, color: "var(--color-text-primary)" }}>
+              <div style={{ flex: 1 }}>
+                <h1 style={{ fontSize: "var(--font-size-xl)", fontWeight: 800, color: "var(--color-text-primary)", marginBottom: "var(--space-2)", letterSpacing: "-0.02em" }}>
                   {pick?.tag}
                 </h1>
-                <p style={{ fontSize: 13, color: "var(--color-text-tertiary)", marginTop: 4 }}>
-                  {pick?.difficulty} · {pick?.time}
+                <p style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-secondary)", lineHeight: 1.6 }}>
+                  {pick?.difficulty} difficulty · {pick?.time} · {pick?.xp} XP
                 </p>
               </div>
             </div>
@@ -1963,11 +1998,11 @@ Challenge: ${text}`
           {loading ? (
             <SkeletonChallenge />
           ) : error ? (
-            <div style={{ padding: "var(--space-6)", background: "var(--color-error-light)", border: "1px solid var(--color-error-border)", borderRadius: "var(--radius-lg)", color: "var(--color-error)" }}>
+            <div style={{ padding: "var(--space-6)", background: "var(--color-error-light)", border: "1px solid var(--color-error-border)", borderRadius: "var(--radius-lg)", color: "var(--color-error)", lineHeight: 1.7 }}>
               {error}
             </div>
           ) : (
-            <div className="card anim-fade-up-1" style={{ marginBottom: "var(--space-6)" }}>
+            <div className="card anim-fade-up-1" style={{ marginBottom: "var(--space-8)", lineHeight: 1.8 }}>
               {renderChallenge(challengeText)}
             </div>
           )}
