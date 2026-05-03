@@ -1136,6 +1136,10 @@ export default function PMApp() {
   async function openChallenge(idx) {
     if (isGuest && idx > 0) return;
     const chosen = CHALLENGES[track][idx];
+    if (!chosen) {
+      showToast("Challenge not found.", "error");
+      return;
+    }
     setPick(chosen); setCurrentIdx(idx); setHintOpen(false);
     setLoading(true); setError("");
     setChallengeText(""); setAnswer(""); setOpenAnswer("");
@@ -1143,6 +1147,9 @@ export default function PMApp() {
     setScreen("challenge");
     try {
       const text = await callClaude(`You are a ${track} PM coach. Generate a concise, realistic, specific challenge.`, chosen.prompt);
+      if (!text || text.trim().length === 0) {
+        throw new Error("Failed to generate challenge text");
+      }
       setChallengeText(text);
 
       if (chosen.type === "quiz") {
@@ -1158,17 +1165,30 @@ The correct answer must appear exactly as written in the options array.
 
 Challenge: ${text}`
           );
+          if (!mcqRaw || mcqRaw.trim().length === 0) {
+            throw new Error("Empty MCQ response");
+          }
           const clean = mcqRaw.replace(/```json|```/g, "").trim();
           const parsed = JSON.parse(clean);
+          if (!parsed.options || !Array.isArray(parsed.options) || parsed.options.length !== 4) {
+            throw new Error("Invalid MCQ options format");
+          }
+          if (!parsed.correct || typeof parsed.correct !== "string") {
+            throw new Error("Invalid correct answer");
+          }
           setMcqOptions(parsed.options);
           setMcqCorrect(parsed.correct);
-        } catch (_) {
+        } catch (e) {
+          console.error("MCQ generation error:", e);
           setMcqOptions([]); setMcqCorrect(null);
         }
       }
     } catch (e) {
-      setError(e.message);
+      console.error("Challenge loading error:", e);
+      setError(e.message || "Failed to load challenge");
       showToast("Failed to load challenge. Please try again.", "error");
+      setLoading(false);
+      return;
     }
     setLoading(false);
   }
@@ -1548,7 +1568,7 @@ Challenge: ${text}`
             {/* Streak counter */}
             {streak > 0 && (
               <div className="streak-counter">
-                <span style={{ fontSize: 13 }}>Streak</span>
+                <span style={{ fontSize: 13 }}>🔥</span>
                 <span style={{ fontWeight: 800 }}>{streak}</span>
               </div>
             )}
@@ -1559,6 +1579,11 @@ Challenge: ${text}`
               </div>
             )}
             {isGuest && <span className="badge badge-neutral">Guest</span>}
+            {!isGuest && (
+              <button className="btn btn-ghost btn-sm" onClick={() => { storageSet("pm_auth", ""); setScreen("login"); setIsGuest(false); }} title="Sign out">
+                Sign out
+              </button>
+            )}
           </div>
         </div>
       </div>
