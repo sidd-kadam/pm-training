@@ -21,54 +21,54 @@ const TIER_FEATURES = {
 // ── Challenge data ─────────────────────────────────────────────────────────
 const CHALLENGES = {
   B2B: [
-    { tag: "Prioritization", color: "#6366F1", icon: "⚖️", xp: 50, difficulty: "Medium", time: "10 min", type: "quiz",
+    { tag: "Prioritization", color: "#6366F1", icon: "P", xp: 50, difficulty: "Medium", time: "10 min", type: "quiz",
       hint: { framework: "RICE or MoSCoW", steps: ["Name your framework and justify the choice","Score each backlog item — don't just list them","Address the compliance deadline and churn risk explicitly","End with a ranked list and what gets cut if capacity runs out"], watch: "Describing features ≠ prioritizing them. Defend every trade-off." },
       prompt: `B2B SaaS prioritization challenge for a junior PM. Include: company context (ARR, customer count), 5 backlog items with effort/value estimates, sprint constraint + 1 enterprise churn risk + 1 compliance deadline. Ask: prioritize using a framework. Be specific and concise.` },
-    { tag: "Metrics", color: "#3B82F6", icon: "📊", xp: 50, difficulty: "Medium", time: "10 min", type: "quiz",
+    { tag: "Metrics", color: "#3B82F6", icon: "M", xp: 50, difficulty: "Medium", time: "10 min", type: "quiz",
       hint: { framework: "Diagnose → Hypothesize → Measure", steps: ["Describe what you observe in the data first","Generate 2-3 root cause hypotheses","Identify what data is missing","Define 2-3 metrics you'd add to the dashboard"], watch: "Never diagnose from a single data point. Ask: what else would I need to know?" },
       prompt: `B2B platform metrics challenge for a junior PM. Show a 4-metric text dashboard with one red herring. Something is wrong (API errors, adoption drop, or ticket spike). Ask: diagnose the root cause and plan next steps. Be concise.` },
-    { tag: "Stakeholder", color: "#10B981", icon: "🤝", xp: 50, difficulty: "Medium", time: "10 min", type: "quiz",
+    { tag: "Stakeholder", color: "#10B981", icon: "S", xp: 50, difficulty: "Medium", time: "10 min", type: "quiz",
       hint: { framework: "Understand → Align → Decide", steps: ["Find what each stakeholder truly wants beneath their stated position","Spot any shared goals or constraints","Make a concrete decision — don't sit on the fence","State who gets which message and how"], watch: "PMs decide. They don't just mediate. End with a clear recommendation." },
       prompt: `B2B stakeholder conflict for a junior PM. 2-3 stakeholders with conflicting goals, distinct motivations, 1 hard sprint deadline. Ask: how do you navigate this and what gets built? Be concise.` },
-    { tag: "Strategy", color: "#8B5CF6", icon: "🎯", xp: 150, difficulty: "Hard", time: "15 min", type: "case_study",
+    { tag: "Strategy", color: "#8B5CF6", icon: "T", xp: 150, difficulty: "Hard", time: "15 min", type: "case_study",
       hint: { framework: "Situation → Options → Recommendation", steps: ["Summarize the core tension in 1-2 sentences","Name 2-3 strategic options","Pick one and defend it with business reasoning","Explicitly state what you would NOT do and why"], watch: "Every strategy needs a trade-off. What are you giving up?" },
       prompt: `B2B product strategy challenge for a junior PM. Company at a crossroads with fake market data and real constraints. Ask: what is your strategy and what would you NOT do? Be concise.` },
-    { tag: "Execution", color: "#F59E0B", icon: "⚡", xp: 50, difficulty: "Medium", time: "10 min", type: "quiz",
+    { tag: "Execution", color: "#F59E0B", icon: "E", xp: 50, difficulty: "Medium", time: "10 min", type: "quiz",
       hint: { framework: "Triage → Communicate → Adapt", steps: ["What is most critical in the next 2 hours?","Who do you talk to and in what order?","What do you cut or defer?","How do you run the retrospective after?"], watch: "Focus and communicate. Not heroics. A clear mind beats a busy one." },
       prompt: `B2B sprint execution crisis for a junior PM. Mid-sprint blocker, sprint goal at risk, one panicking stakeholder. Ask: walk through your response step by step. Be concise.` },
-    { tag: "Estimation", color: "#EF4444", icon: "🔢", xp: 150, difficulty: "Hard", time: "15 min", type: "estimation",
+    { tag: "Estimation", color: "#EF4444", icon: "Est", xp: 150, difficulty: "Hard", time: "15 min", type: "estimation",
       hint: { framework: "Fermi Estimation", steps: ["Break the problem into components","Estimate each component independently","Sanity-check your answer against known benchmarks","State your assumptions clearly"], watch: "The method matters more than the number. Show your logic." },
       prompt: `B2B market sizing Fermi challenge for a junior PM. Ask them to estimate the total addressable market for a B2B SaaS tool in India (e.g., project management, HR software, or CRM). Provide some anchor data points. Ask them to break down their reasoning step by step. Be concise.` },
-    { tag: "Roleplay", color: "#06B6D4", icon: "🎭", xp: 150, difficulty: "Hard", time: "15 min", type: "roleplay",
+    { tag: "Roleplay", color: "#06B6D4", icon: "RP", xp: 150, difficulty: "Hard", time: "15 min", type: "roleplay",
       hint: { framework: "Navigate Without Authority", steps: ["Understand the stakeholder's underlying concern","Find common ground before disagreeing","Propose a data-driven path forward","Commit to a next step with a timeline"], watch: "You cannot command. You must influence. Lead with empathy, end with clarity." },
       prompt: `B2B roleplay: You are a PM. I am a senior engineer who believes the roadmap is wrong and is threatening to escalate to the CTO. I think the feature you're pushing is technically risky and will create 6 months of debt. You need to navigate this without formal authority. Generate the opening scenario and ask the PM how they respond. Be concise.` },
-    { tag: "Debate", color: "#F97316", icon: "💬", xp: 150, difficulty: "Hard", time: "15 min", type: "debate",
+    { tag: "Debate", color: "#F97316", icon: "D", xp: 150, difficulty: "Hard", time: "15 min", type: "debate",
       hint: { framework: "Argue a Position", steps: ["State your position clearly in the first sentence","Use 2-3 specific, concrete arguments","Acknowledge the strongest counterargument","Reinforce your conclusion"], watch: "Fence-sitting loses debates. Pick a side and defend it with conviction." },
       prompt: `B2B debate challenge: The motion is "B2B PMs should write technical specs, not just PRDs." Ask the user to argue FOR this position with specific reasoning. Evaluate the strength of their argument, not just whether they agree. Be concise.` },
   ],
   B2C: [
-    { tag: "Prioritization", color: "#6366F1", icon: "⚖️", xp: 50, difficulty: "Medium", time: "10 min", type: "quiz",
+    { tag: "Prioritization", color: "#6366F1", icon: "P", xp: 50, difficulty: "Medium", time: "10 min", type: "quiz",
       hint: { framework: "RICE or Impact vs Effort", steps: ["State your framework and why it fits B2C","Consider user volume, engagement, and retention for each item","Factor in competitor timing and seasonal context","Give a final ranked order and what gets cut"], watch: "B2C is about user love at scale. Delight is a valid business metric." },
       prompt: `B2C mobile app prioritization challenge for a junior PM. Consumer app with 5 backlog items, a competitor just launched a similar feature. Ask: prioritize using a framework. Be concise.` },
-    { tag: "Metrics", color: "#3B82F6", icon: "📊", xp: 50, difficulty: "Medium", time: "10 min", type: "quiz",
+    { tag: "Metrics", color: "#3B82F6", icon: "M", xp: 50, difficulty: "Medium", time: "10 min", type: "quiz",
       hint: { framework: "AARRR Funnel", steps: ["Map each metric to its funnel stage","Identify the biggest drop-off point","Form 2-3 hypotheses for the drop-off","Pick one metric to fix first and defend the choice"], watch: "Find the leak in the funnel. One metric in isolation tells you nothing." },
       prompt: `B2C consumer app metrics challenge for a junior PM. Funnel problem with 5 fake metrics, one red herring. Ask: diagnose the funnel and recommend one focus area. Be concise.` },
-    { tag: "Growth", color: "#10B981", icon: "🚀", xp: 50, difficulty: "Medium", time: "10 min", type: "quiz",
+    { tag: "Growth", color: "#10B981", icon: "G", xp: 50, difficulty: "Medium", time: "10 min", type: "quiz",
       hint: { framework: "Growth Loops", steps: ["Identify which growth loop is broken or missing","Pick ONE lever to pull — don't try to fix everything","Define how you'd measure if your fix worked","Estimate the impact in user numbers or revenue"], watch: "Growth is a system. Fix the loop. Don't just add features." },
       prompt: `B2C growth challenge for a junior PM. Consumer app growth has plateaued with fake metrics showing the problem and limited engineering capacity. Ask: what single growth lever would you pull and why? Be concise.` },
-    { tag: "User Research", color: "#8B5CF6", icon: "🔍", xp: 50, difficulty: "Medium", time: "10 min", type: "quiz",
+    { tag: "User Research", color: "#8B5CF6", icon: "UR", xp: 50, difficulty: "Medium", time: "10 min", type: "quiz",
       hint: { framework: "Jobs To Be Done", steps: ["Identify the job each user hires the product to do","Find the gap between expectation and experience","Separate genuine pain points from nice-to-haves","Recommend what to build and what to ignore"], watch: "Focus on what users DO, not what they SAY. Behaviour beats words." },
       prompt: `B2C user research challenge for a junior PM. 3 user types giving conflicting qualitative feedback on the same feature area. Ask: synthesize the feedback and decide what to build. Be concise.` },
-    { tag: "Execution", color: "#F59E0B", icon: "⚡", xp: 50, difficulty: "Medium", time: "10 min", type: "quiz",
+    { tag: "Execution", color: "#F59E0B", icon: "E", xp: 50, difficulty: "Medium", time: "10 min", type: "quiz",
       hint: { framework: "Triage → Communicate → Ship", steps: ["What is breaking user experience RIGHT NOW?","Hotfix immediately or wait for proper fix — pick one and justify","Communicate to users if the issue is visible to them","Define what resolved looks like and how you'll confirm it"], watch: "B2C crises are public. Users tweet. Think about user communication, not just internal teams." },
       prompt: `B2C app execution crisis for a junior PM. Consumer-facing incident with public user impact and social media pressure, engineering says 4 hours to fix. Ask: how does the PM handle this step by step? Be concise.` },
-    { tag: "Estimation", color: "#EF4444", icon: "🔢", xp: 150, difficulty: "Hard", time: "15 min", type: "estimation",
+    { tag: "Estimation", color: "#EF4444", icon: "Est", xp: 150, difficulty: "Hard", time: "15 min", type: "estimation",
       hint: { framework: "Fermi Estimation", steps: ["Break the problem into components","Estimate each component independently","Sanity-check your answer against known benchmarks","State your assumptions clearly"], watch: "The method matters more than the number. Show your logic." },
       prompt: `B2C market sizing Fermi challenge for a junior PM. Ask them to estimate the number of daily active users a food delivery app in a Tier-1 Indian city could realistically achieve in year 2. Provide some anchor data points about the city. Ask them to break down their reasoning step by step. Be concise.` },
-    { tag: "Roleplay", color: "#06B6D4", icon: "🎭", xp: 150, difficulty: "Hard", time: "15 min", type: "roleplay",
+    { tag: "Roleplay", color: "#06B6D4", icon: "RP", xp: 150, difficulty: "Hard", time: "15 min", type: "roleplay",
       hint: { framework: "Navigate Without Authority", steps: ["Understand the stakeholder's underlying concern","Find common ground before disagreeing","Propose a data-driven path forward","Commit to a next step with a timeline"], watch: "You cannot command. You must influence. Lead with empathy, end with clarity." },
       prompt: `B2C roleplay: You are a PM at a consumer app. I am a data scientist who insists the A/B test you want to run is statistically invalid and will produce misleading results. I'm refusing to help set it up. You need to convince me or find another path. Generate the opening scenario and ask the PM how they respond. Be concise.` },
-    { tag: "Debate", color: "#F97316", icon: "💬", xp: 150, difficulty: "Hard", time: "15 min", type: "debate",
+    { tag: "Debate", color: "#F97316", icon: "D", xp: 150, difficulty: "Hard", time: "15 min", type: "debate",
       hint: { framework: "Argue a Position", steps: ["State your position clearly in the first sentence","Use 2-3 specific, concrete arguments","Acknowledge the strongest counterargument","Reinforce your conclusion"], watch: "Fence-sitting loses debates. Pick a side and defend it with conviction." },
       prompt: `B2C debate challenge: The motion is "B2C PMs should prioritize retention over acquisition in year 1." Ask the user to argue FOR this position with specific reasoning. Evaluate the strength of their argument, not just whether they agree. Be concise.` },
   ]
@@ -130,30 +130,30 @@ const CSS = `
 
   :root {
     /* Colors */
-    --color-bg: #F9FAFB;
+    --color-bg: #FAFBFC;
     --color-surface: #FFFFFF;
-    --color-border: #E5E7EB;
-    --color-border-strong: #D1D5DB;
+    --color-border: #E8EAED;
+    --color-border-strong: #D9DCE0;
 
-    --color-text-primary: #111827;
-    --color-text-secondary: #4B5563;
-    --color-text-tertiary: #9CA3AF;
+    --color-text-primary: #1A1A1A;
+    --color-text-secondary: #525252;
+    --color-text-tertiary: #A0A0A0;
     --color-text-inverse: #FFFFFF;
 
-    --color-accent: #6366F1;
-    --color-accent-hover: #4F46E5;
-    --color-accent-light: #EEF2FF;
-    --color-accent-border: #C7D2FE;
+    --color-accent: #5B5BFF;
+    --color-accent-hover: #4A4AE8;
+    --color-accent-light: #F0F0FF;
+    --color-accent-border: #D9D9FF;
 
-    --color-success: #10B981;
-    --color-success-light: #ECFDF5;
-    --color-success-border: #A7F3D0;
+    --color-success: #0D8B4F;
+    --color-success-light: #EEF9F5;
+    --color-success-border: #B3E5D1;
 
-    --color-warning: #F59E0B;
-    --color-warning-light: #FFFBEB;
-    --color-warning-border: #FDE68A;
+    --color-warning: #D97706;
+    --color-warning-light: #FEF6E8;
+    --color-warning-border: #FDD9A3;
 
-    --color-error: #EF4444;
+    --color-error: #DC2626;
     --color-error-light: #FEF2F2;
     --color-error-border: #FECACA;
 
@@ -171,27 +171,27 @@ const CSS = `
 
     /* Typography */
     --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --font-size-xs: 11px;
-    --font-size-sm: 13px;
-    --font-size-base: 15px;
-    --font-size-md: 16px;
-    --font-size-lg: 18px;
-    --font-size-xl: 22px;
-    --font-size-2xl: 28px;
-    --font-size-3xl: 36px;
+    --font-size-xs: 12px;
+    --font-size-sm: 14px;
+    --font-size-base: 16px;
+    --font-size-md: 17px;
+    --font-size-lg: 20px;
+    --font-size-xl: 24px;
+    --font-size-2xl: 32px;
+    --font-size-3xl: 40px;
 
     /* Radius */
-    --radius-sm: 6px;
-    --radius-md: 10px;
-    --radius-lg: 14px;
-    --radius-xl: 20px;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
     --radius-full: 9999px;
 
     /* Shadows */
-    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -1px rgba(0,0,0,0.04);
-    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -2px rgba(0,0,0,0.04);
-    --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 12px 24px rgba(0,0,0,0.1);
+    --shadow-xl: 0 20px 40px rgba(0,0,0,0.12);
 
     /* Transitions */
     --transition-fast: 100ms ease;
@@ -206,8 +206,8 @@ const CSS = `
     -moz-osx-font-smoothing: grayscale;
     color: var(--color-text-primary);
     font-size: var(--font-size-base);
-    line-height: 1.6;
-    letter-spacing: -0.011em;
+    line-height: 1.7;
+    letter-spacing: -0.005em;
   }
 
   ::selection { background: var(--color-accent-light); color: var(--color-accent); }
@@ -218,7 +218,7 @@ const CSS = `
 
   /* ── Animations ── */
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
+    from { opacity: 0; transform: translateY(20px); }
     to   { opacity: 1; transform: translateY(0); }
   }
   @keyframes fadeIn {
@@ -227,7 +227,7 @@ const CSS = `
   }
   @keyframes spin { to { transform: rotate(360deg); } }
   @keyframes popIn {
-    0%   { transform: scale(0.96); opacity: 0; }
+    0%   { transform: scale(0.95); opacity: 0; }
     100% { transform: scale(1); opacity: 1; }
   }
   @keyframes slideDown {
@@ -246,23 +246,15 @@ const CSS = `
     from { opacity: 0; transform: translateY(16px) scale(0.96); }
     to   { opacity: 1; transform: translateY(0) scale(1); }
   }
-  @keyframes progressFill {
-    from { width: 0%; }
-    to   { width: var(--target-width); }
-  }
-  @keyframes streakPulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.08); }
-  }
 
-  .anim-fade-up   { animation: fadeUp 0.45s cubic-bezier(0.16,1,0.3,1) both; }
-  .anim-fade-up-1 { animation: fadeUp 0.45s 0.06s cubic-bezier(0.16,1,0.3,1) both; }
-  .anim-fade-up-2 { animation: fadeUp 0.45s 0.12s cubic-bezier(0.16,1,0.3,1) both; }
-  .anim-fade-up-3 { animation: fadeUp 0.45s 0.18s cubic-bezier(0.16,1,0.3,1) both; }
-  .anim-fade-up-4 { animation: fadeUp 0.45s 0.24s cubic-bezier(0.16,1,0.3,1) both; }
-  .anim-pop-in    { animation: popIn 0.35s cubic-bezier(0.16,1,0.3,1) both; }
-  .anim-slide-down { animation: slideDown 0.3s cubic-bezier(0.16,1,0.3,1) both; }
-  .spinner        { animation: spin 0.7s linear infinite; }
+  .anim-fade-up   { animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both; }
+  .anim-fade-up-1 { animation: fadeUp 0.5s 0.08s cubic-bezier(0.16,1,0.3,1) both; }
+  .anim-fade-up-2 { animation: fadeUp 0.5s 0.16s cubic-bezier(0.16,1,0.3,1) both; }
+  .anim-fade-up-3 { animation: fadeUp 0.5s 0.24s cubic-bezier(0.16,1,0.3,1) both; }
+  .anim-fade-up-4 { animation: fadeUp 0.5s 0.32s cubic-bezier(0.16,1,0.3,1) both; }
+  .anim-pop-in    { animation: popIn 0.4s cubic-bezier(0.16,1,0.3,1) both; }
+  .anim-slide-down { animation: slideDown 0.35s cubic-bezier(0.16,1,0.3,1) both; }
+  .spinner        { animation: spin 0.8s linear infinite; }
 
   /* ── Layout ── */
   .page-container {
@@ -275,13 +267,13 @@ const CSS = `
     max-width: 720px;
     margin: 0 auto;
     width: 100%;
-    padding: 0 var(--space-5);
+    padding: 0 var(--space-6);
   }
   .content-container-sm {
     max-width: 480px;
     margin: 0 auto;
     width: 100%;
-    padding: 0 var(--space-5);
+    padding: 0 var(--space-6);
   }
 
   /* ── Topbar ── */
@@ -291,21 +283,21 @@ const CSS = `
     position: sticky;
     top: 0;
     z-index: 100;
-    backdrop-filter: blur(8px);
-    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(10px);
+    background: rgba(255,255,255,0.95);
   }
   .topbar-inner {
     max-width: 720px;
     margin: 0 auto;
-    padding: var(--space-3) var(--space-5);
+    padding: var(--space-4) var(--space-6);
     display: flex;
     align-items: center;
-    gap: var(--space-3);
-    height: 56px;
+    gap: var(--space-4);
+    height: 60px;
   }
   .logo-mark {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border-radius: var(--radius-md);
     background: var(--color-text-primary);
     display: flex;
@@ -325,7 +317,7 @@ const CSS = `
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
-    padding: var(--space-5);
+    padding: var(--space-6);
   }
 
   /* ── Buttons ── */
@@ -339,15 +331,15 @@ const CSS = `
     transition: all var(--transition-base);
     white-space: nowrap;
     font-size: var(--font-size-sm);
-    padding: 8px var(--space-4);
+    padding: 10px var(--space-4);
     letter-spacing: -0.01em;
   }
-  .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
   .btn-primary {
     background: var(--color-text-primary);
     color: var(--color-text-inverse);
   }
-  .btn-primary:hover:not(:disabled) { background: #1F2937; }
+  .btn-primary:hover:not(:disabled) { background: #2A2A2A; }
   .btn-secondary {
     background: var(--color-surface);
     color: var(--color-text-primary);
@@ -364,22 +356,23 @@ const CSS = `
     color: var(--color-text-secondary);
   }
   .btn-ghost:hover:not(:disabled) { background: var(--color-bg); color: var(--color-text-primary); }
-  .btn-lg { padding: 11px var(--space-5); font-size: var(--font-size-base); }
-  .btn-sm { padding: 6px var(--space-3); font-size: var(--font-size-sm); }
+  .btn-lg { padding: 12px var(--space-5); font-size: var(--font-size-base); }
+  .btn-sm { padding: 8px var(--space-3); font-size: var(--font-size-xs); }
   .btn-full { width: 100%; }
 
   /* ── Inputs ── */
   .input {
     width: 100%;
-    padding: 10px var(--space-3);
-    border: 1.5px solid var(--color-border);
+    padding: 11px var(--space-4);
+    border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
     font-size: var(--font-size-sm);
     color: var(--color-text-primary);
     background: var(--color-surface);
     transition: border-color var(--transition-base);
+    line-height: 1.6;
   }
-  .input:focus { border-color: var(--color-accent); }
+  .input:focus { border-color: var(--color-accent); box-shadow: 0 0 0 3px var(--color-accent-light); }
   .input-error { border-color: var(--color-error) !important; }
   .label {
     display: block;
@@ -389,19 +382,19 @@ const CSS = `
     margin-bottom: var(--space-2);
   }
   .field-error {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--color-error);
-    margin-top: var(--space-1);
+    margin-top: var(--space-2);
   }
 
   /* ── Badges ── */
   .badge {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    font-size: 11px;
+    gap: 6px;
+    font-size: 12px;
     font-weight: 600;
-    padding: 3px 8px;
+    padding: 5px 12px;
     border-radius: var(--radius-sm);
     letter-spacing: 0.01em;
     white-space: nowrap;
@@ -421,7 +414,7 @@ const CSS = `
 
   /* ── Progress ── */
   .progress-track {
-    height: 6px;
+    height: 8px;
     background: var(--color-bg);
     border-radius: var(--radius-full);
     overflow: hidden;
@@ -438,33 +431,34 @@ const CSS = `
   .skeleton {
     background: linear-gradient(90deg, var(--color-bg) 25%, var(--color-border) 50%, var(--color-bg) 75%);
     background-size: 200% 100%;
-    animation: shimmer 1.4s infinite;
+    animation: shimmer 1.5s infinite;
     border-radius: var(--radius-sm);
   }
 
   /* ── Table ── */
   table { width: 100%; border-collapse: collapse; }
   th {
-    padding: 10px var(--space-3);
+    padding: 12px var(--space-4);
     text-align: left;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     color: var(--color-text-tertiary);
     border-bottom: 1px solid var(--color-border);
-    letter-spacing: 0.02em;
+    letter-spacing: 0.03em;
     text-transform: uppercase;
   }
   td {
-    padding: 11px var(--space-3);
+    padding: 13px var(--space-4);
     border-bottom: 1px solid var(--color-border);
     color: var(--color-text-primary);
     vertical-align: top;
+    font-size: var(--font-size-sm);
   }
   tr:last-child td { border-bottom: none; }
   tr:hover td { background: var(--color-bg); }
 
   /* ── Scrollbar ── */
-  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--color-border-strong); border-radius: var(--radius-full); }
   ::-webkit-scrollbar-thumb:hover { background: var(--color-text-tertiary); }
@@ -477,22 +471,22 @@ const CSS = `
     transform: translateX(-50%);
     background: var(--color-text-primary);
     color: var(--color-text-inverse);
-    padding: 12px var(--space-5);
-    border-radius: var(--radius-lg);
+    padding: 13px var(--space-5);
+    border-radius: var(--radius-md);
     font-size: var(--font-size-sm);
     font-weight: 500;
-    box-shadow: var(--shadow-xl);
+    box-shadow: var(--shadow-lg);
     z-index: 9999;
-    animation: toastIn 0.3s cubic-bezier(0.16,1,0.3,1) both;
+    animation: toastIn 0.35s cubic-bezier(0.16,1,0.3,1) both;
     display: flex;
     align-items: center;
-    gap: var(--space-2);
+    gap: var(--space-3);
     white-space: nowrap;
   }
 
   /* ── Track tabs ── */
   .track-tab {
-    padding: 8px var(--space-4);
+    padding: 9px var(--space-4);
     border-radius: var(--radius-md);
     font-size: var(--font-size-sm);
     font-weight: 600;
@@ -518,7 +512,7 @@ const CSS = `
     display: flex;
     align-items: flex-start;
     gap: var(--space-4);
-    padding: var(--space-4);
+    padding: var(--space-5);
     border-radius: var(--radius-lg);
     border: 1px solid var(--color-border);
     background: var(--color-surface);
@@ -530,7 +524,7 @@ const CSS = `
   .challenge-node:hover:not(.node-locked) {
     border-color: var(--color-border-strong);
     box-shadow: var(--shadow-md);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
   }
   .challenge-node.node-active {
     border-color: var(--color-accent-border);
@@ -538,7 +532,7 @@ const CSS = `
   }
   .challenge-node.node-active:hover {
     border-color: var(--color-accent);
-    box-shadow: 0 4px 12px rgba(99,102,241,0.15);
+    box-shadow: 0 8px 20px rgba(91,91,255,0.15);
   }
   .challenge-node.node-done {
     border-color: var(--color-success-border);
@@ -556,7 +550,7 @@ const CSS = `
     text-align: left;
     padding: var(--space-4) var(--space-5);
     border-radius: var(--radius-md);
-    border: 1.5px solid var(--color-border);
+    border: 1px solid var(--color-border);
     background: var(--color-surface);
     color: var(--color-text-primary);
     font-size: var(--font-size-sm);
@@ -568,7 +562,7 @@ const CSS = `
     gap: var(--space-3);
     font-family: var(--font-family);
     letter-spacing: -0.01em;
-    line-height: 1.55;
+    line-height: 1.6;
   }
   .mcq-option:hover:not(.mcq-revealed) {
     border-color: var(--color-accent);
@@ -608,33 +602,33 @@ const CSS = `
   .hint-step {
     display: flex;
     gap: var(--space-3);
-    padding: var(--space-2) 0;
+    padding: var(--space-3) 0;
     align-items: flex-start;
   }
   .hint-step-num {
-    width: 22px;
-    height: 22px;
+    width: 24px;
+    height: 24px;
     border-radius: var(--radius-full);
     background: var(--color-warning-light);
     border: 1px solid var(--color-warning-border);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     color: #92400E;
     flex-shrink: 0;
     margin-top: 2px;
   }
 
-  /* ── Feedback stars ── */
+  /* ── Star buttons ── */
   .star-btn {
-    width: 44px;
-    height: 44px;
+    width: 48px;
+    height: 48px;
     border-radius: var(--radius-md);
-    border: 1.5px solid var(--color-border);
+    border: 1px solid var(--color-border);
     background: var(--color-surface);
-    font-size: 18px;
+    font-size: 20px;
     cursor: pointer;
     transition: all var(--transition-base);
     display: flex;
@@ -648,17 +642,14 @@ const CSS = `
   .streak-counter {
     display: flex;
     align-items: center;
-    gap: 5px;
-    padding: 5px 10px;
+    gap: 6px;
+    padding: 6px 12px;
     border-radius: var(--radius-full);
-    background: #FFFBEB;
-    border: 1px solid #FDE68A;
-    font-size: var(--font-size-sm);
+    background: var(--color-warning-light);
+    border: 1px solid var(--color-warning-border);
+    font-size: var(--font-size-xs);
     font-weight: 700;
     color: #92400E;
-  }
-  .streak-counter.active {
-    animation: streakPulse 2s ease-in-out infinite;
   }
 
   /* ── Leaderboard ── */
@@ -666,7 +657,7 @@ const CSS = `
     display: flex;
     align-items: center;
     gap: var(--space-3);
-    padding: 10px var(--space-3);
+    padding: 12px var(--space-3);
     border-radius: var(--radius-md);
     transition: background var(--transition-base);
   }
@@ -678,22 +669,22 @@ const CSS = `
     bottom: 0;
   }
   .lb-rank {
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
     border-radius: var(--radius-full);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
     flex-shrink: 0;
   }
 
   /* ── Pricing cards ── */
   .pricing-card {
-    border: 1.5px solid var(--color-border);
+    border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
-    padding: var(--space-5);
+    padding: var(--space-6);
     background: var(--color-surface);
     transition: all var(--transition-base);
     cursor: pointer;
@@ -706,7 +697,7 @@ const CSS = `
     display: flex;
     align-items: center;
     gap: var(--space-2);
-    padding: 8px var(--space-3);
+    padding: 9px var(--space-4);
     border-radius: var(--radius-md);
     font-size: var(--font-size-sm);
     font-weight: 600;
@@ -725,10 +716,10 @@ const CSS = `
     .stack-mobile { flex-direction: column !important; }
     .full-mobile { width: 100% !important; }
     .content-container, .content-container-sm {
-      padding: 0 var(--space-4);
+      padding: 0 var(--space-5);
     }
     .topbar-inner {
-      padding: var(--space-3) var(--space-4);
+      padding: var(--space-4) var(--space-5);
     }
   }
 `;
@@ -758,7 +749,7 @@ function renderChallenge(text) {
     if (parsed.length === 0) { tableBuffer = []; inTable = false; return; }
     const [head, ...body] = parsed;
     result.push(
-      <div key={key} style={{ overflowX: "auto", margin: "var(--space-4) 0", borderRadius: "var(--radius-md)", border: "1px solid var(--color-border)" }}>
+      <div key={key} style={{ overflowX: "auto", margin: "var(--space-5) 0", borderRadius: "var(--radius-md)", border: "1px solid var(--color-border)" }}>
         <table>
           <thead>
             <tr>{head.map((h, i) => <th key={i}>{h}</th>)}</tr>
@@ -783,30 +774,30 @@ function renderChallenge(text) {
     if (inTable) flushTable(`t${i}`);
 
     if (!line.trim()) {
-      result.push(<div key={i} style={{ height: "var(--space-3)" }} />);
+      result.push(<div key={i} style={{ height: "var(--space-4)" }} />);
     } else if (line.startsWith("### ")) {
-      result.push(<h3 key={i} style={{ fontSize: "var(--font-size-base)", fontWeight: 700, color: "var(--color-text-primary)", margin: "var(--space-5) 0 var(--space-2)" }}>{inlineFormat(line.slice(4))}</h3>);
+      result.push(<h3 key={i} style={{ fontSize: "var(--font-size-base)", fontWeight: 700, color: "var(--color-text-primary)", margin: "var(--space-5) 0 var(--space-3)", lineHeight: 1.5 }}>{inlineFormat(line.slice(4))}</h3>);
     } else if (line.startsWith("## ")) {
-      result.push(<h2 key={i} style={{ fontSize: "var(--font-size-lg)", fontWeight: 700, color: "var(--color-text-primary)", margin: "var(--space-6) 0 var(--space-3)" }}>{inlineFormat(line.slice(3))}</h2>);
+      result.push(<h2 key={i} style={{ fontSize: "var(--font-size-lg)", fontWeight: 700, color: "var(--color-text-primary)", margin: "var(--space-6) 0 var(--space-4)", lineHeight: 1.4 }}>{inlineFormat(line.slice(3))}</h2>);
     } else if (line.startsWith("# ")) {
-      result.push(<h1 key={i} style={{ fontSize: "var(--font-size-xl)", fontWeight: 800, color: "var(--color-text-primary)", margin: "var(--space-6) 0 var(--space-3)" }}>{inlineFormat(line.slice(2))}</h1>);
+      result.push(<h1 key={i} style={{ fontSize: "var(--font-size-xl)", fontWeight: 800, color: "var(--color-text-primary)", margin: "var(--space-6) 0 var(--space-4)", lineHeight: 1.3 }}>{inlineFormat(line.slice(2))}</h1>);
     } else if (line.match(/^[-*] /)) {
       result.push(
-        <div key={i} style={{ display: "flex", gap: "var(--space-3)", margin: "var(--space-1) 0", alignItems: "flex-start" }}>
-          <span style={{ color: "var(--color-accent)", fontWeight: 700, marginTop: 2, flexShrink: 0 }}>·</span>
-          <span style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-secondary)", lineHeight: 1.65 }}>{inlineFormat(line.slice(2))}</span>
+        <div key={i} style={{ display: "flex", gap: "var(--space-3)", margin: "var(--space-2) 0", alignItems: "flex-start" }}>
+          <span style={{ color: "var(--color-accent)", fontWeight: 700, marginTop: 3, flexShrink: 0 }}>·</span>
+          <span style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-secondary)", lineHeight: 1.7 }}>{inlineFormat(line.slice(2))}</span>
         </div>
       );
     } else if (line.match(/^\d+\. /)) {
       const num = line.match(/^(\d+)\./)[1];
       result.push(
-        <div key={i} style={{ display: "flex", gap: "var(--space-3)", margin: "var(--space-1) 0", alignItems: "flex-start" }}>
-          <span style={{ color: "var(--color-accent)", fontWeight: 700, minWidth: 20, fontSize: "var(--font-size-sm)", marginTop: 2, flexShrink: 0 }}>{num}.</span>
-          <span style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-secondary)", lineHeight: 1.65 }}>{inlineFormat(line.replace(/^\d+\.\s*/, ""))}</span>
+        <div key={i} style={{ display: "flex", gap: "var(--space-3)", margin: "var(--space-2) 0", alignItems: "flex-start" }}>
+          <span style={{ color: "var(--color-accent)", fontWeight: 700, minWidth: 22, fontSize: "var(--font-size-sm)", marginTop: 2, flexShrink: 0 }}>{num}.</span>
+          <span style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-secondary)", lineHeight: 1.7 }}>{inlineFormat(line.replace(/^\d+\.\s*/, ""))}</span>
         </div>
       );
     } else {
-      result.push(<p key={i} style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-secondary)", lineHeight: 1.7, margin: "var(--space-1) 0" }}>{inlineFormat(line)}</p>);
+      result.push(<p key={i} style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-secondary)", lineHeight: 1.8, margin: "var(--space-2) 0" }}>{inlineFormat(line)}</p>);
     }
   });
 
@@ -818,27 +809,27 @@ function renderMD(text, isKey = false) {
   if (!text) return null;
   const lines = text.split("\n");
   return lines.map((line, i) => {
-    if (!line.trim()) return <div key={i} style={{ height: "var(--space-2)" }} />;
+    if (!line.trim()) return <div key={i} style={{ height: "var(--space-3)" }} />;
     if (line.startsWith("**") && line.endsWith("**") && line.length > 4) {
       return (
-        <p key={i} style={{ fontSize: "11px", fontWeight: 700, color: "var(--color-text-primary)", margin: "var(--space-4) 0 var(--space-2)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+        <p key={i} style={{ fontSize: "12px", fontWeight: 700, color: "var(--color-text-primary)", margin: "var(--space-5) 0 var(--space-3)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
           {line.replace(/\*\*/g, "")}
         </p>
       );
     }
     if (line.startsWith("━")) {
-      return <div key={i} style={{ height: 1, background: "var(--color-border)", margin: "var(--space-2) 0" }} />;
+      return <div key={i} style={{ height: 1, background: "var(--color-border)", margin: "var(--space-3) 0" }} />;
     }
     if (line.match(/^[-*] /)) {
       return (
-        <div key={i} style={{ display: "flex", gap: "var(--space-2)", margin: "3px 0", alignItems: "flex-start" }}>
+        <div key={i} style={{ display: "flex", gap: "var(--space-2)", margin: "var(--space-2) 0", alignItems: "flex-start" }}>
           <span style={{ color: "var(--color-accent)", fontWeight: 700, marginTop: 3, flexShrink: 0, fontSize: 10 }}>●</span>
-          <span style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-secondary)", lineHeight: 1.65 }}>{inlineFormat(line.slice(2))}</span>
+          <span style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-secondary)", lineHeight: 1.7 }}>{inlineFormat(line.slice(2))}</span>
         </div>
       );
     }
     return (
-      <p key={i} style={{ fontSize: "var(--font-size-sm)", color: isKey ? "var(--color-text-primary)" : "var(--color-text-secondary)", lineHeight: 1.7, margin: "2px 0" }}>
+      <p key={i} style={{ fontSize: "var(--font-size-sm)", color: isKey ? "var(--color-text-primary)" : "var(--color-text-secondary)", lineHeight: 1.8, margin: "var(--space-2) 0" }}>
         {inlineFormat(line)}
       </p>
     );
@@ -856,8 +847,8 @@ function ScoreBar({ label, score, delay = 0 }) {
   const color = score >= 7 ? "var(--color-success)" : score >= 5 ? "var(--color-warning)" : "var(--color-error)";
 
   return (
-    <div style={{ marginBottom: "var(--space-4)" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--space-2)" }}>
+    <div style={{ marginBottom: "var(--space-5)" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--space-3)" }}>
         <span style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-secondary)", fontWeight: 500 }}>{label}</span>
         <span style={{ fontSize: "var(--font-size-sm)", fontWeight: 700, color }}>{score}<span style={{ color: "var(--color-text-tertiary)", fontWeight: 400 }}>/10</span></span>
       </div>
@@ -887,16 +878,16 @@ function Toast({ message, type = "default" }) {
 function SkeletonChallenge() {
   return (
     <div style={{ padding: "var(--space-6)" }}>
-      <div className="skeleton" style={{ height: 20, width: "40%", marginBottom: "var(--space-4)" }} />
-      <div className="skeleton" style={{ height: 14, width: "100%", marginBottom: "var(--space-2)" }} />
-      <div className="skeleton" style={{ height: 14, width: "95%", marginBottom: "var(--space-2)" }} />
-      <div className="skeleton" style={{ height: 14, width: "88%", marginBottom: "var(--space-5)" }} />
-      <div className="skeleton" style={{ height: 14, width: "100%", marginBottom: "var(--space-2)" }} />
-      <div className="skeleton" style={{ height: 14, width: "92%", marginBottom: "var(--space-2)" }} />
-      <div className="skeleton" style={{ height: 14, width: "75%", marginBottom: "var(--space-6)" }} />
+      <div className="skeleton" style={{ height: 22, width: "40%", marginBottom: "var(--space-5)" }} />
+      <div className="skeleton" style={{ height: 15, width: "100%", marginBottom: "var(--space-3)" }} />
+      <div className="skeleton" style={{ height: 15, width: "95%", marginBottom: "var(--space-3)" }} />
+      <div className="skeleton" style={{ height: 15, width: "88%", marginBottom: "var(--space-6)" }} />
+      <div className="skeleton" style={{ height: 15, width: "100%", marginBottom: "var(--space-3)" }} />
+      <div className="skeleton" style={{ height: 15, width: "92%", marginBottom: "var(--space-3)" }} />
+      <div className="skeleton" style={{ height: 15, width: "75%", marginBottom: "var(--space-8)" }} />
       <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)" }}>
         {[1,2,3,4].map(i => (
-          <div key={i} className="skeleton" style={{ height: 52, borderRadius: "var(--radius-md)" }} />
+          <div key={i} className="skeleton" style={{ height: 56, borderRadius: "var(--radius-md)" }} />
         ))}
       </div>
     </div>
@@ -906,9 +897,9 @@ function SkeletonChallenge() {
 // ── Path node component ────────────────────────────────────────────────────
 function PathNode({ challenge, idx, status, onClick }) {
   const statusConfig = {
-    active: { icon: null, label: "Start", badgeClass: "badge-accent" },
-    done:   { icon: "✓",  label: "Done",  badgeClass: "badge-success" },
-    locked: { icon: "🔒", label: "Locked", badgeClass: "badge-neutral" },
+    active: { label: "Start", badgeClass: "badge-accent" },
+    done:   { label: "Done",  badgeClass: "badge-success" },
+    locked: { label: "Locked", badgeClass: "badge-neutral" },
   };
   const cfg = statusConfig[status];
   const typeLabel = CHALLENGE_TYPE_LABELS[challenge.type] || "Challenge";
@@ -920,19 +911,19 @@ function PathNode({ challenge, idx, status, onClick }) {
       onClick={status !== "locked" ? onClick : undefined}
       style={{ cursor: status === "locked" ? "not-allowed" : "pointer" }}
     >
-      {/* Icon */}
+      {/* Icon badge */}
       <div style={{
-        width: 44,
-        height: 44,
+        width: 48,
+        height: 48,
         borderRadius: "var(--radius-md)",
         background: status === "done" ? "var(--color-success-light)" : status === "active" ? "var(--color-accent-light)" : "var(--color-bg)",
         border: `1px solid ${status === "done" ? "var(--color-success-border)" : status === "active" ? "var(--color-accent-border)" : "var(--color-border)"}`,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        fontSize: status === "done" ? 18 : 20,
+        fontSize: 14,
         flexShrink: 0,
-        color: status === "done" ? "var(--color-success)" : "inherit",
+        color: status === "done" ? "var(--color-success)" : "var(--color-text-primary)",
         fontWeight: 700,
       }}>
         {status === "done" ? "✓" : challenge.icon}
@@ -940,26 +931,26 @@ function PathNode({ challenge, idx, status, onClick }) {
 
       {/* Content */}
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", marginBottom: 4, flexWrap: "wrap" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", marginBottom: 6, flexWrap: "wrap" }}>
           <span style={{ fontSize: "var(--font-size-base)", fontWeight: 600, color: "var(--color-text-primary)" }}>
             {challenge.tag}
           </span>
           <span className={`badge ${cfg.badgeClass}`}>{cfg.label}</span>
           <span className="badge badge-neutral">{typeLabel}</span>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
-          <p style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-tertiary)", lineHeight: 1.4 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", flexWrap: "wrap" }}>
+          <p style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-tertiary)", lineHeight: 1.5 }}>
             {status === "locked" ? "Complete the previous challenge to unlock" : `${challenge.hint?.framework || "Framework-based"} · ${challenge.time}`}
           </p>
           {challenge.difficulty === "Hard" && (
-            <span style={{ fontSize: 11, color: diffColor, fontWeight: 700 }}>3× XP</span>
+            <span style={{ fontSize: 12, color: diffColor, fontWeight: 700 }}>3× XP</span>
           )}
         </div>
       </div>
 
       {/* XP + Arrow */}
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4, flexShrink: 0 }}>
-        <span style={{ fontSize: 11, fontWeight: 700, color: "var(--color-warning)", background: "var(--color-warning-light)", padding: "2px 7px", borderRadius: "var(--radius-sm)" }}>+{challenge.xp} XP</span>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6, flexShrink: 0 }}>
+        <span style={{ fontSize: 12, fontWeight: 700, color: "var(--color-warning)", background: "var(--color-warning-light)", padding: "3px 10px", borderRadius: "var(--radius-sm)" }}>+{challenge.xp} XP</span>
         {status !== "locked" && (
           <div style={{ color: "var(--color-text-tertiary)", fontSize: 16 }}>→</div>
         )}
@@ -970,11 +961,10 @@ function PathNode({ challenge, idx, status, onClick }) {
 
 // ── Leaderboard data helpers ───────────────────────────────────────────────
 function buildLeaderboard(myName, myXP, myTrack) {
-  // Simulated leaderboard entries (in a real app these would come from a backend)
   const fakeUsers = [
-    { name: "Priya S.", xp: 1840, track: "B2B", badge: "🥇" },
-    { name: "Arjun M.", xp: 1620, track: "B2C", badge: "🥈" },
-    { name: "Neha K.", xp: 1450, track: "B2B", badge: "🥉" },
+    { name: "Priya S.", xp: 1840, track: "B2B", badge: "1" },
+    { name: "Arjun M.", xp: 1620, track: "B2C", badge: "2" },
+    { name: "Neha K.", xp: 1450, track: "B2B", badge: "3" },
     { name: "Rohan D.", xp: 1280, track: "B2C", badge: null },
     { name: "Sneha P.", xp: 1100, track: "B2B", badge: null },
     { name: "Vikram R.", xp: 980,  track: "B2C", badge: null },
@@ -1021,7 +1011,7 @@ function getStreakData() {
 // ── Main component ─────────────────────────────────────────────────────────
 export default function PMApp() {
   const [screen, setScreen] = useState("login");
-  const [homeTab, setHomeTab] = useState("challenges"); // challenges | leaderboard | pricing
+  const [homeTab, setHomeTab] = useState("challenges");
   const [isGuest, setIsGuest] = useState(false);
   const [pwInput, setPwInput] = useState("");
   const [pwError, setPwError] = useState(false);
@@ -1065,20 +1055,16 @@ export default function PMApp() {
   const [mcqCorrect, setMcqCorrect] = useState(null);
   const [mcqRevealed, setMcqRevealed] = useState(false);
 
-  // Open-ended answer (for case study, roleplay, debate, estimation)
   const [openAnswer, setOpenAnswer] = useState("");
 
-  // Friend challenge state
   const [friendChallenges, setFriendChallenges] = useState([]);
   const [showFriendModal, setShowFriendModal] = useState(false);
   const [friendInput, setFriendInput] = useState("");
   const [friendChallengeIdx, setFriendChallengeIdx] = useState(null);
   const [friendChallengeTrack, setFriendChallengeTrack] = useState("B2B");
 
-  // Leaderboard state
-  const [lbFilter, setLbFilter] = useState("global"); // global | friends | track
+  const [lbFilter, setLbFilter] = useState("global");
 
-  // Feedback state
   const [fbName, setFbName] = useState("");
   const [fbAge, setFbAge] = useState("");
   const [fbIndustry, setFbIndustry] = useState("");
@@ -1102,18 +1088,14 @@ export default function PMApp() {
   }
 
   useEffect(() => {
-    // Load history
     const hR = storageList("pm_session:");
     if (hR?.keys?.length) {
       const s = hR.keys.map(k => { const r = storageGet(k); return r ? JSON.parse(r.value) : null; }).filter(Boolean).reverse();
       setHistory(s.slice(0, 30));
     }
-    // Load streak
     const { streak: s } = getStreakData();
     setStreak(s);
-    // Load friend challenges
     setFriendChallenges(buildFriendChallenges());
-    // Request notification permission for streak reminders
     requestNotificationPermission();
   }, []);
 
@@ -1163,7 +1145,6 @@ export default function PMApp() {
       const text = await callClaude(`You are a ${track} PM coach. Generate a concise, realistic, specific challenge.`, chosen.prompt);
       setChallengeText(text);
 
-      // For quiz type, generate MCQ options
       if (chosen.type === "quiz") {
         try {
           const mcqRaw = await callClaude(
@@ -1221,7 +1202,6 @@ Challenge: ${text}`
     storageSet("pm_last_tag", pick?.tag);
     storageSet(`pm_session:${Date.now()}`, JSON.stringify({ date: today, tag: pick?.tag, track, scores: s, type: pick?.type }));
 
-    // Update streak
     const lastDate = storageGet("pm_last_date")?.value || "";
     const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
     const streakR = storageGet("pm_streak");
@@ -1232,12 +1212,11 @@ Challenge: ${text}`
     storageSet("pm_last_date", today);
     setStreak(cur);
 
-    // Streak milestone notifications
     if ("Notification" in window && Notification.permission === "granted") {
       if (cur === 7) {
-        new Notification("🔥 7-day streak!", { body: "You're in the top 12% of learners this week." });
+        new Notification("7-day streak!", { body: "You're in the top 12% of learners this week." });
       } else if (cur > 0 && cur % 5 === 0) {
-        new Notification(`🔥 ${cur}-day streak!`, { body: "Keep the momentum going. Come back tomorrow." });
+        new Notification(`${cur}-day streak!`, { body: "Keep the momentum going. Come back tomorrow." });
       }
     }
 
@@ -1245,7 +1224,6 @@ Challenge: ${text}`
       const updated = { ...completedIdxs, [track]: [...new Set([...completedIdxs[track], currentIdx])] };
       setCompletedIdxs(updated);
       storageSet("pm_completed", JSON.stringify(updated));
-      // Hard challenges give 3x XP
       const xpMultiplier = pick?.difficulty === "Hard" ? 3 : 1;
       const gained = (10 + (s.overall * 5)) * xpMultiplier;
       const newXP = totalXP + gained;
@@ -1274,7 +1252,6 @@ Challenge: ${text}`
     setFriendChallenges(buildFriendChallenges());
     setShowFriendModal(false);
     setFriendInput("");
-    // Sender earns 20 XP for inviting
     if (!isGuest) {
       const newXP = totalXP + 20;
       setTotalXP(newXP);
@@ -1323,7 +1300,6 @@ Challenge: ${text}`
   const pct = challenges.length > 0 ? Math.round((doneCount / challenges.length) * 100) : 0;
   const { entries: lbEntries, myRank } = buildLeaderboard(isGuest ? guestName : "Siddhant", totalXP, track);
 
-  // ── Leaderboard filtered entries ──
   const filteredLbEntries = lbFilter === "track"
     ? lbEntries.filter(e => e.track === track || e.isMe)
     : lbEntries;
@@ -1336,37 +1312,37 @@ Challenge: ${text}`
       <style>{CSS}</style>
       {toast && <Toast message={toast.msg} type={toast.type} />}
 
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "var(--space-8) var(--space-5)" }}>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "var(--space-10) var(--space-6)" }}>
 
         {/* Hero */}
-        <div className="anim-fade-up" style={{ textAlign: "center", marginBottom: "var(--space-10)", maxWidth: 440 }}>
+        <div className="anim-fade-up" style={{ textAlign: "center", marginBottom: "var(--space-12)", maxWidth: 480 }}>
           <div style={{
-            width: 56, height: 56, borderRadius: "var(--radius-lg)",
+            width: 64, height: 64, borderRadius: "var(--radius-lg)",
             background: "var(--color-text-primary)", display: "flex", alignItems: "center", justifyContent: "center",
-            margin: "0 auto var(--space-6)", boxShadow: "var(--shadow-lg)",
+            margin: "0 auto var(--space-8)", boxShadow: "var(--shadow-lg)",
           }}>
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 2L2 7l10 5 10-5-10-5z"/>
               <path d="M2 17l10 5 10-5"/>
               <path d="M2 12l10 5 10-5"/>
             </svg>
           </div>
-          <h1 style={{ fontSize: "var(--font-size-2xl)", fontWeight: 800, color: "var(--color-text-primary)", marginBottom: "var(--space-3)", letterSpacing: "-0.03em", lineHeight: 1.2 }}>
+          <h1 style={{ fontSize: "var(--font-size-3xl)", fontWeight: 800, color: "var(--color-text-primary)", marginBottom: "var(--space-4)", letterSpacing: "-0.03em", lineHeight: 1.2 }}>
             PM Academy
           </h1>
-          <p style={{ fontSize: "var(--font-size-base)", color: "var(--color-text-secondary)", lineHeight: 1.6, maxWidth: 320, margin: "0 auto" }}>
+          <p style={{ fontSize: "var(--font-size-md)", color: "var(--color-text-secondary)", lineHeight: 1.8, maxWidth: 380, margin: "0 auto" }}>
             Real-world scenarios. AI-powered feedback. Build the instincts of a senior PM.
           </p>
         </div>
 
         {/* Login card */}
-        <div className="card anim-fade-up-1" style={{ width: "100%", maxWidth: 400 }}>
-          <div style={{ marginBottom: "var(--space-6)" }}>
-            <h2 style={{ fontSize: "var(--font-size-lg)", fontWeight: 700, color: "var(--color-text-primary)", marginBottom: "var(--space-1)" }}>Sign in</h2>
+        <div className="card anim-fade-up-1" style={{ width: "100%", maxWidth: 420 }}>
+          <div style={{ marginBottom: "var(--space-8)" }}>
+            <h2 style={{ fontSize: "var(--font-size-lg)", fontWeight: 700, color: "var(--color-text-primary)", marginBottom: "var(--space-2)" }}>Sign in</h2>
             <p style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-tertiary)" }}>Enter your access code to continue</p>
           </div>
 
-          <div style={{ marginBottom: "var(--space-4)" }}>
+          <div style={{ marginBottom: "var(--space-5)" }}>
             <label className="label">Access code</label>
             <input
               className={`input ${pwError ? "input-error" : ""}`}
@@ -1384,19 +1360,19 @@ Challenge: ${text}`
             className="btn btn-primary btn-lg btn-full"
             onClick={loginFull}
             disabled={!pwInput.trim() || pwLoading}
-            style={{ marginBottom: "var(--space-3)" }}
+            style={{ marginBottom: "var(--space-4)" }}
           >
             {pwLoading ? (
               <span style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
                 <span className="spinner" style={{ width: 16, height: 16, border: "2px solid rgba(255,255,255,0.3)", borderTopColor: "#fff", borderRadius: "50%", display: "inline-block" }} />
                 Signing in…
               </span>
-            ) : "Sign in →"}
+            ) : "Sign in"}
           </button>
 
-          <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", margin: "var(--space-4) 0" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", margin: "var(--space-5) 0" }}>
             <div className="divider" style={{ flex: 1, margin: 0 }} />
-            <span style={{ fontSize: 12, color: "var(--color-text-tertiary)", fontWeight: 500 }}>or</span>
+            <span style={{ fontSize: 13, color: "var(--color-text-tertiary)", fontWeight: 500 }}>or</span>
             <div className="divider" style={{ flex: 1, margin: 0 }} />
           </div>
 
@@ -1406,15 +1382,15 @@ Challenge: ${text}`
         </div>
 
         {/* Social proof */}
-        <div className="anim-fade-up-2" style={{ marginTop: "var(--space-8)", display: "flex", gap: "var(--space-8)", textAlign: "center" }}>
+        <div className="anim-fade-up-2" style={{ marginTop: "var(--space-12)", display: "flex", gap: "var(--space-10)", textAlign: "center" }}>
           {[
-            { value: "16+", label: "Challenges" },
+            { value: "16", label: "Challenges" },
             { value: "2", label: "Tracks" },
             { value: "5", label: "Challenge Types" },
           ].map((s, i) => (
             <div key={i}>
-              <div style={{ fontSize: "var(--font-size-xl)", fontWeight: 800, color: "var(--color-text-primary)", letterSpacing: "-0.03em" }}>{s.value}</div>
-              <div style={{ fontSize: 12, color: "var(--color-text-tertiary)", fontWeight: 500, marginTop: 2 }}>{s.label}</div>
+              <div style={{ fontSize: "var(--font-size-2xl)", fontWeight: 800, color: "var(--color-text-primary)", letterSpacing: "-0.03em" }}>{s.value}</div>
+              <div style={{ fontSize: 13, color: "var(--color-text-tertiary)", fontWeight: 500, marginTop: 4 }}>{s.label}</div>
             </div>
           ))}
         </div>
@@ -1433,7 +1409,7 @@ Challenge: ${text}`
       <div className="topbar">
         <div className="topbar-inner">
           <div className="logo-mark">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 2L2 7l10 5 10-5-10-5z"/>
               <path d="M2 17l10 5 10-5"/>
               <path d="M2 12l10 5 10-5"/>
@@ -1441,56 +1417,56 @@ Challenge: ${text}`
           </div>
           <span className="logo-text">PM Academy</span>
           <button className="btn btn-ghost btn-sm" style={{ marginLeft: "auto" }} onClick={() => { setShowGuestForm(false); setIsGuest(false); }}>
-            ← Back
+            Back
           </button>
         </div>
       </div>
 
-      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "var(--space-8) var(--space-5)" }}>
-        <div style={{ width: "100%", maxWidth: 440 }}>
-          <div className="anim-fade-up" style={{ marginBottom: "var(--space-8)" }}>
-            <h1 style={{ fontSize: "var(--font-size-2xl)", fontWeight: 800, color: "var(--color-text-primary)", marginBottom: "var(--space-2)", letterSpacing: "-0.03em" }}>
+      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "var(--space-10) var(--space-6)" }}>
+        <div style={{ width: "100%", maxWidth: 460 }}>
+          <div className="anim-fade-up" style={{ marginBottom: "var(--space-10)" }}>
+            <h1 style={{ fontSize: "var(--font-size-2xl)", fontWeight: 800, color: "var(--color-text-primary)", marginBottom: "var(--space-3)", letterSpacing: "-0.03em" }}>
               Quick intro
             </h1>
-            <p style={{ fontSize: "var(--font-size-base)", color: "var(--color-text-secondary)" }}>
+            <p style={{ fontSize: "var(--font-size-md)", color: "var(--color-text-secondary)", lineHeight: 1.7 }}>
               This helps us tailor the challenge and feedback to you.
             </p>
           </div>
 
           <div className="card anim-fade-up-1">
-            <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-5)" }}>
               <div>
-                <label className="label">Full name <span style={{ color: "var(--color-error)" }}>*</span></label>
+                <label className="label">Full name</label>
                 <input className="input" placeholder="e.g. Alex Johnson" value={guestName} onChange={e => { setGuestName(e.target.value); setGuestFormErr(""); }} />
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-3)" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-4)" }}>
                 <div>
-                  <label className="label">Age <span style={{ color: "var(--color-error)" }}>*</span></label>
+                  <label className="label">Age</label>
                   <input className="input" placeholder="e.g. 28" value={guestAge} onChange={e => { setGuestAge(e.target.value); setGuestFormErr(""); }} />
                 </div>
                 <div>
-                  <label className="label">Experience <span style={{ color: "var(--color-error)" }}>*</span></label>
+                  <label className="label">Experience</label>
                   <input className="input" placeholder="e.g. 2 years" value={guestExp} onChange={e => { setGuestExp(e.target.value); setGuestFormErr(""); }} />
                 </div>
               </div>
               <div>
-                <label className="label">Industry <span style={{ color: "var(--color-error)" }}>*</span></label>
+                <label className="label">Industry</label>
                 <input className="input" placeholder="e.g. SaaS, FinTech, Healthcare" value={guestIndustry} onChange={e => { setGuestIndustry(e.target.value); setGuestFormErr(""); }} />
               </div>
             </div>
 
             {guestFormErr && (
-              <div style={{ marginTop: "var(--space-4)", padding: "10px var(--space-3)", background: "var(--color-error-light)", border: "1px solid var(--color-error-border)", borderRadius: "var(--radius-sm)", fontSize: "var(--font-size-sm)", color: "var(--color-error)" }}>
+              <div style={{ marginTop: "var(--space-5)", padding: "12px var(--space-4)", background: "var(--color-error-light)", border: "1px solid var(--color-error-border)", borderRadius: "var(--radius-md)", fontSize: "var(--font-size-sm)", color: "var(--color-error)" }}>
                 {guestFormErr}
               </div>
             )}
 
-            <button className="btn btn-primary btn-lg btn-full" style={{ marginTop: "var(--space-5)" }} onClick={submitGuestProfile}>
-              Start my free challenge →
+            <button className="btn btn-primary btn-lg btn-full" style={{ marginTop: "var(--space-6)" }} onClick={submitGuestProfile}>
+              Start my free challenge
             </button>
           </div>
 
-          <p className="anim-fade-up-2" style={{ marginTop: "var(--space-4)", textAlign: "center", fontSize: 12, color: "var(--color-text-tertiary)" }}>
+          <p className="anim-fade-up-2" style={{ marginTop: "var(--space-5)", textAlign: "center", fontSize: 13, color: "var(--color-text-tertiary)", lineHeight: 1.6 }}>
             Your information is only used to personalise your experience.
           </p>
         </div>
@@ -1508,14 +1484,14 @@ Challenge: ${text}`
 
       {/* Friend Challenge Modal */}
       {showFriendModal && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.4)", zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", padding: "var(--space-5)" }}>
-          <div className="card anim-pop-in" style={{ width: "100%", maxWidth: 440 }}>
-            <h3 style={{ fontSize: "var(--font-size-lg)", fontWeight: 700, color: "var(--color-text-primary)", marginBottom: "var(--space-2)" }}>Challenge a friend</h3>
-            <p style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-tertiary)", marginBottom: "var(--space-5)" }}>
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", padding: "var(--space-6)" }}>
+          <div className="card anim-pop-in" style={{ width: "100%", maxWidth: 460 }}>
+            <h3 style={{ fontSize: "var(--font-size-lg)", fontWeight: 700, color: "var(--color-text-primary)", marginBottom: "var(--space-3)" }}>Challenge a friend</h3>
+            <p style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-tertiary)", marginBottom: "var(--space-6)", lineHeight: 1.7 }}>
               Both complete it independently within 24 hours. Winner gets full XP + 20% bonus. You earn +20 XP just for sending.
             </p>
 
-            <div style={{ marginBottom: "var(--space-4)" }}>
+            <div style={{ marginBottom: "var(--space-5)" }}>
               <label className="label">Select track</label>
               <div style={{ display: "flex", gap: "var(--space-2)" }}>
                 {["B2B", "B2C"].map(t => (
@@ -1526,23 +1502,23 @@ Challenge: ${text}`
               </div>
             </div>
 
-            <div style={{ marginBottom: "var(--space-4)" }}>
+            <div style={{ marginBottom: "var(--space-5)" }}>
               <label className="label">Select challenge</label>
-              <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-2)", maxHeight: 180, overflowY: "auto" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-2)", maxHeight: 200, overflowY: "auto" }}>
                 {CHALLENGES[friendChallengeTrack].map((ch, i) => (
                   <button key={i} onClick={() => setFriendChallengeIdx(i)}
-                    style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", padding: "10px var(--space-3)", borderRadius: "var(--radius-md)", border: `1.5px solid ${friendChallengeIdx === i ? "var(--color-accent)" : "var(--color-border)"}`, background: friendChallengeIdx === i ? "var(--color-accent-light)" : "var(--color-surface)", cursor: "pointer", textAlign: "left" }}>
-                    <span style={{ fontSize: 18 }}>{ch.icon}</span>
+                    style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", padding: "12px var(--space-4)", borderRadius: "var(--radius-md)", border: `1px solid ${friendChallengeIdx === i ? "var(--color-accent)" : "var(--color-border)"}`, background: friendChallengeIdx === i ? "var(--color-accent-light)" : "var(--color-surface)", cursor: "pointer", textAlign: "left", fontSize: "var(--font-size-sm)" }}>
+                    <span style={{ width: 36, height: 36, borderRadius: "var(--radius-sm)", background: "var(--color-bg)", border: "1px solid var(--color-border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 700, flexShrink: 0 }}>{ch.icon}</span>
                     <div>
-                      <div style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color: "var(--color-text-primary)" }}>{ch.tag}</div>
-                      <div style={{ fontSize: 11, color: "var(--color-text-tertiary)" }}>{CHALLENGE_TYPE_LABELS[ch.type]} · +{ch.xp} XP</div>
+                      <div style={{ fontWeight: 600, color: "var(--color-text-primary)" }}>{ch.tag}</div>
+                      <div style={{ fontSize: 12, color: "var(--color-text-tertiary)", marginTop: 2 }}>{CHALLENGE_TYPE_LABELS[ch.type]} · +{ch.xp} XP</div>
                     </div>
                   </button>
                 ))}
               </div>
             </div>
 
-            <div style={{ marginBottom: "var(--space-5)" }}>
+            <div style={{ marginBottom: "var(--space-6)" }}>
               <label className="label">Friend's username or email</label>
               <input className="input" placeholder="e.g. priya@email.com or @priya_pm" value={friendInput} onChange={e => setFriendInput(e.target.value)} />
             </div>
@@ -1550,7 +1526,7 @@ Challenge: ${text}`
             <div style={{ display: "flex", gap: "var(--space-3)" }}>
               <button className="btn btn-ghost" onClick={() => { setShowFriendModal(false); setFriendInput(""); setFriendChallengeIdx(null); }}>Cancel</button>
               <button className="btn btn-primary btn-lg" style={{ flex: 1 }} disabled={!friendInput.trim() || friendChallengeIdx === null} onClick={sendFriendChallenge}>
-                Send challenge →
+                Send challenge
               </button>
             </div>
           </div>
@@ -1561,21 +1537,25 @@ Challenge: ${text}`
       <div className="topbar">
         <div className="topbar-inner">
           <div className="logo-mark">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 2L2 7l10 5 10-5-10-5z"/>
               <path d="M2 17l10 5 10-5"/>
               <path d="M2 12l10 5 10-5"/>
             </svg>
           </div>
           <span className="logo-text">PM Academy</span>
-          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
+          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: "var(--space-4)" }}>
             {/* Streak counter */}
-            <div className={`streak-counter ${streak > 0 ? "active" : ""}`}>
-              🔥 {streak}
-            </div>
+            {streak > 0 && (
+              <div className="streak-counter">
+                <span style={{ fontSize: 13 }}>Streak</span>
+                <span style={{ fontWeight: 800 }}>{streak}</span>
+              </div>
+            )}
             {!isGuest && (
               <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
-                <span style={{ fontSize: 12, color: "var(--color-text-tertiary)", fontWeight: 500 }}>{totalXP} XP</span>
+                <span style={{ fontSize: 13, color: "var(--color-text-tertiary)", fontWeight: 500 }}>{totalXP}</span>
+                <span style={{ fontSize: 12, color: "var(--color-text-tertiary)" }}>XP</span>
               </div>
             )}
             {isGuest && <span className="badge badge-neutral">Guest</span>}
@@ -1584,14 +1564,14 @@ Challenge: ${text}`
       </div>
 
       <div style={{ flex: 1, paddingBottom: "var(--space-16)" }}>
-        <div className="content-container" style={{ paddingTop: "var(--space-8)" }}>
+        <div className="content-container" style={{ paddingTop: "var(--space-10)" }}>
 
           {/* Header */}
-          <div className="anim-fade-up" style={{ marginBottom: "var(--space-6)" }}>
-            <h1 style={{ fontSize: "var(--font-size-2xl)", fontWeight: 800, color: "var(--color-text-primary)", marginBottom: "var(--space-2)", letterSpacing: "-0.03em" }}>
+          <div className="anim-fade-up" style={{ marginBottom: "var(--space-8)" }}>
+            <h1 style={{ fontSize: "var(--font-size-2xl)", fontWeight: 800, color: "var(--color-text-primary)", marginBottom: "var(--space-3)", letterSpacing: "-0.03em" }}>
               {isGuest ? `Welcome, ${guestName}` : "Your training path"}
             </h1>
-            <p style={{ fontSize: "var(--font-size-base)", color: "var(--color-text-secondary)" }}>
+            <p style={{ fontSize: "var(--font-size-md)", color: "var(--color-text-secondary)", lineHeight: 1.7 }}>
               {isGuest
                 ? "Try a free challenge to see how AI-powered PM coaching works."
                 : "Practice real scenarios. Get structured feedback. Build PM instincts."}
@@ -1600,14 +1580,13 @@ Challenge: ${text}`
 
           {/* Nav tabs (full users only) */}
           {!isGuest && (
-            <div className="anim-fade-up-1" style={{ display: "flex", gap: "var(--space-1)", marginBottom: "var(--space-6)", borderBottom: "1px solid var(--color-border)", paddingBottom: "var(--space-3)" }}>
+            <div className="anim-fade-up-1" style={{ display: "flex", gap: "var(--space-1)", marginBottom: "var(--space-8)", borderBottom: "1px solid var(--color-border)", paddingBottom: "var(--space-4)" }}>
               {[
-                { id: "challenges", label: "Challenges", icon: "🎯" },
-                { id: "leaderboard", label: "Leaderboard", icon: "🏆" },
-                { id: "pricing", label: "Upgrade", icon: "⭐" },
+                { id: "challenges", label: "Challenges" },
+                { id: "leaderboard", label: "Leaderboard" },
+                { id: "pricing", label: "Upgrade" },
               ].map(tab => (
                 <button key={tab.id} className={`nav-tab ${homeTab === tab.id ? "active" : ""}`} onClick={() => setHomeTab(tab.id)}>
-                  <span>{tab.icon}</span>
                   <span>{tab.label}</span>
                 </button>
               ))}
@@ -1619,15 +1598,15 @@ Challenge: ${text}`
             <>
               {/* Track selector */}
               {!isGuest && (
-                <div className="anim-fade-up-1" style={{ marginBottom: "var(--space-6)" }}>
-                  <div style={{ display: "flex", gap: "var(--space-2)", padding: "var(--space-1)", background: "var(--color-bg)", border: "1px solid var(--color-border)", borderRadius: "var(--radius-md)", width: "fit-content" }}>
+                <div className="anim-fade-up-1" style={{ marginBottom: "var(--space-8)" }}>
+                  <div style={{ display: "flex", gap: "var(--space-2)", padding: "var(--space-2)", background: "var(--color-bg)", border: "1px solid var(--color-border)", borderRadius: "var(--radius-md)", width: "fit-content" }}>
                     {["B2B", "B2C"].map(t => (
                       <button key={t} className={`track-tab ${track === t ? "active" : ""}`} onClick={() => setTrack(t)}>
                         {t === "B2B" ? "B2B SaaS" : "B2C Consumer"}
                       </button>
                     ))}
                   </div>
-                  <p style={{ fontSize: 12, color: "var(--color-text-tertiary)", marginTop: "var(--space-2)" }}>
+                  <p style={{ fontSize: 13, color: "var(--color-text-tertiary)", marginTop: "var(--space-3)", lineHeight: 1.6 }}>
                     Both tracks are free to enter. Freemium limits apply on challenge volume.
                   </p>
                 </div>
@@ -1635,10 +1614,10 @@ Challenge: ${text}`
 
               {/* Progress bar (full users) */}
               {!isGuest && (
-                <div className="card anim-fade-up-2" style={{ marginBottom: "var(--space-5)" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--space-4)" }}>
+                <div className="card anim-fade-up-2" style={{ marginBottom: "var(--space-6)" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--space-5)" }}>
                     <div>
-                      <div style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color: "var(--color-text-primary)", marginBottom: 2 }}>
+                      <div style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color: "var(--color-text-primary)", marginBottom: 4 }}>
                         {track === "B2B" ? "B2B SaaS Track" : "B2C Consumer Track"}
                       </div>
                       <div style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-tertiary)" }}>
@@ -1646,7 +1625,7 @@ Challenge: ${text}`
                       </div>
                     </div>
                     <div style={{ textAlign: "right" }}>
-                      <div style={{ fontSize: "var(--font-size-xl)", fontWeight: 800, color: "var(--color-text-primary)", letterSpacing: "-0.03em" }}>{pct}%</div>
+                      <div style={{ fontSize: "var(--font-size-2xl)", fontWeight: 800, color: "var(--color-text-primary)", letterSpacing: "-0.03em" }}>{pct}%</div>
                       <div style={{ fontSize: 12, color: "var(--color-text-tertiary)" }}>complete</div>
                     </div>
                   </div>
@@ -1655,7 +1634,7 @@ Challenge: ${text}`
                   </div>
 
                   {/* Stats row */}
-                  <div style={{ display: "flex", gap: "var(--space-6)", marginTop: "var(--space-5)", paddingTop: "var(--space-5)", borderTop: "1px solid var(--color-border)" }}>
+                  <div style={{ display: "flex", gap: "var(--space-8)", marginTop: "var(--space-6)", paddingTop: "var(--space-6)", borderTop: "1px solid var(--color-border)" }}>
                     {[
                       { value: totalXP, label: "Total XP" },
                       { value: history.length, label: "Sessions" },
@@ -1663,7 +1642,7 @@ Challenge: ${text}`
                     ].map((s, i) => (
                       <div key={i}>
                         <div style={{ fontSize: "var(--font-size-lg)", fontWeight: 800, color: "var(--color-text-primary)", letterSpacing: "-0.02em" }}>{s.value}</div>
-                        <div style={{ fontSize: 12, color: "var(--color-text-tertiary)", fontWeight: 500, marginTop: 1 }}>{s.label}</div>
+                        <div style={{ fontSize: 12, color: "var(--color-text-tertiary)", fontWeight: 500, marginTop: 3 }}>{s.label}</div>
                       </div>
                     ))}
                   </div>
@@ -1672,22 +1651,22 @@ Challenge: ${text}`
 
               {/* Friend challenge button (full users) */}
               {!isGuest && (
-                <div className="anim-fade-up-2" style={{ marginBottom: "var(--space-4)" }}>
+                <div className="anim-fade-up-2" style={{ marginBottom: "var(--space-5)" }}>
                   <button className="btn btn-secondary btn-sm" onClick={() => setShowFriendModal(true)}>
-                    🤝 Challenge a friend (+20 XP)
+                    Challenge a friend
                   </button>
                 </div>
               )}
 
               {/* Pending friend challenges */}
               {!isGuest && friendChallenges.length > 0 && (
-                <div className="card anim-fade-up-2" style={{ marginBottom: "var(--space-4)", borderColor: "var(--color-accent-border)", background: "var(--color-accent-light)" }}>
-                  <p style={{ fontSize: "var(--font-size-sm)", fontWeight: 700, color: "var(--color-accent)", marginBottom: "var(--space-3)" }}>
-                    🤝 Friend challenges sent
+                <div className="card anim-fade-up-2" style={{ marginBottom: "var(--space-5)", borderColor: "var(--color-accent-border)", background: "var(--color-accent-light)" }}>
+                  <p style={{ fontSize: "var(--font-size-sm)", fontWeight: 700, color: "var(--color-accent)", marginBottom: "var(--space-4)" }}>
+                    Friend challenges sent
                   </p>
                   {friendChallenges.slice(0, 3).map((fc, i) => (
-                    <div key={i} style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", padding: "8px 0", borderBottom: i < Math.min(friendChallenges.length - 1, 2) ? "1px solid var(--color-accent-border)" : "none" }}>
-                      <span style={{ fontSize: 14 }}>→</span>
+                    <div key={i} style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", padding: "10px 0", borderBottom: i < Math.min(friendChallenges.length - 1, 2) ? "1px solid var(--color-accent-border)" : "none" }}>
+                      <span style={{ fontSize: 13, color: "var(--color-accent)" }}>→</span>
                       <div style={{ flex: 1 }}>
                         <span style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color: "var(--color-text-primary)" }}>{fc.to}</span>
                         <span style={{ fontSize: 12, color: "var(--color-text-tertiary)" }}> · {fc.track} {fc.challengeTag} · {fc.sentAt}</span>
@@ -1700,16 +1679,16 @@ Challenge: ${text}`
 
               {/* Challenge path */}
               <div className="anim-fade-up-3">
-                <div style={{ marginBottom: "var(--space-4)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <div style={{ marginBottom: "var(--space-5)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                   <h2 style={{ fontSize: "var(--font-size-base)", fontWeight: 700, color: "var(--color-text-primary)" }}>
                     {isGuest ? "Free challenge" : "Challenge path"}
                   </h2>
                   <span className="badge badge-neutral">{challenges.length} challenges</span>
                 </div>
 
-                <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }}>
                   {(isGuest ? challenges.slice(0, 1) : challenges).map((ch, idx) => (
-                    <div key={idx} className="anim-fade-up" style={{ animationDelay: `${idx * 0.04}s` }}>
+                    <div key={idx} className="anim-fade-up" style={{ animationDelay: `${idx * 0.05}s` }}>
                       <PathNode challenge={ch} idx={idx} status={getStatus(idx)} onClick={() => openChallenge(idx)} />
                     </div>
                   ))}
@@ -1717,11 +1696,11 @@ Challenge: ${text}`
 
                 {/* Guest upsell */}
                 {isGuest && (
-                  <div style={{ marginTop: "var(--space-5)", padding: "var(--space-5)", background: "var(--color-accent-light)", border: "1px solid var(--color-accent-border)", borderRadius: "var(--radius-lg)", textAlign: "center" }}>
-                    <p style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color: "var(--color-accent)", marginBottom: "var(--space-1)" }}>
+                  <div style={{ marginTop: "var(--space-6)", padding: "var(--space-6)", background: "var(--color-accent-light)", border: "1px solid var(--color-accent-border)", borderRadius: "var(--radius-lg)", textAlign: "center" }}>
+                    <p style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color: "var(--color-accent)", marginBottom: "var(--space-2)" }}>
                       Unlock all 16 challenges across B2B & B2C
                     </p>
-                    <p style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-secondary)" }}>
+                    <p style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-secondary)", lineHeight: 1.7 }}>
                       5 challenge types · AI scoring · Streak tracking · Leaderboard
                     </p>
                   </div>
@@ -1730,8 +1709,8 @@ Challenge: ${text}`
 
               {/* Recent history */}
               {!isGuest && history.length > 0 && (
-                <div className="card anim-fade-up-4" style={{ marginTop: "var(--space-6)" }}>
-                  <h3 style={{ fontSize: "var(--font-size-base)", fontWeight: 700, color: "var(--color-text-primary)", marginBottom: "var(--space-4)" }}>Recent sessions</h3>
+                <div className="card anim-fade-up-4" style={{ marginTop: "var(--space-8)" }}>
+                  <h3 style={{ fontSize: "var(--font-size-base)", fontWeight: 700, color: "var(--color-text-primary)", marginBottom: "var(--space-5)" }}>Recent sessions</h3>
                   <div style={{ display: "flex", flexDirection: "column" }}>
                     {history.slice(0, 5).map((s, i) => {
                       const sc = s.scores?.overall;
@@ -1739,13 +1718,13 @@ Challenge: ${text}`
                       const allChallenges = CHALLENGES.B2B.concat(CHALLENGES.B2C);
                       const ch = allChallenges.find(x => x.tag === s.tag);
                       return (
-                        <div key={i} style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", padding: "var(--space-3) 0", borderBottom: i < Math.min(history.length - 1, 4) ? "1px solid var(--color-border)" : "none" }}>
-                          <div style={{ width: 36, height: 36, borderRadius: "var(--radius-sm)", background: "var(--color-bg)", border: "1px solid var(--color-border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, flexShrink: 0 }}>
-                            {ch?.icon || "📋"}
+                        <div key={i} style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", padding: "var(--space-4) 0", borderBottom: i < Math.min(history.length - 1, 4) ? "1px solid var(--color-border)" : "none" }}>
+                          <div style={{ width: 40, height: 40, borderRadius: "var(--radius-md)", background: "var(--color-bg)", border: "1px solid var(--color-border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, flexShrink: 0, fontWeight: 700 }}>
+                            {ch?.icon || "C"}
                           </div>
                           <div style={{ flex: 1, minWidth: 0 }}>
                             <div style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color: "var(--color-text-primary)" }}>{s.tag}</div>
-                            <div style={{ fontSize: 12, color: "var(--color-text-tertiary)" }}>{s.track} · {s.type ? CHALLENGE_TYPE_LABELS[s.type] : "Quiz"} · {s.date}</div>
+                            <div style={{ fontSize: 12, color: "var(--color-text-tertiary)", marginTop: 2 }}>{s.track} · {s.type ? CHALLENGE_TYPE_LABELS[s.type] : "Quiz"} · {s.date}</div>
                           </div>
                           {sc != null && (
                             <div style={{ textAlign: "right", flexShrink: 0 }}>
@@ -1762,9 +1741,9 @@ Challenge: ${text}`
 
               {/* Empty state for history */}
               {!isGuest && history.length === 0 && (
-                <div style={{ marginTop: "var(--space-6)", padding: "var(--space-8)", textAlign: "center", border: "1px dashed var(--color-border)", borderRadius: "var(--radius-lg)" }}>
-                  <div style={{ fontSize: 32, marginBottom: "var(--space-3)" }}>📋</div>
-                  <p style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color: "var(--color-text-primary)", marginBottom: "var(--space-1)" }}>No sessions yet</p>
+                <div style={{ marginTop: "var(--space-8)", padding: "var(--space-10)", textAlign: "center", border: "1px dashed var(--color-border)", borderRadius: "var(--radius-lg)" }}>
+                  <div style={{ fontSize: 32, marginBottom: "var(--space-4)" }}>C</div>
+                  <p style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color: "var(--color-text-primary)", marginBottom: "var(--space-2)" }}>No sessions yet</p>
                   <p style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-tertiary)" }}>Complete your first challenge to see your history here.</p>
                 </div>
               )}
@@ -1774,13 +1753,13 @@ Challenge: ${text}`
           {/* ── TAB: LEADERBOARD ── */}
           {homeTab === "leaderboard" && !isGuest && (
             <div className="anim-fade-up">
-              <div style={{ marginBottom: "var(--space-5)" }}>
-                <h2 style={{ fontSize: "var(--font-size-xl)", fontWeight: 800, color: "var(--color-text-primary)", letterSpacing: "-0.03em", marginBottom: "var(--space-1)" }}>Leaderboard</h2>
-                <p style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-tertiary)" }}>Weekly resets every Monday. Top 3 earn a profile badge.</p>
+              <div style={{ marginBottom: "var(--space-6)" }}>
+                <h2 style={{ fontSize: "var(--font-size-xl)", fontWeight: 800, color: "var(--color-text-primary)", letterSpacing: "-0.03em", marginBottom: "var(--space-2)" }}>Leaderboard</h2>
+                <p style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-tertiary)", lineHeight: 1.7 }}>Weekly resets every Monday. Top 3 earn a profile badge.</p>
               </div>
 
               {/* Filters */}
-              <div style={{ display: "flex", gap: "var(--space-2)", marginBottom: "var(--space-5)", padding: "var(--space-1)", background: "var(--color-bg)", border: "1px solid var(--color-border)", borderRadius: "var(--radius-md)", width: "fit-content" }}>
+              <div style={{ display: "flex", gap: "var(--space-2)", marginBottom: "var(--space-6)", padding: "var(--space-2)", background: "var(--color-bg)", border: "1px solid var(--color-border)", borderRadius: "var(--radius-md)", width: "fit-content" }}>
                 {[
                   { id: "global", label: "Global" },
                   { id: "friends", label: "Friends" },
@@ -1793,39 +1772,38 @@ Challenge: ${text}`
               </div>
 
               {/* My rank banner */}
-              <div style={{ marginBottom: "var(--space-4)", padding: "var(--space-4) var(--space-5)", background: "var(--color-accent-light)", border: "1px solid var(--color-accent-border)", borderRadius: "var(--radius-lg)", display: "flex", alignItems: "center", gap: "var(--space-4)" }}>
-                <div style={{ fontSize: "var(--font-size-2xl)", fontWeight: 900, color: "var(--color-accent)", letterSpacing: "-0.04em" }}>#{myRank}</div>
+              <div style={{ marginBottom: "var(--space-5)", padding: "var(--space-5) var(--space-6)", background: "var(--color-accent-light)", border: "1px solid var(--color-accent-border)", borderRadius: "var(--radius-lg)", display: "flex", alignItems: "center", gap: "var(--space-5)" }}>
+                <div style={{ fontSize: "var(--font-size-3xl)", fontWeight: 900, color: "var(--color-accent)", letterSpacing: "-0.04em" }}>#{myRank}</div>
                 <div>
                   <div style={{ fontSize: "var(--font-size-sm)", fontWeight: 700, color: "var(--color-text-primary)" }}>Your current rank</div>
-                  <div style={{ fontSize: 12, color: "var(--color-text-tertiary)" }}>{totalXP} XP · {track} track</div>
+                  <div style={{ fontSize: 13, color: "var(--color-text-tertiary)", marginTop: 2 }}>{totalXP} XP · {track} track</div>
                 </div>
-                {myRank <= 3 && <span style={{ marginLeft: "auto", fontSize: 24 }}>{myRank === 1 ? "🥇" : myRank === 2 ? "🥈" : "🥉"}</span>}
               </div>
 
               {/* Leaderboard list */}
               <div className="card" style={{ padding: 0, overflow: "hidden" }}>
-                <div style={{ padding: "var(--space-4) var(--space-5)", borderBottom: "1px solid var(--color-border)" }}>
-                  <span style={{ fontSize: 11, fontWeight: 700, color: "var(--color-text-tertiary)", letterSpacing: "0.08em", textTransform: "uppercase" }}>Weekly rankings</span>
+                <div style={{ padding: "var(--space-5) var(--space-6)", borderBottom: "1px solid var(--color-border)" }}>
+                  <span style={{ fontSize: 12, fontWeight: 700, color: "var(--color-text-tertiary)", letterSpacing: "0.08em", textTransform: "uppercase" }}>Weekly rankings</span>
                 </div>
-                <div style={{ padding: "var(--space-2) var(--space-3)" }}>
+                <div style={{ padding: "var(--space-3) var(--space-4)" }}>
                   {filteredLbEntries.map((entry, i) => {
                     const rank = i + 1;
                     const isMe = entry.isMe;
-                    const rankColor = rank === 1 ? "#F59E0B" : rank === 2 ? "#9CA3AF" : rank === 3 ? "#D97706" : "var(--color-text-tertiary)";
+                    const rankColor = rank === 1 ? "#D97706" : rank === 2 ? "#9CA3AF" : rank === 3 ? "#B45309" : "var(--color-text-tertiary)";
                     return (
                       <div key={i} className={`lb-row ${isMe ? "lb-me" : ""}`}>
-                        <div className="lb-rank" style={{ background: rank <= 3 ? "#FFFBEB" : "var(--color-bg)", color: rankColor, border: `1px solid ${rank <= 3 ? "#FDE68A" : "var(--color-border)"}` }}>
-                          {rank <= 3 ? (rank === 1 ? "🥇" : rank === 2 ? "🥈" : "🥉") : rank}
+                        <div className="lb-rank" style={{ background: rank <= 3 ? "var(--color-warning-light)" : "var(--color-bg)", color: rankColor, border: `1px solid ${rank <= 3 ? "var(--color-warning-border)" : "var(--color-border)"}`, fontSize: 13 }}>
+                          {rank}
                         </div>
                         <div style={{ flex: 1 }}>
                           <div style={{ fontSize: "var(--font-size-sm)", fontWeight: isMe ? 700 : 500, color: isMe ? "var(--color-accent)" : "var(--color-text-primary)" }}>
-                            {entry.name} {isMe && <span style={{ fontSize: 11, color: "var(--color-accent)" }}>(you)</span>}
+                            {entry.name} {isMe && <span style={{ fontSize: 12, color: "var(--color-accent)" }}>(you)</span>}
                           </div>
-                          <div style={{ fontSize: 11, color: "var(--color-text-tertiary)" }}>{entry.track} track</div>
+                          <div style={{ fontSize: 12, color: "var(--color-text-tertiary)", marginTop: 2 }}>{entry.track} track</div>
                         </div>
                         <div style={{ textAlign: "right" }}>
                           <div style={{ fontSize: "var(--font-size-sm)", fontWeight: 700, color: "var(--color-text-primary)" }}>{entry.xp}</div>
-                          <div style={{ fontSize: 11, color: "var(--color-text-tertiary)" }}>XP</div>
+                          <div style={{ fontSize: 12, color: "var(--color-text-tertiary)", marginTop: 2 }}>XP</div>
                         </div>
                       </div>
                     );
@@ -1833,22 +1811,22 @@ Challenge: ${text}`
                   {/* Pinned "me" row if not in top entries */}
                   {myRank > filteredLbEntries.length && (
                     <>
-                      <div style={{ padding: "4px var(--space-3)", textAlign: "center" }}>
-                        <span style={{ fontSize: 11, color: "var(--color-text-tertiary)" }}>···</span>
+                      <div style={{ padding: "6px var(--space-4)", textAlign: "center" }}>
+                        <span style={{ fontSize: 12, color: "var(--color-text-tertiary)" }}>···</span>
                       </div>
                       <div className="lb-row lb-me">
-                        <div className="lb-rank" style={{ background: "var(--color-accent-light)", color: "var(--color-accent)", border: "1px solid var(--color-accent-border)" }}>
+                        <div className="lb-rank" style={{ background: "var(--color-accent-light)", color: "var(--color-accent)", border: "1px solid var(--color-accent-border)", fontSize: 13 }}>
                           {myRank}
                         </div>
                         <div style={{ flex: 1 }}>
                           <div style={{ fontSize: "var(--font-size-sm)", fontWeight: 700, color: "var(--color-accent)" }}>
-                            Siddhant <span style={{ fontSize: 11 }}>(you)</span>
+                            Siddhant <span style={{ fontSize: 12 }}>(you)</span>
                           </div>
-                          <div style={{ fontSize: 11, color: "var(--color-text-tertiary)" }}>{track} track</div>
+                          <div style={{ fontSize: 12, color: "var(--color-text-tertiary)", marginTop: 2 }}>{track} track</div>
                         </div>
                         <div style={{ textAlign: "right" }}>
                           <div style={{ fontSize: "var(--font-size-sm)", fontWeight: 700, color: "var(--color-text-primary)" }}>{totalXP}</div>
-                          <div style={{ fontSize: 11, color: "var(--color-text-tertiary)" }}>XP</div>
+                          <div style={{ fontSize: 12, color: "var(--color-text-tertiary)", marginTop: 2 }}>XP</div>
                         </div>
                       </div>
                     </>
@@ -1856,8 +1834,8 @@ Challenge: ${text}`
                 </div>
               </div>
 
-              <div style={{ marginTop: "var(--space-4)", padding: "var(--space-4)", background: "var(--color-warning-light)", border: "1px solid var(--color-warning-border)", borderRadius: "var(--radius-md)", fontSize: "var(--font-size-sm)", color: "#92400E" }}>
-                💡 Hard challenges (Estimation, Roleplay, Debate) give 3× XP — complete them to climb faster.
+              <div style={{ marginTop: "var(--space-5)", padding: "var(--space-5) var(--space-6)", background: "var(--color-warning-light)", border: "1px solid var(--color-warning-border)", borderRadius: "var(--radius-md)", fontSize: "var(--font-size-sm)", color: "#92400E", lineHeight: 1.7 }}>
+                Hard challenges (Estimation, Roleplay, Debate) give 3× XP — complete them to climb faster.
               </div>
             </div>
           )}
@@ -1865,46 +1843,46 @@ Challenge: ${text}`
           {/* ── TAB: PRICING ── */}
           {homeTab === "pricing" && !isGuest && (
             <div className="anim-fade-up">
-              <div style={{ marginBottom: "var(--space-6)" }}>
-                <h2 style={{ fontSize: "var(--font-size-xl)", fontWeight: 800, color: "var(--color-text-primary)", letterSpacing: "-0.03em", marginBottom: "var(--space-1)" }}>Upgrade your plan</h2>
-                <p style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-tertiary)" }}>Unlock unlimited challenges, friend battles, and team features.</p>
+              <div style={{ marginBottom: "var(--space-8)" }}>
+                <h2 style={{ fontSize: "var(--font-size-xl)", fontWeight: 800, color: "var(--color-text-primary)", letterSpacing: "-0.03em", marginBottom: "var(--space-2)" }}>Upgrade your plan</h2>
+                <p style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-tertiary)", lineHeight: 1.7 }}>Unlock unlimited challenges, friend battles, and team features.</p>
               </div>
 
-              <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-5)" }}>
                 {Object.values(TIERS).map(tier => (
                   <div key={tier.id} className="pricing-card" style={{ borderColor: tier.id === "pro" ? "var(--color-accent)" : "var(--color-border)", background: tier.id === "pro" ? "var(--color-accent-light)" : "var(--color-surface)" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "var(--space-4)" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "var(--space-5)" }}>
                       <div>
-                        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", marginBottom: "var(--space-1)" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", marginBottom: "var(--space-2)" }}>
                           <span style={{ fontSize: "var(--font-size-base)", fontWeight: 700, color: "var(--color-text-primary)" }}>{tier.label}</span>
                           {tier.id === "pro" && <span className="badge badge-accent">Most popular</span>}
                           {tier.id === "team" && <span className="badge badge-success">B2B revenue play</span>}
                         </div>
-                        <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
+                        <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
                           <span style={{ fontSize: "var(--font-size-2xl)", fontWeight: 800, color: tier.color, letterSpacing: "-0.03em" }}>{tier.price}</span>
                           <span style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-tertiary)" }}>{tier.period}</span>
                         </div>
                       </div>
                     </div>
-                    <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)" }}>
                       {TIER_FEATURES[tier.id].map((f, i) => (
                         <div key={i} style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", fontSize: "var(--font-size-sm)", color: "var(--color-text-secondary)" }}>
-                          <span style={{ color: "var(--color-success)", fontWeight: 700, fontSize: 12 }}>✓</span>
+                          <span style={{ color: "var(--color-success)", fontWeight: 700, fontSize: 13 }}>✓</span>
                           {f}
                         </div>
                       ))}
                     </div>
                     {tier.id !== "free" && (
-                      <button className={`btn ${tier.id === "pro" ? "btn-primary" : "btn-secondary"} btn-lg btn-full`} style={{ marginTop: "var(--space-5)" }}>
-                        {tier.id === "pro" ? "Upgrade to Pro →" : "Contact for Team →"}
+                      <button className={`btn ${tier.id === "pro" ? "btn-primary" : "btn-secondary"} btn-lg btn-full`} style={{ marginTop: "var(--space-6)" }}>
+                        {tier.id === "pro" ? "Upgrade to Pro" : "Contact for Team"}
                       </button>
                     )}
                   </div>
                 ))}
               </div>
 
-              <div style={{ marginTop: "var(--space-5)", padding: "var(--space-4)", background: "var(--color-bg)", border: "1px solid var(--color-border)", borderRadius: "var(--radius-md)", fontSize: "var(--font-size-sm)", color: "var(--color-text-tertiary)", lineHeight: 1.6 }}>
-                🔒 <strong style={{ color: "var(--color-text-primary)" }}>Streak freeze</strong> — Pro users get 1 streak freeze per month to protect their streak. The single highest-retention mechanic in EdTech.
+              <div style={{ marginTop: "var(--space-6)", padding: "var(--space-5) var(--space-6)", background: "var(--color-bg)", border: "1px solid var(--color-border)", borderRadius: "var(--radius-md)", fontSize: "var(--font-size-sm)", color: "var(--color-text-tertiary)", lineHeight: 1.8 }}>
+                <strong style={{ color: "var(--color-text-primary)" }}>Streak freeze</strong> — Pro users get 1 streak freeze per month to protect their streak. The single highest-retention mechanic in EdTech.
               </div>
             </div>
           )}
@@ -1922,232 +1900,166 @@ Challenge: ${text}`
       <style>{CSS}</style>
       {toast && <Toast message={toast.msg} type={toast.type} />}
 
-      {/* Topbar */}
       <div className="topbar">
         <div className="topbar-inner">
           <button className="btn btn-ghost btn-sm" onClick={() => setScreen("home")}>
-            ← Back
+            Back
           </button>
-          <div style={{ flex: 1, display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
+          <div style={{ flex: 1, textAlign: "center" }}>
             <span style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color: "var(--color-text-primary)" }}>
-              {pick?.icon} {pick?.tag}
+              {pick?.tag}
             </span>
-            {pick && <span className="badge badge-neutral">{CHALLENGE_TYPE_LABELS[pick.type]}</span>}
           </div>
-          <span className="badge badge-neutral hide-mobile">{track}</span>
+          <div style={{ width: 40 }} />
         </div>
       </div>
 
       <div style={{ flex: 1, paddingBottom: "var(--space-16)" }}>
-        <div className="content-container" style={{ paddingTop: "var(--space-6)" }}>
+        <div className="content-container-sm" style={{ paddingTop: "var(--space-10)" }}>
 
-          {/* Loading skeleton */}
-          {loading && !challengeText && (
-            <div className="card anim-fade-up">
-              <SkeletonChallenge />
+          {/* Challenge header */}
+          <div className="anim-fade-up" style={{ marginBottom: "var(--space-8)" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", marginBottom: "var(--space-4)" }}>
+              <div style={{ width: 48, height: 48, borderRadius: "var(--radius-md)", background: "var(--color-accent-light)", border: "1px solid var(--color-accent-border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, fontWeight: 700, color: "var(--color-accent)" }}>
+                {pick?.icon}
+              </div>
+              <div>
+                <h1 style={{ fontSize: "var(--font-size-lg)", fontWeight: 700, color: "var(--color-text-primary)" }}>
+                  {pick?.tag}
+                </h1>
+                <p style={{ fontSize: 13, color: "var(--color-text-tertiary)", marginTop: 4 }}>
+                  {pick?.difficulty} · {pick?.time}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Challenge text */}
+          {loading ? (
+            <SkeletonChallenge />
+          ) : error ? (
+            <div style={{ padding: "var(--space-6)", background: "var(--color-error-light)", border: "1px solid var(--color-error-border)", borderRadius: "var(--radius-lg)", color: "var(--color-error)" }}>
+              {error}
+            </div>
+          ) : (
+            <div className="card anim-fade-up-1" style={{ marginBottom: "var(--space-6)" }}>
+              {renderChallenge(challengeText)}
             </div>
           )}
 
-          {challengeText && (
-            <>
-              {/* Challenge card */}
-              <div className="card anim-fade-up" style={{ marginBottom: "var(--space-4)" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", marginBottom: "var(--space-5)", paddingBottom: "var(--space-5)", borderBottom: "1px solid var(--color-border)" }}>
-                  <div style={{ width: 40, height: 40, borderRadius: "var(--radius-md)", background: "var(--color-bg)", border: "1px solid var(--color-border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, flexShrink: 0 }}>
-                    {pick?.icon}
-                  </div>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 11, fontWeight: 700, color: "var(--color-text-tertiary)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 2 }}>Challenge</div>
-                    <div style={{ fontSize: "var(--font-size-base)", fontWeight: 700, color: "var(--color-text-primary)" }}>{pick?.tag}</div>
-                  </div>
-                  <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4 }}>
-                    <span className="badge badge-neutral">{track}</span>
-                    <span style={{ fontSize: 11, fontWeight: 700, color: "var(--color-warning)" }}>+{pick?.xp} XP</span>
-                  </div>
-                </div>
-                <div style={{ fontSize: "var(--font-size-sm)", lineHeight: 1.7, color: "var(--color-text-secondary)" }}>
-                  {renderChallenge(challengeText)}
-                </div>
-              </div>
-
-              {/* Hint accordion */}
-              {pick?.hint && (
-                <div className="card anim-fade-up-1" style={{ marginBottom: "var(--space-4)", borderColor: hintOpen ? "var(--color-warning-border)" : "var(--color-border)", background: hintOpen ? "var(--color-warning-light)" : "var(--color-surface)" }}>
-                  <button
-                    onClick={() => setHintOpen(o => !o)}
-                    style={{ background: "none", width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: 0, cursor: "pointer", border: "none" }}
-                  >
-                    <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
-                      <span style={{ fontSize: 16 }}>💡</span>
-                      <span style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color: "var(--color-text-primary)" }}>Framework hint</span>
-                      <span className="badge badge-warning">{pick.hint.framework}</span>
+          {/* Hint accordion */}
+          {pick?.hint && (
+            <div className="card anim-fade-up-2" style={{ marginBottom: "var(--space-6)", borderColor: "var(--color-warning-border)", background: "var(--color-warning-light)" }}>
+              <button
+                className="btn btn-ghost"
+                style={{ width: "100%", justifyContent: "space-between", padding: 0, marginBottom: hintOpen ? "var(--space-5)" : 0 }}
+                onClick={() => setHintOpen(!hintOpen)}
+              >
+                <span style={{ fontSize: "var(--font-size-sm)", fontWeight: 700, color: "#92400E" }}>Framework & tips</span>
+                <span style={{ fontSize: 14, color: "#92400E", transition: "transform 0.3s" }}>
+                  {hintOpen ? "−" : "+"}
+                </span>
+              </button>
+              {hintOpen && (
+                <>
+                  <div style={{ height: 1, background: "var(--color-warning-border)", margin: "var(--space-4) 0" }} />
+                  <p style={{ fontSize: "var(--font-size-sm)", fontWeight: 700, color: "#92400E", marginBottom: "var(--space-4)" }}>
+                    {pick.hint.framework}
+                  </p>
+                  {pick.hint.steps.map((step, i) => (
+                    <div key={i} className="hint-step">
+                      <div className="hint-step-num">{i + 1}</div>
+                      <p style={{ fontSize: "var(--font-size-sm)", color: "#92400E", lineHeight: 1.7 }}>{step}</p>
                     </div>
-                    <span style={{ fontSize: 12, color: "var(--color-text-tertiary)", fontWeight: 600 }}>{hintOpen ? "Hide ▲" : "Show ▼"}</span>
-                  </button>
-
-                  {hintOpen && (
-                    <div className="anim-slide-down" style={{ marginTop: "var(--space-4)", paddingTop: "var(--space-4)", borderTop: "1px solid var(--color-warning-border)" }}>
-                      {pick.hint.steps.map((s, i) => (
-                        <div key={i} className="hint-step">
-                          <span className="hint-step-num">{i + 1}</span>
-                          <span style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-secondary)", lineHeight: 1.65 }}>{s}</span>
-                        </div>
-                      ))}
-                      <div style={{ marginTop: "var(--space-4)", padding: "10px var(--space-3)", background: "rgba(245,158,11,0.08)", borderRadius: "var(--radius-sm)", borderLeft: "3px solid var(--color-warning)", fontSize: "var(--font-size-sm)", color: "#92400E", fontWeight: 500 }}>
-                        Watch out: {pick.hint.watch}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* ── MCQ section (quiz type) ── */}
-              {pick?.type === "quiz" && (
-                <div className="card anim-fade-up-2" style={{ marginBottom: "var(--space-5)" }}>
-                  <div style={{ marginBottom: "var(--space-5)" }}>
-                    <h3 style={{ fontSize: "var(--font-size-base)", fontWeight: 700, color: "var(--color-text-primary)", marginBottom: "var(--space-1)" }}>
-                      Select your answer
-                    </h3>
-                    <p style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-tertiary)" }}>
-                      Choose the best response to this scenario.
+                  ))}
+                  <div style={{ marginTop: "var(--space-5)", padding: "var(--space-4)", background: "rgba(146,64,14,0.1)", borderRadius: "var(--radius-md)", borderLeft: "3px solid #92400E" }}>
+                    <p style={{ fontSize: "var(--font-size-sm)", color: "#92400E", fontStyle: "italic", lineHeight: 1.7 }}>
+                      {pick.hint.watch}
                     </p>
                   </div>
+                </>
+              )}
+            </div>
+          )}
 
-                  {/* MCQ loading skeleton */}
-                  {mcqOptions.length === 0 && loading && (
-                    <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)" }}>
-                      {[1,2,3,4].map(i => (
-                        <div key={i} className="skeleton" style={{ height: 52, borderRadius: "var(--radius-md)" }} />
-                      ))}
-                    </div>
-                  )}
+          {/* Answer input */}
+          {!loading && !error && (
+            <div className="anim-fade-up-3">
+              {pick?.type === "quiz" && mcqOptions.length > 0 ? (
+                <>
+                  <p style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color: "var(--color-text-primary)", marginBottom: "var(--space-5)" }}>
+                    Select your answer
+                  </p>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)", marginBottom: "var(--space-6)" }}>
+                    {mcqOptions.map((opt, i) => {
+                      const isSelected = mcqSelected === i;
+                      const isCorrect = opt === mcqCorrect;
+                      const userGotItWrong = mcqSelected !== null && mcqSelected !== i && !isCorrect;
 
-                  {mcqOptions.length > 0 && (
-                    <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)" }}>
-                      {mcqOptions.map((opt, i) => {
-                        const isSelected = mcqSelected === opt;
-                        const isCorrect = opt === mcqCorrect;
-                        const userGotItWrong = mcqRevealed && mcqSelected && mcqSelected !== mcqCorrect;
+                      let className = "mcq-option";
+                      if (mcqRevealed) {
+                        if (isSelected && isCorrect) className += " mcq-correct";
+                        else if (isSelected) className += " mcq-wrong";
+                        else if (isCorrect) className += " mcq-show-correct";
+                        className += " mcq-revealed";
+                      } else if (isSelected) {
+                        className += " mcq-selected";
+                      }
 
-                        let className = "mcq-option";
-                        if (mcqRevealed) {
-                          className += " mcq-revealed";
-                          if (isSelected && isCorrect) className += " mcq-correct";
-                          else if (isSelected) className += " mcq-wrong";
-                          else if (isCorrect && userGotItWrong) className += " mcq-show-correct";
-                        } else if (isSelected) {
-                          className += " mcq-selected";
-                        }
-
-                        return (
-                          <button key={i} className={className} onClick={() => !mcqRevealed && setMcqSelected(opt)}>
-                            <span style={{ width: 28, height: 28, borderRadius: "var(--radius-sm)", background: "var(--color-bg)", border: "1px solid var(--color-border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, flexShrink: 0, color: "var(--color-text-secondary)" }}>
-                              {mcqRevealed && isSelected && isCorrect ? "✓" :
-                               mcqRevealed && isSelected ? "✕" :
-                               mcqRevealed && isCorrect && userGotItWrong ? "✓" :
-                               String.fromCharCode(65 + i)}
-                            </span>
-                            <span style={{ flex: 1, lineHeight: 1.55 }}>{opt}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  )}
-
-                  {/* Action buttons */}
-                  {mcqOptions.length > 0 && (
-                    <div style={{ marginTop: "var(--space-5)", display: "flex", gap: "var(--space-3)" }} className="stack-mobile">
-                      <button className="btn btn-ghost" onClick={() => setScreen("home")}>Cancel</button>
-                      {!mcqRevealed ? (
-                        <button
-                          className={`btn ${mcqSelected ? "btn-primary" : "btn-secondary"} btn-lg`}
-                          style={{ flex: 1 }}
-                          disabled={!mcqSelected}
-                          onClick={() => { if (mcqSelected) setMcqRevealed(true); }}
-                        >
-                          Check answer →
+                      return (
+                        <button key={i} className={className} onClick={() => !mcqRevealed && setMcqSelected(i)}>
+                          <span style={{ width: 28, height: 28, borderRadius: "var(--radius-sm)", background: "var(--color-bg)", border: "1px solid var(--color-border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, flexShrink: 0, color: "var(--color-text-secondary)" }}>
+                            {mcqRevealed && isSelected && isCorrect ? "✓" :
+                             mcqRevealed && isSelected ? "✕" :
+                             mcqRevealed && isCorrect && userGotItWrong ? "✓" :
+                             String.fromCharCode(65 + i)}
+                          </span>
+                          <span style={{ flex: 1, textAlign: "left", fontSize: "var(--font-size-sm)", lineHeight: 1.6 }}>
+                            {opt}
+                          </span>
                         </button>
-                      ) : (
-                        loading ? (
-                          <button className="btn btn-secondary btn-lg" style={{ flex: 1 }} disabled>
-                            <span className="spinner" style={{ width: 16, height: 16, border: "2px solid var(--color-border)", borderTopColor: "var(--color-text-primary)", borderRadius: "50%", display: "inline-block" }} />
-                            Scoring…
-                          </button>
-                        ) : (
-                          <button className="btn btn-accent btn-lg" style={{ flex: 1 }} onClick={() => submitAnswer(mcqSelected)}>
-                            Get full assessment →
-                          </button>
-                        )
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* ── Open-answer section (case_study, estimation, roleplay, debate) ── */}
-              {pick?.type !== "quiz" && (
-                <div className="card anim-fade-up-2" style={{ marginBottom: "var(--space-5)" }}>
-                  <div style={{ marginBottom: "var(--space-4)" }}>
-                    <h3 style={{ fontSize: "var(--font-size-base)", fontWeight: 700, color: "var(--color-text-primary)", marginBottom: "var(--space-1)" }}>
-                      {pick?.type === "estimation" && "Break down your estimate"}
-                      {pick?.type === "case_study" && "Write your response"}
-                      {pick?.type === "roleplay" && "How do you respond?"}
-                      {pick?.type === "debate" && "Argue your position"}
-                    </h3>
-                    <p style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-tertiary)" }}>
-                      {pick?.type === "estimation" && "Show your reasoning step by step. The method matters more than the number."}
-                      {pick?.type === "case_study" && "Use a framework. Be specific. Defend your trade-offs."}
-                      {pick?.type === "roleplay" && "Write how you would actually respond in this situation."}
-                      {pick?.type === "debate" && "Pick a side and defend it with conviction. Fence-sitting loses debates."}
-                    </p>
+                      );
+                    })}
                   </div>
 
+                  {!mcqRevealed && (
+                    <button className="btn btn-primary btn-lg btn-full" disabled={mcqSelected === null || loading} onClick={() => { setMcqRevealed(true); setAnswer(mcqOptions[mcqSelected]); }}>
+                      Submit answer
+                    </button>
+                  )}
+
+                  {mcqRevealed && (
+                    <button className="btn btn-accent btn-lg btn-full" disabled={loading} onClick={() => submitAnswer(mcqOptions[mcqSelected])}>
+                      {loading ? "Assessing..." : "Get assessment"}
+                    </button>
+                  )}
+                </>
+              ) : (
+                <>
+                  <label className="label">Your answer</label>
                   <textarea
                     className="input"
-                    rows={8}
-                    placeholder={
-                      pick?.type === "estimation" ? "Step 1: ...\nStep 2: ...\nMy estimate: ..." :
-                      pick?.type === "roleplay" ? "I would start by saying...\n\nThen I would..." :
-                      pick?.type === "debate" ? "My position is...\n\nFirst argument: ...\nSecond argument: ..." :
-                      "Use a framework. Think out loud. Be specific about trade-offs..."
-                    }
+                    placeholder={pick?.type === "estimation" ? "Break down your reasoning step by step..." : "Share your thinking..."}
                     value={openAnswer}
                     onChange={e => setOpenAnswer(e.target.value)}
-                    style={{ resize: "vertical", marginBottom: "var(--space-4)" }}
+                    style={{ minHeight: 160, fontFamily: "var(--font-family)", fontSize: "var(--font-size-sm)", lineHeight: 1.7, padding: "var(--space-4)" }}
                   />
-
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <div style={{ fontSize: 11, color: openAnswer.length < 80 ? "var(--color-error)" : "var(--color-text-tertiary)" }}>
-                      {openAnswer.length < 80 ? `${80 - openAnswer.length} more chars needed` : `${openAnswer.length} chars`}
-                    </div>
-                    <div style={{ display: "flex", gap: "var(--space-3)" }}>
-                      <button className="btn btn-ghost" onClick={() => setScreen("home")}>Cancel</button>
-                      {loading ? (
-                        <button className="btn btn-secondary btn-lg" disabled>
-                          <span className="spinner" style={{ width: 16, height: 16, border: "2px solid var(--color-border)", borderTopColor: "var(--color-text-primary)", borderRadius: "50%", display: "inline-block" }} />
-                          Scoring…
-                        </button>
-                      ) : (
-                        <button
-                          className={`btn ${openAnswer.length >= 80 ? "btn-accent" : "btn-secondary"} btn-lg`}
-                          disabled={openAnswer.length < 80}
-                          onClick={() => submitAnswer(openAnswer)}
-                        >
-                          Get assessment →
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                </div>
+                  <p style={{ fontSize: 12, color: "var(--color-text-tertiary)", marginTop: "var(--space-2)" }}>
+                    Minimum 80 characters for quality feedback
+                  </p>
+                  <button
+                    className="btn btn-primary btn-lg btn-full"
+                    style={{ marginTop: "var(--space-5)" }}
+                    disabled={openAnswer.trim().length < 80 || loading}
+                    onClick={() => submitAnswer()}
+                  >
+                    {loading ? "Assessing..." : "Submit for assessment"}
+                  </button>
+                </>
               )}
-
-              {error && (
-                <div style={{ marginTop: "var(--space-4)", padding: "10px var(--space-3)", background: "var(--color-error-light)", border: "1px solid var(--color-error-border)", borderRadius: "var(--radius-sm)", fontSize: "var(--font-size-sm)", color: "var(--color-error)", display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
-                  <span>⚠</span> {error}
-                </div>
-              )}
-            </>
+            </div>
           )}
+
         </div>
       </div>
     </div>
@@ -2161,151 +2073,10 @@ Challenge: ${text}`
       <style>{CSS}</style>
       {toast && <Toast message={toast.msg} type={toast.type} />}
 
-      {/* Topbar */}
-      <div className="topbar">
-        <div className="topbar-inner">
-          <button className="btn btn-ghost btn-sm" onClick={() => setScreen("home")}>
-            ← Back to path
-          </button>
-          <span style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color: "var(--color-text-primary)", marginLeft: "auto" }}>
-            Assessment
-          </span>
-        </div>
-      </div>
-
-      <div style={{ flex: 1, paddingBottom: "var(--space-16)" }}>
-        <div className="content-container" style={{ paddingTop: "var(--space-6)" }}>
-
-          {/* Score hero */}
-          {scores && (() => {
-            const sc = scores.overall;
-            const isHigh = sc >= 7;
-            const isMid = sc >= 5 && sc < 7;
-            const color = isHigh ? "var(--color-success)" : isMid ? "var(--color-warning)" : "var(--color-error)";
-            const bg = isHigh ? "var(--color-success-light)" : isMid ? "var(--color-warning-light)" : "var(--color-error-light)";
-            const borderColor = isHigh ? "var(--color-success-border)" : isMid ? "var(--color-warning-border)" : "var(--color-error-border)";
-            const label = isHigh ? "Excellent thinking" : isMid ? "Good effort — keep going" : "Keep practising";
-            const emoji = isHigh ? "🎉" : isMid ? "📈" : "💪";
-            const xpMultiplier = pick?.difficulty === "Hard" ? 3 : 1;
-            const xpEarned = !isGuest ? (10 + (sc * 5)) * xpMultiplier : 0;
-            return (
-              <div className="anim-pop-in" style={{ marginBottom: "var(--space-4)", background: bg, border: `1px solid ${borderColor}`, borderRadius: "var(--radius-lg)", padding: "var(--space-8) var(--space-6)", textAlign: "center" }}>
-                <div style={{ fontSize: 64, fontWeight: 900, color, letterSpacing: "-0.04em", lineHeight: 1, marginBottom: "var(--space-2)" }}>{sc}</div>
-                <div style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-tertiary)", marginBottom: "var(--space-4)" }}>out of 10</div>
-                <div style={{ display: "inline-flex", alignItems: "center", gap: "var(--space-2)", background: "rgba(255,255,255,0.7)", borderRadius: "var(--radius-full)", padding: "6px 16px", border: `1px solid ${borderColor}` }}>
-                  <span>{emoji}</span>
-                  <span style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color }}>{label}</span>
-                </div>
-                {!isGuest && (
-                  <div style={{ marginTop: "var(--space-4)", fontSize: "var(--font-size-sm)", color: "var(--color-text-tertiary)" }}>
-                    +{xpEarned} XP earned {xpMultiplier > 1 && <span style={{ color: "var(--color-error)", fontWeight: 700 }}>(3× hard challenge bonus!)</span>}
-                  </div>
-                )}
-                {streak > 0 && (
-                  <div style={{ marginTop: "var(--space-2)", fontSize: "var(--font-size-sm)", color: "#92400E", fontWeight: 600 }}>
-                    🔥 {streak}-day streak!
-                  </div>
-                )}
-              </div>
-            );
-          })()}
-
-          {/* Score breakdown */}
-          {scores && (
-            <div className="card anim-fade-up-1" style={{ marginBottom: "var(--space-4)" }}>
-              <h3 style={{ fontSize: "var(--font-size-base)", fontWeight: 700, color: "var(--color-text-primary)", marginBottom: "var(--space-5)" }}>Score breakdown</h3>
-              <ScoreBar label="Structured Thinking" score={scores.structured} delay={0} />
-              <ScoreBar label="Business Acumen"     score={scores.business}   delay={80} />
-              <ScoreBar label="Specificity & Depth"  score={scores.depth}      delay={160} />
-              <ScoreBar label="PM Maturity"          score={scores.maturity}   delay={240} />
-            </div>
-          )}
-
-          {/* Coach feedback */}
-          <div className="card anim-fade-up-2" style={{ marginBottom: "var(--space-4)" }}>
-            <h3 style={{ fontSize: "var(--font-size-base)", fontWeight: 700, color: "var(--color-text-primary)", marginBottom: "var(--space-4)" }}>Coach feedback</h3>
-            <div style={{ fontSize: "var(--font-size-sm)", lineHeight: 1.7 }}>
-              {renderMD(assessment)}
-            </div>
-          </div>
-
-          {/* Model answer */}
-          {answerKey && (
-            <div className="anim-fade-up-3" style={{ marginBottom: "var(--space-6)" }}>
-              <button
-                onClick={() => setShowKey(o => !o)}
-                style={{
-                  width: "100%",
-                  background: showKey ? "var(--color-success-light)" : "var(--color-surface)",
-                  border: `1px solid ${showKey ? "var(--color-success-border)" : "var(--color-border)"}`,
-                  borderRadius: "var(--radius-lg)",
-                  padding: "var(--space-4) var(--space-5)",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  transition: "all var(--transition-base)",
-                  fontFamily: "var(--font-family)",
-                }}
-              >
-                <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
-                  <span style={{ fontSize: 18 }}>🔑</span>
-                  <span style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color: showKey ? "#065F46" : "var(--color-text-primary)" }}>
-                    Model answer
-                  </span>
-                  {!showKey && <span style={{ fontSize: 12, color: "var(--color-text-tertiary)" }}>tap to reveal</span>}
-                </div>
-                <span style={{ fontSize: 12, color: "var(--color-text-tertiary)", fontWeight: 600 }}>{showKey ? "Hide ▲" : "Show ▼"}</span>
-              </button>
-
-              {showKey && (
-                <div className="anim-slide-down" style={{ marginTop: "var(--space-2)", padding: "var(--space-5)", background: "var(--color-success-light)", border: "1px solid var(--color-success-border)", borderRadius: "var(--radius-lg)" }}>
-                  <div style={{ fontSize: "var(--font-size-sm)", lineHeight: 1.7 }}>
-                    {renderMD(answerKey, true)}
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Actions */}
-          <div className="anim-fade-up-4" style={{ display: "flex", gap: "var(--space-3)" }}>
-            <button className="btn btn-ghost" onClick={() => setScreen("home")}>← Back to path</button>
-            {isGuest ? (
-              <button className="btn btn-primary btn-lg" style={{ flex: 1 }} onClick={() => setScreen("feedback")}>
-                Leave feedback →
-              </button>
-            ) : (
-              <button
-                className="btn btn-primary btn-lg"
-                style={{ flex: 1 }}
-                onClick={() => {
-                  setScreen("home");
-                  setTimeout(() => openChallenge(Math.min(currentIdx + 1, challenges.length - 1)), 50);
-                }}
-              >
-                Next challenge →
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  // ─────────────────────────────────────────────────────────────────────────
-  // SCREEN: GUEST FEEDBACK (Pricing Discovery Form)
-  // ─────────────────────────────────────────────────────────────────────────
-  if (screen === "feedback") return (
-    <div className="page-container">
-      <style>{CSS}</style>
-      {toast && <Toast message={toast.msg} type={toast.type} />}
-
-      {/* Topbar */}
       <div className="topbar">
         <div className="topbar-inner">
           <div className="logo-mark">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 2L2 7l10 5 10-5-10-5z"/>
               <path d="M2 17l10 5 10-5"/>
               <path d="M2 12l10 5 10-5"/>
@@ -2315,178 +2086,238 @@ Challenge: ${text}`
         </div>
       </div>
 
-      <div style={{ flex: 1, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "var(--space-8) var(--space-5)" }}>
-        <div style={{ width: "100%", maxWidth: 480 }}>
+      <div style={{ flex: 1, paddingBottom: "var(--space-16)" }}>
+        <div className="content-container-sm" style={{ paddingTop: "var(--space-10)" }}>
 
-          <div className="anim-fade-up" style={{ marginBottom: "var(--space-8)" }}>
-            <h1 style={{ fontSize: "var(--font-size-2xl)", fontWeight: 800, color: "var(--color-text-primary)", marginBottom: "var(--space-2)", letterSpacing: "-0.03em" }}>
-              Quick feedback
+          {/* Result header */}
+          <div className="anim-fade-up" style={{ marginBottom: "var(--space-8)", textAlign: "center" }}>
+            <div style={{ fontSize: 48, marginBottom: "var(--space-4)" }}>✓</div>
+            <h1 style={{ fontSize: "var(--font-size-2xl)", fontWeight: 800, color: "var(--color-text-primary)", letterSpacing: "-0.03em", marginBottom: "var(--space-3)" }}>
+              Assessment complete
             </h1>
-            <p style={{ fontSize: "var(--font-size-base)", color: "var(--color-text-secondary)" }}>
-              Takes 60 seconds. Helps us build a better product.
+            <p style={{ fontSize: "var(--font-size-md)", color: "var(--color-text-secondary)", lineHeight: 1.7 }}>
+              Here's your personalized feedback from your PM coach.
             </p>
           </div>
 
-          <div className="card anim-fade-up-1" style={{ marginBottom: "var(--space-4)" }}>
-
-            {/* Pre-filled details */}
-            <div style={{ marginBottom: "var(--space-5)", paddingBottom: "var(--space-5)", borderBottom: "1px solid var(--color-border)" }}>
-              <p style={{ fontSize: 11, fontWeight: 700, color: "var(--color-text-tertiary)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "var(--space-3)" }}>Your details</p>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-3)" }}>
-                {[
-                  { label: "Name", val: fbName, set: setFbName, placeholder: "Your name" },
-                  { label: "Age", val: fbAge, set: setFbAge, placeholder: "Your age" },
-                  { label: "Industry", val: fbIndustry, set: setFbIndustry, placeholder: "e.g. SaaS" },
-                  { label: "Experience", val: fbYears, set: setFbYears, placeholder: "e.g. 3 years" },
-                ].map(({ label, val, set, placeholder }) => (
-                  <div key={label}>
-                    <label className="label">{label}</label>
-                    <input className="input" value={val} onChange={e => set(e.target.value)} placeholder={placeholder} />
+          {/* Score card */}
+          <div className="card anim-fade-up-1" style={{ marginBottom: "var(--space-6)", background: "var(--color-accent-light)", border: "1px solid var(--color-accent-border)" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "var(--space-6)" }}>
+              <div>
+                <p style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color: "var(--color-accent)", marginBottom: "var(--space-2)" }}>Overall score</p>
+                <div style={{ fontSize: "var(--font-size-3xl)", fontWeight: 900, color: "var(--color-accent)", letterSpacing: "-0.04em" }}>
+                  {scores?.overall}/10
+                </div>
+              </div>
+              <div style={{ textAlign: "right" }}>
+                <p style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color: "var(--color-accent)", marginBottom: "var(--space-2)" }}>XP earned</p>
+                <div style={{ fontSize: "var(--font-size-2xl)", fontWeight: 800, color: "var(--color-warning)", letterSpacing: "-0.03em" }}>
+                  +{Math.round(10 + (scores?.overall * 5) * (pick?.difficulty === "Hard" ? 3 : 1))}
+                </div>
+              </div>
+            </div>
+            <div className="divider" style={{ margin: "var(--space-5) 0" }} />
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-5)" }}>
+              {[
+                { label: "Structured Thinking", key: "structured" },
+                { label: "Business Acumen", key: "business" },
+                { label: "Specificity", key: "depth" },
+                { label: "PM Maturity", key: "maturity" },
+              ].map((s, i) => (
+                <div key={i}>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: "var(--color-accent)", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                    {s.label}
                   </div>
-                ))}
-              </div>
-              <div style={{ marginTop: "var(--space-3)" }}>
-                <label className="label">Current role</label>
-                <input className="input" value={fbRole} onChange={e => setFbRole(e.target.value)} placeholder="e.g. Associate PM, Product Analyst, Engineer" />
-              </div>
+                  <div style={{ fontSize: "var(--font-size-xl)", fontWeight: 800, color: "var(--color-accent)" }}>
+                    {scores?.[s.key]}/10
+                  </div>
+                </div>
+              ))}
             </div>
+          </div>
 
-            {/* Track preference */}
+          {/* Feedback card */}
+          <div className="card anim-fade-up-2" style={{ marginBottom: "var(--space-6)" }}>
             <div style={{ marginBottom: "var(--space-5)" }}>
-              <p style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color: "var(--color-text-primary)", marginBottom: "var(--space-3)" }}>
-                Which track interests you most?
-              </p>
-              <div style={{ display: "flex", gap: "var(--space-2)", flexWrap: "wrap" }}>
-                {["B2B SaaS", "B2C Consumer", "Both equally"].map(opt => (
-                  <button
-                    key={opt}
-                    className={`badge ${fbTrackPref === opt ? "badge-accent" : "badge-neutral"}`}
-                    style={{ cursor: "pointer", padding: "8px 14px", fontSize: 13, fontWeight: 600 }}
-                    onClick={() => setFbTrackPref(opt)}
-                  >
-                    {opt}
-                  </button>
-                ))}
-              </div>
+              <h2 style={{ fontSize: "var(--font-size-base)", fontWeight: 700, color: "var(--color-text-primary)", marginBottom: "var(--space-4)" }}>Coach's feedback</h2>
             </div>
-
-            {/* Rating */}
-            <div style={{ marginBottom: "var(--space-5)" }}>
-              <p style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color: "var(--color-text-primary)", marginBottom: "var(--space-3)" }}>
-                How useful was this challenge? <span style={{ color: "var(--color-error)" }}>*</span>
-              </p>
-              <div style={{ display: "flex", gap: "var(--space-2)" }}>
-                {[1, 2, 3, 4, 5].map(n => (
-                  <button key={n} className={`star-btn ${fbUseful >= n ? "active" : ""}`} onClick={() => setFbUseful(n)}>
-                    {fbUseful >= n ? "★" : "☆"}
-                  </button>
-                ))}
-              </div>
+            <div style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-secondary)", lineHeight: 1.9 }}>
+              {renderMD(assessment)}
             </div>
+          </div>
 
-            {/* Easy to use */}
-            <div style={{ marginBottom: "var(--space-5)" }}>
-              <p style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color: "var(--color-text-primary)", marginBottom: "var(--space-3)" }}>
-                Was it easy to use?
-              </p>
-              <div style={{ display: "flex", gap: "var(--space-2)" }}>
-                {["Yes", "Somewhat", "No"].map(opt => (
-                  <button
-                    key={opt}
-                    className={`badge ${fbEasy === opt ? "badge-accent" : "badge-neutral"}`}
-                    style={{ cursor: "pointer", padding: "8px 16px", fontSize: 13, fontWeight: 600 }}
-                    onClick={() => setFbEasy(opt)}
-                  >
-                    {opt}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Comment */}
-            <div style={{ marginBottom: "var(--space-5)" }}>
-              <label className="label">What did you think?</label>
-              <textarea
-                className="input"
-                rows={3}
-                placeholder="Any thoughts, suggestions, or reactions…"
-                value={fbComment}
-                onChange={e => setFbComment(e.target.value)}
-                style={{ resize: "vertical" }}
-              />
-            </div>
-
-            {/* Improve */}
-            <div style={{ marginBottom: "var(--space-5)" }}>
-              <label className="label">What would make it better?</label>
-              <textarea
-                className="input"
-                rows={2}
-                placeholder="e.g. More scenarios, better hints, video explanations…"
-                value={fbImprove}
-                onChange={e => setFbImprove(e.target.value)}
-                style={{ resize: "vertical" }}
-              />
-            </div>
-
-            {/* Pricing tier selector — willingness-to-pay research */}
-            <div style={{ marginBottom: "var(--space-5)", padding: "var(--space-4)", background: "var(--color-bg)", border: "1px solid var(--color-border)", borderRadius: "var(--radius-md)" }}>
-              <p style={{ fontSize: "var(--font-size-sm)", fontWeight: 700, color: "var(--color-text-primary)", marginBottom: "var(--space-1)" }}>
-                Which plan would you consider paying for?
-              </p>
-              <p style={{ fontSize: 12, color: "var(--color-text-tertiary)", marginBottom: "var(--space-4)" }}>
-                This helps us set the right price. No commitment.
-              </p>
-              <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)" }}>
-                {[
-                  { id: "free", label: "Free", desc: "3 challenges/week, basic access" },
-                  { id: "pro", label: "Pro — ₹499/month", desc: "Unlimited challenges, friend battles, leaderboard, streak freeze" },
-                  { id: "team", label: "Team — ₹999/user/month", desc: "For L&D teams: manager dashboard, custom challenges, team leaderboard" },
-                  { id: "none", label: "I wouldn't pay", desc: "Honest feedback is valuable too" },
-                ].map(opt => (
-                  <button
-                    key={opt.id}
-                    onClick={() => setFbPricingTier(opt.id)}
-                    style={{
-                      display: "flex",
-                      alignItems: "flex-start",
-                      gap: "var(--space-3)",
-                      padding: "var(--space-3) var(--space-4)",
-                      borderRadius: "var(--radius-md)",
-                      border: `1.5px solid ${fbPricingTier === opt.id ? "var(--color-accent)" : "var(--color-border)"}`,
-                      background: fbPricingTier === opt.id ? "var(--color-accent-light)" : "var(--color-surface)",
-                      cursor: "pointer",
-                      textAlign: "left",
-                      transition: "all var(--transition-base)",
-                    }}
-                  >
-                    <div style={{ width: 18, height: 18, borderRadius: "50%", border: `2px solid ${fbPricingTier === opt.id ? "var(--color-accent)" : "var(--color-border)"}`, background: fbPricingTier === opt.id ? "var(--color-accent)" : "transparent", flexShrink: 0, marginTop: 2 }} />
-                    <div>
-                      <div style={{ fontSize: "var(--font-size-sm)", fontWeight: 600, color: fbPricingTier === opt.id ? "var(--color-accent)" : "var(--color-text-primary)" }}>{opt.label}</div>
-                      <div style={{ fontSize: 12, color: "var(--color-text-tertiary)", marginTop: 2 }}>{opt.desc}</div>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <button
-              className={`btn ${fbUseful > 0 ? "btn-primary" : "btn-secondary"} btn-lg btn-full`}
-              disabled={fbUseful === 0 || fbSending}
-              onClick={submitGuestFeedback}
-            >
-              {fbSending ? (
-                <span style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
-                  <span className="spinner" style={{ width: 16, height: 16, border: "2px solid rgba(255,255,255,0.3)", borderTopColor: "#fff", borderRadius: "50%", display: "inline-block" }} />
-                  Sending…
+          {/* Answer key toggle */}
+          {answerKey && (
+            <div className="card anim-fade-up-3" style={{ marginBottom: "var(--space-6)", borderColor: "var(--color-success-border)", background: "var(--color-success-light)" }}>
+              <button
+                className="btn btn-ghost"
+                style={{ width: "100%", justifyContent: "space-between", padding: 0, marginBottom: showKey ? "var(--space-5)" : 0 }}
+                onClick={() => setShowKey(!showKey)}
+              >
+                <span style={{ fontSize: "var(--font-size-sm)", fontWeight: 700, color: "var(--color-success)" }}>Model answer</span>
+                <span style={{ fontSize: 14, color: "var(--color-success)" }}>
+                  {showKey ? "−" : "+"}
                 </span>
-              ) : "Submit feedback →"}
+              </button>
+              {showKey && (
+                <>
+                  <div style={{ height: 1, background: "var(--color-success-border)", margin: "var(--space-4) 0" }} />
+                  <div style={{ fontSize: "var(--font-size-sm)", color: "#065F46", lineHeight: 1.9 }}>
+                    {renderMD(answerKey, true)}
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+
+          {/* CTA */}
+          <div className="anim-fade-up-4" style={{ display: "flex", gap: "var(--space-3)" }}>
+            <button className="btn btn-secondary btn-lg btn-full" onClick={() => { setScreen("home"); setHomeTab("challenges"); }}>
+              Back to challenges
+            </button>
+            <button className="btn btn-primary btn-lg btn-full" onClick={() => { setScreen("home"); setHomeTab("challenges"); }}>
+              Next challenge
             </button>
           </div>
 
-          <button className="btn btn-ghost btn-full" onClick={() => setScreen("thanks")}>
-            Skip for now
-          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // SCREEN: FEEDBACK
+  // ─────────────────────────────────────────────────────────────────────────
+  if (screen === "feedback") return (
+    <div className="page-container">
+      <style>{CSS}</style>
+      {toast && <Toast message={toast.msg} type={toast.type} />}
+
+      <div className="topbar">
+        <div className="topbar-inner">
+          <div className="logo-mark">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <span className="logo-text">PM Academy</span>
+        </div>
+      </div>
+
+      <div style={{ flex: 1, paddingBottom: "var(--space-16)" }}>
+        <div className="content-container-sm" style={{ paddingTop: "var(--space-10)" }}>
+
+          <div className="anim-fade-up" style={{ marginBottom: "var(--space-8)" }}>
+            <h1 style={{ fontSize: "var(--font-size-2xl)", fontWeight: 800, color: "var(--color-text-primary)", letterSpacing: "-0.03em", marginBottom: "var(--space-3)" }}>
+              Help us improve
+            </h1>
+            <p style={{ fontSize: "var(--font-size-md)", color: "var(--color-text-secondary)", lineHeight: 1.7 }}>
+              Your feedback shapes the future of PM Academy.
+            </p>
+          </div>
+
+          <div className="card anim-fade-up-1">
+            <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
+
+              {/* Usefulness rating */}
+              <div>
+                <label className="label">How useful was this challenge?</label>
+                <div style={{ display: "flex", gap: "var(--space-2)" }}>
+                  {[1, 2, 3, 4, 5].map(i => (
+                    <button key={i} className={`star-btn ${fbUseful === i ? "active" : ""}`} onClick={() => setFbUseful(i)}>
+                      {i <= fbUseful ? "★" : "☆"}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Role */}
+              <div>
+                <label className="label">Your role</label>
+                <select className="input" value={fbRole} onChange={e => setFbRole(e.target.value)}>
+                  <option value="">Select your role</option>
+                  <option value="Product Manager">Product Manager</option>
+                  <option value="APM">Associate PM / APM</option>
+                  <option value="Founder">Founder</option>
+                  <option value="Designer">Designer</option>
+                  <option value="Engineer">Engineer</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              {/* Track preference */}
+              <div>
+                <label className="label">Which track interests you more?</label>
+                <select className="input" value={fbTrackPref} onChange={e => setFbTrackPref(e.target.value)}>
+                  <option value="">Select track</option>
+                  <option value="B2B">B2B SaaS</option>
+                  <option value="B2C">B2C Consumer</option>
+                  <option value="Both">Both equally</option>
+                </select>
+              </div>
+
+              {/* Pricing tier */}
+              <div>
+                <label className="label">Would you pay for this?</label>
+                <select className="input" value={fbPricingTier} onChange={e => setFbPricingTier(e.target.value)}>
+                  <option value="">Select option</option>
+                  <option value="Free">Keep it free</option>
+                  <option value="Pro">₹499/month (Pro)</option>
+                  <option value="Team">₹999/month (Team)</option>
+                  <option value="Unsure">Not sure yet</option>
+                </select>
+              </div>
+
+              {/* Ease of use */}
+              <div>
+                <label className="label">Easy to understand?</label>
+                <select className="input" value={fbEasy} onChange={e => setFbEasy(e.target.value)}>
+                  <option value="">Select option</option>
+                  <option value="Very easy">Very easy</option>
+                  <option value="Easy">Easy</option>
+                  <option value="Neutral">Neutral</option>
+                  <option value="Difficult">Difficult</option>
+                </select>
+              </div>
+
+              {/* Comment */}
+              <div>
+                <label className="label">Any comments?</label>
+                <textarea
+                  className="input"
+                  placeholder="What could we improve?"
+                  value={fbComment}
+                  onChange={e => setFbComment(e.target.value)}
+                  style={{ minHeight: 100, fontFamily: "var(--font-family)", fontSize: "var(--font-size-sm)", lineHeight: 1.7, padding: "var(--space-4)" }}
+                />
+              </div>
+
+              {/* Improve */}
+              <div>
+                <label className="label">What should we build next?</label>
+                <textarea
+                  className="input"
+                  placeholder="Your ideas..."
+                  value={fbImprove}
+                  onChange={e => setFbImprove(e.target.value)}
+                  style={{ minHeight: 100, fontFamily: "var(--font-family)", fontSize: "var(--font-size-sm)", lineHeight: 1.7, padding: "var(--space-4)" }}
+                />
+              </div>
+
+            </div>
+
+            <button
+              className="btn btn-primary btn-lg btn-full"
+              style={{ marginTop: "var(--space-6)" }}
+              disabled={fbUseful === 0 || fbSending}
+              onClick={submitGuestFeedback}
+            >
+              {fbSending ? "Sending..." : "Submit feedback"}
+            </button>
+          </div>
+
         </div>
       </div>
     </div>
@@ -2496,30 +2327,27 @@ Challenge: ${text}`
   // SCREEN: THANKS
   // ─────────────────────────────────────────────────────────────────────────
   if (screen === "thanks") return (
-    <div className="page-container" style={{ alignItems: "center", justifyContent: "center" }}>
+    <div className="page-container">
       <style>{CSS}</style>
 
-      <div className="anim-pop-in" style={{ textAlign: "center", maxWidth: 400, padding: "var(--space-8) var(--space-5)" }}>
-        <div style={{
-          width: 72, height: 72, borderRadius: "var(--radius-xl)",
-          background: "var(--color-success-light)", border: "1px solid var(--color-success-border)",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          margin: "0 auto var(--space-6)", fontSize: 32,
-        }}>
-          ✓
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "var(--space-10) var(--space-6)" }}>
+
+        <div className="anim-fade-up" style={{ textAlign: "center", maxWidth: 480 }}>
+          <div style={{ fontSize: 56, marginBottom: "var(--space-6)" }}>✓</div>
+          <h1 style={{ fontSize: "var(--font-size-2xl)", fontWeight: 800, color: "var(--color-text-primary)", letterSpacing: "-0.03em", marginBottom: "var(--space-3)" }}>
+            Thank you!
+          </h1>
+          <p style={{ fontSize: "var(--font-size-md)", color: "var(--color-text-secondary)", lineHeight: 1.8, marginBottom: "var(--space-8)" }}>
+            Your feedback helps us build better PM training. We'll be in touch soon.
+          </p>
+
+          <button className="btn btn-primary btn-lg btn-full" onClick={() => { setScreen("login"); setIsGuest(false); }}>
+            Back to login
+          </button>
         </div>
-        <h1 style={{ fontSize: "var(--font-size-2xl)", fontWeight: 800, color: "var(--color-text-primary)", marginBottom: "var(--space-3)", letterSpacing: "-0.03em" }}>
-          Thank you
-        </h1>
-        <p style={{ fontSize: "var(--font-size-base)", color: "var(--color-text-secondary)", lineHeight: 1.6, marginBottom: "var(--space-8)" }}>
-          Your feedback helps us build a better product. We read every response.
-        </p>
-        <button className="btn btn-primary btn-lg" onClick={() => { setScreen("login"); setIsGuest(false); }}>
-          Back to start
-        </button>
+
       </div>
     </div>
   );
 
-  return null;
 }
